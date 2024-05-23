@@ -1,0 +1,281 @@
+
+{% extends 'student_score/layout.html' %}
+{% block content %}
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户性别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户城市</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="city" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户职业</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 批量删除 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: 'data/',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {align:'center', title: '编号', sort: true,type:'numbers',width:80}, //编号列
+                {field: 'id', width: 80, title: 'ID', sort: true, hide:true},//隐藏ID列
+                {field: 'username', width: 120, title: '学校名称',width:120},
+                {field: 'sex', width: 80, title: '姓名', sort: true},
+                {field: 'city', width: 100, title: '年级'},
+                {field: 'sign', width: 100,title: '班级'},
+                {field: 'experience', width: 100, title: '学科', sort: true },
+                {field: 'score', width: 100, title: '得分', sort: true, edit: 'text'},
+                { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
+            ]],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            skin: 'line'
+            , done: function (res, curr, count) {
+
+                // 使用方法:
+                //1.在需要启用此功能的页面中table done回调函数中插入。
+                //2.修改源代码，在源代码中直接插入，此方法就不需要在每一个页面的table done回调函数中 插入。
+                //注：单元格必须开启了 edit：text 模式，才支持键盘切换。
+                $(document).on('keydown', '.layui-table-edit', function (e) {
+                    var td = $(this).parent('td'),
+                        tr = td.parent('tr'),
+                        trs = tr.parent().parent().find("tr"),
+                        tr_index = tr.index(),
+                        td_index = td.index(),
+                        td_last_index = tr.find('[data-edit="text"]:last').index(),
+                        td_first_index = tr.find('[data-edit="text"]:first').index();
+                    switch (e.keyCode) {
+                        case 13: //enter
+                        case 39: //右
+                            td.nextAll('[data-edit="text"]:first').click();
+                            if (td_index == td_last_index) {
+                                tr.next().find('td').eq(td_first_index).click();
+                                if (tr_index == trs.length - 1) {
+                                    trs.eq(0).find('td').eq(td_first_index).click();
+                                }
+                            }
+                            setTimeout(function () { $('.layui-table-edit').select() }, 0);
+                            break;
+                        case 37: //左
+                            td.prevAll('[data-edit="text"]:first').click();
+                            setTimeout(function () { $('.layui-table-edit').select() }, 0);
+                            break;
+                        case 38: //上
+                            tr.prev().find('td').eq(td_index).click();
+                            setTimeout(function () { $('.layui-table-edit').select() }, 0);
+                            break;
+                        case 40: //下
+                            tr.next().find('td').eq(td_index).click();
+                            setTimeout(function () { $('.layui-table-edit').select() }, 0);
+
+                            break;
+
+                    };
+                })
+
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/add.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                {#layer.alert(JSON.stringify(data));#}
+                var Node=new Array();
+                for (i=0;i<data.length;i++)
+                {
+                    Node[i]=data[i]["id"]
+                }
+                layer.confirm('确定删除ID为'+Node+'数据吗?',function (index){
+                    $.ajax({
+                        data:{'Nodeip':Node.toString()},
+                        url:"delete/",
+                        type:"POST",
+                        dataType:"Json",
+                        success:function (arg){
+                            if(arg.status==="ok"){
+                                table.reload('currentTableId',{url:'data/'})
+                                layer.close(index);
+                            }
+                            else {
+                                console.log(arg.msg)
+                            }
+                        }
+                    })
+                })
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+
+                var index = layer.open({
+                    title: '编辑用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/edit.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function(index) {
+                    $.ajax({
+                        data:{'Nodeip':obj.data["id"]},
+                        url:"delete/",
+                        type:"POST",
+                        dataType: "json",
+                        success:function (arg){
+                            if(arg.status==="ok"){
+                                obj.del();
+                                layer.close(index);
+                            }
+                            else {
+                                console.log(arg.msg)
+                            }
+                        }
+                    })
+                });
+            }
+        });
+        //监听单元格编辑
+          //监听单元格编辑
+        table.on('edit(currentTableFilter)', function(obj) {
+
+        let value = obj.value // 得到修改后的值
+            , data = obj.data // 得到所在行所有键值
+            , field = obj.field; //得到修改的字段
+        let modifiedData = {id: data.id};
+        modifiedData[field] = value;
+        console.log(obj.value,data.id)
+        $.ajax({
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            url: '/chengji/up_data/',
+            data: { id: data.id, name: obj.value},
+            success:function(result){
+                //弹出消息
+                    if (result.success){
+                        layer.msg(result.msg);
+                    }
+                    else{
+                        layer.msg(result.msg);
+                    }
+
+                }
+        });
+        });
+
+
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../static/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <h2 align="center">角色新增</h2>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="roleCode" lay-verify="required" lay-reqtext="名称不能为空" placeholder="请输入名称"
+                    value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">中文名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="roleName" placeholder="请输入中文名称" value="" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="remark" placeholder="备注信息" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label required">是否启用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="enable" value="1" title="启用" checked="">
+                <input type="radio" name="enable" value="0" title="禁用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.$;
+
+            var token = "{{ csrf_token }}"
+            $.ajaxSetup({
+                headers: { 'X-CSRFTOKEN': `${token}` }, // 这里是headers，不是data,  CSRF
+            });
+
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+
+                //传给后台
+                $.ajax({
+                    url: "/role-add",
+                    type: "post",
+                    data: data.field,
+                    success: function (result) {
+                        if (result.success) {
+                            layer.msg(result.msg, { icon: 1, time: 2000 }, function () {
+                                parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                                parent.layui.table.reload('currentTableId')
+                            })
+                        }
+                        else {
+                            layer.alert(result.msg);
+                        }
+
+                    },
+                    error: function (result) {
+                        alert("接口错误！！！");
+                    }
+                });
+
+                return false;
+
+            });
+
+        });
+    </script>
+
+
+
+</body>
+
+</html>

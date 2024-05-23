@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+
+	<link rel="stylesheet" href="/static/css/public.css" media="all">
+
+
+
+
+
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+{# <form   method="post" enctype="multipart/form-data" action="/student_multi">#}
+{#                    {% csrf_token %}#}
+{#                    <div class="form-group">#}
+{#                        <input type="file" name="exc">#}
+{#                    </div>#}
+{#                    <input type="submit" value="上传" class="btn btn-info btn-sm">#}
+{#                </form>#}
+<div class="layui-upload">
+<a class="layui-btn layui-btn-xs" href="/static/images/学生导入模板.xlsx" download="/static/images/学生导入模板.xlsx">点击下载导入模板</a>
+</div>>
+<div class="layui-upload-drag" id="test10">
+  <i class="layui-icon"></i>
+  <p>点击上传，或将文件拖拽到此处</p>
+</div>
+
+<table class="layui-table file-list layui-hide">
+				<tr>
+					<td>名称</td>
+					<td>大小</td>
+					<td>状态</td>
+					<td>操作</td>
+				</tr>
+			</table>
+
+<div class="layui-upload">
+  <button class="layui-btn all-upload layui-hide">开始上传</button>
+</div>
+
+
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+
+
+<script>
+    layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+    //拖拽上传
+  upload.render({
+    elem: '#test10'
+    ,url: '/student_multi'
+    ,accept: 'file' //普通文件
+    ,exts: 'xls|xlsx' //只允许上传xls文件
+     ,auto: false//选完文件后不自动上传
+      ,bindAction:  ".all-upload" //开始上传
+      ,before:function () {
+          layer.msg('拼命执行中...',{icon:16,scrollbar:false,offset:'auto',time:100000})
+      }
+    ,choose : function(obj) {
+				files = obj.pushFile();
+				$(".file-list").removeClass("layui-hide");
+				$(".all-upload").removeClass("layui-hide");
+				obj.preview(function(index, file, result) {
+					let tr = $([ "<tr id='upload-" + index + "'>",
+						"<td>" + file.name + "</td>",
+						"<td>" + (file.size / 1024).toFixed(1) + "KB</td>",
+						"<td>等待上传</td>",
+						"<td>",
+						"<button class='layui-btn layui-mini file-reload layui-hide'>重新上传</button>",
+						"<button class='layui-btn layui-mini layui-btn-danger file-del'>删除</button>",
+						"</td>",
+						"</tr>" ].join(""));
+
+					tr.find(".file-reload").on("click", function() {
+						obj.upload(index, file);
+					})
+
+					tr.find(".file-del").on("click", function() {
+						delete files[index];
+						tr.remove();
+					})
+
+					$("table").append(tr);
+				});
+			},
+    allDone : function(obj) { //当文件全部被提交后，才触发
+        console.log(obj.total); //得到总文件数
+        console.log(obj.successful); //请求成功的文件数
+        console.log(obj.aborted); //请求失败的文件数
+    },
+    done : function(res, index, upload) { //上传后的回调
+         var code = res.code === 0 ? 1 : 2;
+            layer.alert(res.msg, {icon: code}, function () {
+                parent.window.location.reload();
+                layer.close(index);
+            })
+
+    },
+    error : function(index, upload) {
+        var tr = $("table").find('tr#upload-' + index),
+            tds = tr.children();
+        tds.eq(2).html("<span style='color:#FF5722;'>上传失败</span>")
+        tds.eq(3).find(".file-reload").removeClass("layui-hide"); //清空操作
+    }
+  });
+
+  });
+
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+		
+		// ajax 头部增加csrf_token
+		var token = "{{ csrf_token }}"
+		$.ajaxSetup({
+		    headers: { 'X-CSRFTOKEN': `${token}` }, // 这里是headers，不是data,  CSRF
+		});
+		
+		
+		$(function(){   //js 加载时，AJAX请求
+			  $.ajax({
+				url:'/college',
+				type:'get',
+				dataType:'json',
+				success:function(result){
+					var list = result.data;
+
+					var str = "<option value=''></option>"
+					for (var i=0; i<list.length;i++) {
+						str += "<option value=\""+list[i].id+"\">"+ list[i].name+"</option>"
+					}
+				    console.log(str);
+					$('#collegeName').html(str);
+					form.render('select')   //重新渲染 form select内容
+				},
+				error:function(){
+					layer.msg('部门查询API出错！');
+				}
+			})
+		});
+		
+	
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+
+			//传给后台
+			$.ajax({
+				url:"/student",
+				type:"post",
+				data:data.field,
+
+				success:function(result){
+					layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+						  parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+						  parent.layui.table.reload('currentTableId');
+						})
+					
+				},
+				error:function(result){
+					alert("接口错误！！！");
+				}
+				});
+			
+			return false;
+			
+        });
+
+    });
+    //# 当学校的下拉列表改变时，查询年级名称，用ajax来发送id，后台获取数据库中的年级
+    layui.use(['layer', 'jquery', 'form'], function() {
+				var layer = layui.layer,
+					$ = layui.jquery,
+					form = layui.form;
+				form.on('select(ceshi)', function(data) {
+                    var college_id=data.value;//在html获取选取的学校ID
+                    console.log(college_id)
+                    $.ajax({    //初始化AJAX请求
+                    url:'/grade',    //设置请求地址(=localhost:8000/hr/ajax/load-cities/)
+                    data:{
+                        'college_id': college_id  //countryId传到GET参数
+                        },
+                    dataType: "JSON",
+                    success:function(result){
+					var list = result.data;
+
+					var str = "<option value=''></option>"
+					for (var i=0; i<list.length;i++) {
+						str += "<option value=\""+list[i].id+"\">"+ list[i].name+"</option>"
+					}
+				    console.log(str);
+					$('#gradeName').html(str);
+					form.render('select')   //重新渲染 form select内容
+				},
+           });
+				})
+                form.on('select(t_grade)', function(data) {
+                    var grade_id=data.value;//在html获取选取的学校ID
+
+                    $.ajax({    //初始化AJAX请求
+                    url:'/class',    //设置请求地址(=localhost:8000/hr/ajax/load-cities/)
+                    data:{
+                        'grade_id': grade_id  //countryId传到GET参数
+                        },
+                    dataType: "JSON",
+                    success:function(result){
+					var list = result.data;
+                    console.log(list)
+					var str = "<option value=''></option>"
+					for (var i=0; i<list.length;i++) {
+						str += "<option value=\""+list[i].id+"\">"+ list[i].name+"</option>"
+					}
+				    console.log(str);
+					$('#className').html(str);
+					form.render('select')   //重新渲染 form select内容
+				},
+           });
+				})});
+
+
+</script>
+
+
+
+</body>
+</html>

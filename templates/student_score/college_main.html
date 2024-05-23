@@ -1,0 +1,417 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- <link rel="stylesheet" href="{% static 'layui-v2.6.8/layui/css/layui.css' %}" media="all"> -->
+    <link rel="stylesheet" href="../../../static/lib/layui-v2.6.3/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../static/css/public.css" media="all">
+    
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>查询条件</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="idNumber" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="userName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">部门</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="dep" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+						<div class="layui-inline">
+						    <label class="layui-form-label">职位</label>
+						    <div class="layui-input-inline">
+						        <input type="text" name="position" autocomplete="off" class="layui-input">
+						    </div>
+						</div>
+						<div class="layui-inline">
+						    <label class="layui-form-label">状态</label>
+						    <div class="layui-input-inline">
+						        <!-- <input type="text" name="status" autocomplete="off" class="layui-input"> -->
+								<select name="status" >
+										<option value=""></option>
+								        <option value="1">启用</option>
+								        <option value="0">禁用</option>
+								</select>
+						    </div>
+						</div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">角色</label>
+                            <div class="layui-input-inline">
+								<select name="role" id="role" class="layui-input">
+								</select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+							
+								<button type="submit" class="layui-btn layui-btn-normal"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询</button>
+							
+                            
+							<button type="reset" class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-refresh"></i> 重 置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+				{% if "user:add" in request.session.permissions %}
+					<button class="layui-btn layui-btn-primary  layui-btn-sm layui-border-green data-add-btn" lay-event="add"> 新增 </button>
+				{% endif %}
+				
+				{% if "user:delete" in request.session.permissions %}
+					<button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn" lay-event="multi-del"> 批量删除 </button>
+				{% endif %}
+                
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+			{% if "user:role-update" in request.session.permissions %}
+				<a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green data-count-editRole" lay-event="editRole">角色</a>
+			{% endif %}
+			
+			{% if "user:delete" in request.session.permissions %}	
+				<a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+			{% endif %}
+        </script>
+		
+
+		
+		<script type="text/html" id="user-enable">
+			{% verbatim %}
+			{{#  if(d.status==1){ }}
+				<input type="checkbox" name="user-enable" lay-skin="switch" checked   lay-text="启用|禁用"  value= {{ d.fieldID}}  lay-filter="userEnable" >
+			{{#  } else { }}
+				<input type="checkbox" name="user-enable" lay-skin="switch"  lay-text="启用|禁用"  value= {{ d.fieldID}} lay-filter="userEnable" >
+			{{#  } }}
+			{% endverbatim %}
+		</script>
+
+
+    </div>
+</div>
+
+
+<!-- <script src="{%static 'layui-v2.6.8/layui/layui.js'%}" charset="utf-8"></script> -->
+<script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+		
+		var token = "{{ csrf_token }}"
+		$.ajaxSetup({
+		    headers: { 'X-CSRFTOKEN': `${token}` }, // 这里是headers，不是data,  CSRF
+		});
+		
+		
+		//登陆超时跳转
+		$.ajaxSetup({
+			complete: function (XMLHttpRequest, textStatus) {
+				if (textStatus == "parsererror") {
+					layer.msg('登陆过期, 请重新登陆', { icon: 2, time: 2000 }, function () {
+						window.location.href = '/';
+					})
+				} else if (textStatus == "error") {
+					$.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
+				}
+			}
+		});
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/college',
+			method:'get',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [[
+                {type: "checkbox", width: 50},
+				{field: 'numbers', width: 80, title: '序号', align:'center', sort: true,type: 'numbers'},
+                {field: 'id', width: 80, title: 'ID', align:'center', sort: true, hide:true},
+				{#{field: 'userID', width: 100, title: '工号', align:'center', sort: true},#}
+                {field: 'name', width: 180, title: '姓名', align:'center', sort: true, edit:'text'},
+                {#{field: 'department', width: 180, title: '部门',align:'center', sort: true, edit:'text'},#}
+				{#{field: 'position', width: 180, title: '职位',align:'center', sort: true, edit:'text'},#}
+                {#{field: 'email', title: '邮箱', width: 240, minWidth: 150, align:'center', sort: true, edit:'text'},#}
+				{#{% if "user:enable" in request.session.permissions %}#}
+				{#	{field: 'status', width: 180, title: '状态', align:'center', sort: true, templet: '#user-enable',},#}
+				{#{% endif %}#}
+                {#{field: 'role', width: 180, title: '角色',align:'center', align:'center', sort: true, templet: '#roleCN'},#}
+                {title: '操作', minWidth: 240, toolbar: '#currentTableBar', align: "center"}	
+            ]],
+            limits: [10, 20, 50, 100, 200, 500],
+            limit: 10,
+            page: true,
+            skin: 'row',
+			even: true
+			
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+			console.log(data.field);
+            var result = JSON.stringify(data.field);
+            // layer.alert(result, {
+            //     title: '最终的搜索信息'
+            // });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    Params:result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '新增',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['40%', '80%'],
+                    content: '/college_add',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
+				var checkStatus = table.checkStatus('currentTableId');
+				var data = checkStatus.data;
+				if (data.length === 0) {
+				  layer.msg('未选中数据', {
+				    icon: 3,
+				    time: 1000
+				  })
+				  return false
+				} else {
+					layer.confirm('真的删除选中行吗?', {icon: 3, title:'确认删除'}, function (index) {
+					    layer.close(index);
+						
+						if (data.length === 0) {
+						  layer.msg('请选择需要删除的数据!', {
+						    icon: 3,
+						    time: 1000
+						  })
+						  return false
+						}
+						//传给后台
+						$.ajax({
+							url:"/college",
+							type:"delete",
+							data:{Params:JSON.stringify(data)},
+							success:function(result){
+								if (result.success){
+									// layer.msg(result.msg);
+									layer.msg(result.msg, { icon: 1, time: 2000 }, function () {
+									  parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+									  table.reload('currentTableId');  //表格重载
+									})
+								}
+								else{
+									layer.msg(result.msg);
+                                    table.reload('currentTableId');  //表格重载
+								}
+								
+							},
+							error:function(result){
+								alert("接口错误！！");
+							}
+						});
+						return false;
+					});
+				}
+            }else if (obj.event === 'refresh') {
+				table.reload('currentTableId');
+				}
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {			
+                var index = layer.open({
+                    title: '编辑',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['40%', '60%'],
+                    content: '/user-edit',
+					success: function(layero, index){
+						var iframe = window['layui-layer-iframe' + index];
+						// 向子页面的全局函数updateForm传参
+						iframe.updateForm(data);
+					  }
+                });
+				
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么?', {icon: 3, title:'确认删除'}, function (index) {
+					console.log(obj);
+                    obj.del();
+                    layer.close(index);
+					//传给后台
+					$.ajax({
+						url:"/college",
+						type:"delete",
+						data:{Params:JSON.stringify(data)},
+						success:function(result){
+							if (result.success){
+								layer.msg(result.msg, {icon: 1});
+							}
+							else{
+								layer.msg(result.msg);
+							}
+							
+						},
+						error:function(result){
+							alert("接口错误！！");
+						}
+					});
+					return false;
+					
+                });
+            }  else if (obj.event === 'editRole') {			
+                var index = layer.open({
+                    title: '角色编辑',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['40%', '50%'],
+                    content: '/college',
+					success: function(layero, index){
+						var iframe = window['layui-layer-iframe' + index];
+						// 向子页面的全局函数updateForm传参
+						iframe.updateForm(data);
+					  }
+                });
+				
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            }
+        });
+		
+		
+		table.on('edit(currentTableFilter)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+		  // console.log(obj.value); //得到修改后的值
+		  // console.log(obj.field); //当前编辑的字段名
+		  console.log(obj.data); //所在行的所有相关数据  
+		  //传给后台
+		  $.ajax({
+		  	url:"/college",
+		  	type:"put",
+		  	data:{
+				field:obj.field,
+				value:obj.value,
+				dbID:obj.data.id
+			},
+		  	success:function(result){
+		  		if (result.success){
+		  			layer.msg(result.msg, {icon: 1});
+		  		}
+		  		else{
+		  			layer.msg(result.msg, {icon: 1});
+		  		}
+		  		
+		  	},
+		  	error:function(result){
+		  		alert("接口错误！！");
+		  	}
+		  	});
+		  return false;
+		  
+
+		});
+		
+		
+		form.on('switch(userEnable)', function (obj) {
+		  // console.log(obj);
+		  // console.log(obj.value);
+		  let operate
+		  if (obj.elem.checked) {
+		    operate = 'enable'
+		  } else {
+		    operate = 'disable'
+		  }
+		  let loading = layer.load()
+		
+		  $.ajax({
+		  	url:"/user-enable",
+		  	type:"post",
+		  	data:{
+		  		userID:obj.value,
+		  		enableValue:operate
+		  			},
+		  	success:function(result){
+				layer.close(loading)
+		  		if (result.success){
+		  			layer.msg(result.msg, {icon:1});
+		  		}
+		  		else{
+		  			layer.msg(result.msg, {icon:2});
+		  		}
+		  	},
+		  	error:function(result){
+		  		alert("接口错误！！");
+		  	}
+		  	});
+		  return false;
+		
+		})
+		
+		
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>layui</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="../../../static/lib/layui-v2.6.3/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../static/css/public.css" media="all">
+	<style>
+		body {
+			background-color: #ffffff;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="layui-form layuimini-form">
+		<div class="layui-form-item">
+			<h2 align="center">权限管理</h2>
+		</div>
+		<div>
+			<label class="layui-form-label">角色ID</label>
+			<div class="layui-input-inline">
+				<input type="text" id="roleId" name="roleId" value="" disabled="disabled" class="layui-input">
+			</div>
+		</div>
+
+		<div>
+			<label class="layui-form-label">角色名称</label>
+			<div class="layui-input-inline">
+				<input type="text" id="roleName" name="roleName" value="" disabled="disabled" class="layui-input">
+			</div>
+		</div>
+
+		<hr>
+
+		<p id="powerContent">
+
+		</p>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+			</div>
+		</div>
+	</div>
+	<script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+	<script>
+		function getRolePower(value, userID) {
+
+			layui.use(['form', 'table'], function () {
+				var $ = layui.jquery,
+					form = layui.form,
+					table = layui.table,
+					laydate = layui.laydate;
+
+				var token = "{{ csrf_token }}";
+				$.ajaxSetup({
+					headers: { 'X-CSRFTOKEN': `${token}` }, // 这里是headers，不是data,  CSRF
+				});
+
+
+				$(function () {   //js 加载时，AJAX请求
+					$.ajax({
+						url: '/role-power',
+						data: {
+							role_id: value,
+							user_id: userID
+						},
+						type: 'post',
+						dataType: 'json',
+						success: function (result) {
+							var list = result.data;
+							console.log(result.data);
+							var str = "", str1 = "", str2 = "", str3 = "", str4 = "";
+							var pageCount = 0, buttonCount = 0;
+							for (var k = 0; k < list.length; k++) {
+
+								var dirID = list[k].dirId;
+								var dirName = list[k].dirName;
+								var menuList = list[k].menuInfo;
+								for (var i = 0; i < menuList.length; i++) {
+
+									let firstInput = '页面访问';
+									pageCount += 1;
+									str = "", str1 = "", str2 = "";
+									let page_name = 'page' + pageCount;
+									str += "<input type='checkbox' name=\"" + page_name + "\" value=\"" + menuList[i].menuId + "\" title=\"" + firstInput + "\" " + menuList[i].menuCheckbox + ">";
+									var buttonIdList = menuList[i].buttonId;
+									var buttonNameList = menuList[i].buttonName;
+									var buttonCheckboxList = menuList[i].buttonCheckbox;
+									for (var j = 0; j < buttonIdList.length; j++) {
+										buttonCount += 1;
+										let button_name = 'button' + buttonCount;
+										str += "<input type='checkbox' name=\"" + button_name + "\"  value=\"" + buttonIdList[j] + "\" title=\"" + buttonNameList[j] + "\" " + buttonCheckboxList[j] + ">"
+									}
+									str1 = "<div class='layui-input-block'>" + str + "</div>"
+									str2 = "<label class='layui-form-label'>" + menuList[i].menuName + "</label>"
+									str3 += "<div class='layui-form-item'>" + str2 + " " + str1 + "</div>"
+								}
+								str4 += "<label class='layui-form-label' style='font-size: 16px;'>" + dirName + "</label>" + str3 + ""
+								str3 = "";
+							}
+
+							// console.log(str4);
+							$('#powerContent').html(str4);
+							form.render('')   //重新渲染 
+						},
+						error: function () {
+							layer.msg('API接口出错！');
+						}
+					})
+				});
+
+
+			});
+
+		}
+
+	</script>
+	<script>
+		layui.use(['form', 'layer'], function () {
+			var form = layui.form,
+				layer = layui.layer,
+				$ = layui.jquery;
+			var roleId = document.getElementById("roleId").value;
+			console.log(roleId);
+
+			//监听提交
+			form.on('submit(saveBtn)', function (data) {
+
+				//传给后台
+				$.ajax({
+					url: "/role-power-save",
+					type: "post",
+					data: data.field,
+					success: function (result) {
+						if (result.success) {
+							layer.msg(result.msg, { icon: 1, time: 2000 }, function () {
+								parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+							})
+						}
+						else {
+							layer.alert(result.msg);
+						}
+
+					},
+					error: function (result) {
+						alert("接口错误！！！");
+					}
+				});
+
+				return false;
+
+			});
+
+
+
+
+		});
+	</script>
+</body>
+
+</html>
