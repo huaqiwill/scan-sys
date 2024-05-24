@@ -15,11 +15,13 @@ from common.API.log import login_log
 from login.models import Logo, Log
 from sys_manage.models import User, Role, Power, RolePower
 from student_score import models as m_model
+from common.API.auth import login_required, authorize
 
 
+@login_required
 def index(request):
     if request.method == "GET":
-        return redirect("/login")
+        return render(request, "login/index.html")
 
 
 def home(request):
@@ -108,12 +110,14 @@ def get_captcha(request):
     return make_captcha(request)
 
 
+@login_required
 def login_in(request):
     user_id = request.session.get("user_id")
     if user_id:
         return render(request, "login/index.html", {"user_id": user_id})
 
 
+@login_required
 def login_out(request):
     user_id = request.session.get("user_id")
     login_log(request, uid=user_id, is_access=True, desc="退出登录")

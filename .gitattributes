@@ -2,3 +2,5 @@
 *.html linguist-language=python
 *.css linguist-language=python
 *.json linguist-language=python
+*.scss linguist-language=python
+*.less linguist-language=python

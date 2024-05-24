@@ -10,20 +10,23 @@ from django.http import JsonResponse
 
 
 def ratelimit_handler(request):
+    """访问限制处理工具"""
     return JsonResponse({"error": "Too many requests. Please try again later."})
 
 
 # Create your views here.
 @login_required
 def monitor(request):
+    """事件监控预警"""
     return render(request, "monitor/monitor.html")
+
 
 @login_required
 def monitor_query(request):
-    if request.method != "POST":
-        return res_josn_data.fail_api("不支持的请求格式")
+    """监控预警查询"""
+    # if request.method != "POST":
+    #     return res_josn_data.fail_api("不支持的请求格式")
 
-    data_list = []
     # 获取必填参数
     page = request.POST.get("page", 1)
     limit = request.POST.get("limit", 10)
@@ -33,38 +36,27 @@ def monitor_query(request):
     # 序号
     count = (int(page) - 1) * int(limit)
 
-    for item in page_data:
-        count += 1
-        item_data = {
-            "id": count,
-            "fieldID": item.id,
-            "userID": item.id_number,
-            "name": item.user_name,
-            "department": item.department,
-            "position": item.position,
-            "email": item.email,
-            "status": item.user_status,
-            "role": item.role_des,
-        }
-        data_list.append(item_data)
-
-    return res_josn_data.table_api(count=len(user_obj), data=data_list)
+    return res_josn_data.table_api(count=len(user_obj), data=page_data)
 
 
+@login_required
 def monitor_delete(request):
     return res_josn_data.success_api("success")
 
 
 @login_required
 def notify(request):
+    """通知管理"""
     # EMail().send_email()
     return render(request, "monitor/notify.html")
 
 
+@login_required
 def notify_query(request):
     return res_josn_data.success_api("success")
 
 
+@login_required
 def notify_delete(request):
     return res_josn_data.success_api("success")
 
@@ -74,10 +66,12 @@ def handle(request):
     return render(request, "monitor/handle.html")
 
 
+@login_required
 def handle_query(request):
     return res_josn_data.success_api("success")
 
 
+@login_required
 def handle_delete(request):
     return res_josn_data.success_api("success")
 
@@ -87,9 +81,11 @@ def recover(request):
     return render(request, "monitor/recover.html")
 
 
+@login_required
 def recover_query(request):
     return res_josn_data.success_api("success")
 
 
+@login_required
 def recover_delete(request):
     return res_josn_data.success_api("success")
