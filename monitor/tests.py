@@ -3,9 +3,23 @@ from django.test import TestCase
 # Create your tests here.
 from .utils.mail import EMail
 from .models import Monitor
+from .utils import sqlbak
 
 
-class Test(TestCase):
+class SqlTest(TestCase):
+    def setUp(self):
+        pass
+
+    def test_backup(self):
+        print("备份数据库")
+        sqlbak.backup()
+
+    def test_restore(self):
+        print("还原数据库")
+        sqlbak.restore()
+
+
+class Test():
 
     def setUp(self):
         # 这个方法在每个测试方法执行之前运行

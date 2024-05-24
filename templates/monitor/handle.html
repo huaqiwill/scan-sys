@@ -20,86 +20,67 @@
                 <div style="margin: 10px 10px 10px 10px">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-form-item">
+
                             <div class="layui-inline">
-                                <label class="layui-form-label">角色ID</label>
+                                <label class="layui-form-label">状态</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="roleID" autocomplete="off" class="layui-input">
+                                    <select name="enable">
+                                        <option value=""></option>
+                                        <option value="1">成功</option>
+                                        <option value="0">失败</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">名称</label>
+                                <label class="layui-form-label">恢复时间</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="codeName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">中文名称</label>
+                                <label class="layui-form-label">文件名</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="roleName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">是否启用</label>
+                                <label class="layui-form-label">详情</label>
                                 <div class="layui-input-inline">
-                                    <select name="enable">
-                                        <option value=""></option>
-                                        <option value="1">启用</option>
-                                        <option value="0">禁用</option>
-                                    </select>
+                                    <input type="text" name="roleName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">备注</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="remark" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-
                                 <button type="submit" class="layui-btn layui-btn-normal" lay-submit
-                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询</button>
-
-                                <button type="reset" class="layui-btn layui-btn-primary"><i
-                                        class="layui-icon layui-icon-refresh"></i> 重 置</button>
+                                    lay-filter="data-search-btn">
+                                    <i class="layui-icon"></i>
+                                    查 询
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">
+                                    <i class="layui-icon layui-icon-refresh"></i>
+                                    重 置
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </fieldset>
 
-            <script type="text/html" id="toolbarUser">
-            <div class="layui-btn-container">
-				{% if "role:add" in request.session.permissions %}
-					<button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm data-add-btn" lay-event="add"> 新增 </button>
-				{% endif %}
-				
-            </div>
-        </script>
-
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
-            <script type="text/html" id="currentTableBar">
-
-			{% if "role:power" in request.session.permissions %}
-				<a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="power">权限</a>
-			{% endif %}
-			
-			{% if "role:delete" in request.session.permissions %}
-				<a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
-			{% endif %}
-
-            
-        </script>
-
-
         </div>
     </div>
-    <script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script type="text/html" id="toolbarUser">
+
+    </script>
+    <script type="text/html" id="currentTableBar">
+        {% if "role:delete" in request.session.permissions %}
+            <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+        {% endif %}
+    </script>
+    <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
         layui.use(['form', 'table'], function () {
             var $ = layui.jquery,
@@ -126,31 +107,24 @@
                 }
             });
 
-            /// 表格渲染
-
             let cols = [
                 { type: "checkbox", width: 50 },
                 { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                { field: 'roleID', width: 100, title: 'ID', align: 'center', sort: true, hide: true },
-                { field: 'roleValue', width: 100, title: '角色ID', align: 'center', sort: true, edit: 'text' },
-                { field: 'roleCode', width: 200, title: '名称', align: 'center', sort: true, edit: 'text' },
-                { field: 'roleName', width: 200, title: '中文名称', align: 'center', sort: true, edit: 'text' },
-                { field: 'remark', width: 360, title: '权限说明', align: 'center', sort: true, edit: 'text' },
-                {
-                    field: 'enable', width: 180, title: '是否启用', align: 'center', sort: true, templet: function (res) {
-                        if (res.enable == 1) {
-                            return '<input type="checkbox" checked="checked" lay-filter="role-enable" lay-skin="switch" lay-text="启用|禁用" roleID=' + res.roleID + '>'
-                        } else {
-                            return '<input type="checkbox" lay-filter="role-enable" lay-skin="switch" lay-text="启用|禁用" roleID=' + res.roleID + '>'
-                        }
-                    },
-                },
-                { title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center" }
+                { field: 'roleID', width: 100, title: '请求时间', align: 'center', sort: true, hide: true },
+                { field: 'roleValue', width: 100, title: '请求方法', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '请求路径', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '响应状态', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '响应时间', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '处置事件', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '源IP', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '攻击类型', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '详情信息', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '是否自动处理', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '处理状态', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '处理动作', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '处理详情', align: 'center', sort: true },
+                { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center" }
             ]
-            let hasRoleEnablePermission = `{% if "role:enable" in request.session.permissions %}1{% endif %}` === "1" ? true : false;
-            if (!hasRoleEnablePermission) {
-                cols = cols.filter(item => item.field !== 'enable')
-            }
 
             table.render({
                 elem: '#currentTableId',

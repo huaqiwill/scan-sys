@@ -22,41 +22,27 @@
                         <div class="layui-form-item">
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">角色ID</label>
+                                <label class="layui-form-label">通报类型</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="roleID" autocomplete="off" class="layui-input">
+                                    <select name="enable">
+                                        <option value=""></option>
+                                        <option value="1">资源类型</option>
+                                        <option value="0">攻击类型</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">名称</label>
+                                <label class="layui-form-label">通报邮箱</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="codeName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">中文名称</label>
+                                <label class="layui-form-label">通报事件</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="roleName" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">是否启用</label>
-                                <div class="layui-input-inline">
-                                    <select name="enable">
-                                        <option value=""></option>
-                                        <option value="1">启用</option>
-                                        <option value="0">禁用</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">备注</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="remark" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
@@ -80,21 +66,14 @@
         </div>
     </div>
     <script type="text/html" id="toolbarUser">
-        <div class="layui-btn-container">
-            {% if "role:add" in request.session.permissions %}
-                <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm data-add-btn" lay-event="add">新增</button>
-            {% endif %}
-        </div>
+
     </script>
     <script type="text/html" id="currentTableBar">
-        {% if "role:power" in request.session.permissions %}
-            <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="power">权限</a>
-        {% endif %}
         {% if "role:delete" in request.session.permissions %}
             <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
         {% endif %}
     </script>
-    <script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
         layui.use(['form', 'table'], function () {
             var $ = layui.jquery,
@@ -124,11 +103,12 @@
             let cols = [
                 { type: "checkbox", width: 50 },
                 { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                { field: 'roleID', width: 100, title: '通报ID', align: 'center', sort: true, hide: true },
                 { field: 'roleValue', width: 100, title: '通报类型', align: 'center', sort: true },
                 { field: 'roleCode', width: 200, title: '通报邮箱', align: 'center', sort: true },
-                { field: 'roleName', width: 200, title: '接收人', align: 'center', sort: true },
-                { field: 'remark', width: 360, title: '接受内容', align: 'center', sort: true },
+                { field: 'roleName', width: 200, title: '通报主题', align: 'center', sort: true },
+                { field: 'remark', width: 360, title: '通报内容', align: 'center', sort: true },
+                { field: 'remark', width: 360, title: '通报时间', align: 'center', sort: true },
+                { field: 'remark', width: 360, title: '通报状态', align: 'center', sort: true },
                 { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center" }
             ]
 

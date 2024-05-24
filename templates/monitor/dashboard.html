@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>监控预警系统</title>
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+    <script src="/static/lib/layui-v2.6.3/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+
+<body>
+    <div class="layui-container">
+        <h1>监控预警系统</h1>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <table class="layui-table" id="attack-table"></table>
+            </div>
+            <div class="layui-col-md6">
+                <div id="system-chart" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            // 获取攻击数据
+            fetch('/get_attack_data')
+                .then(response => response.json())
+                .then(data => {
+                    table.render({
+                        elem: '#attack-table',
+                        cols: [[
+                            { field: 'attack_type', title: '攻击类型' },
+                            { field: 'timestamp', title: '时间' },
+                            { field: 'description', title: '描述' }
+                        ]],
+                        data: data
+                    });
+                });
+        });
+
+        // 获取系统资源数据并绘制图表
+        function fetchSystemData() {
+            fetch('/get_system_data')
+                .then(response => response.json())
+                .then(data => {
+                    var chart = echarts.init(document.getElementById('system-chart'));
+                    var option = {
+                        title: { text: '系统资源使用情况' },
+                        tooltip: {},
+                        legend: { data: ['使用率'] },
+                        xAxis: { data: ['CPU', '内存', '磁盘'] },
+                        yAxis: {},
+                        series: [{
+                            name: '使用率',
+                            type: 'bar',
+                            data: [data.cpu_usage, data.memory_usage, data.disk_usage]
+                        }]
+                    };
+                    chart.setOption(option);
+                });
+        }
+
+        fetchSystemData();
+        setInterval(fetchSystemData, 5000);  // 每5秒刷新一次数据
+    </script>
+</body>
+
+</html>

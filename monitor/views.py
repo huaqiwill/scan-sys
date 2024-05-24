@@ -89,3 +89,53 @@ def recover_query(request):
 @login_required
 def recover_delete(request):
     return res_josn_data.success_api("success")
+
+
+from .utils import sqlbak
+
+
+def mysql_backup(request):
+    sqlbak.backup()
+
+
+def mysql_restore(request):
+    sqlbak.restore()
+
+
+from .models import Attack
+import psutil
+
+
+def dashboard(request):
+    return render(request, "monitor/dashboard.html")
+
+
+def get_attack_data(request):
+    attacks = Attack.objects.all().values("attack_type", "timestamp", "description")
+    return JsonResponse(list(attacks), safe=False)
+
+
+def get_system_data(request):
+    cpu_usage = psutil.cpu_percent(interval=1)
+    memory_info = psutil.virtual_memory()
+    disk_usage = psutil.disk_usage("/")
+    system_data = {
+        "cpu_usage": cpu_usage,
+        "memory_usage": memory_info.percent,
+        "disk_usage": disk_usage.percent,
+    }
+    return JsonResponse(system_data)
+
+
+def restore_page(request):
+    return render(request, "monitor/recover.html")
+
+
+from .models import RestoreRecord
+
+
+def get_restore_records(request):
+    records = RestoreRecord.objects.all().values(
+        "timestamp", "filename", "status", "details"
+    )
+    return JsonResponse(list(records), safe=False)

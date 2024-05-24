@@ -35,7 +35,6 @@ def backup_database(host, user, password, database, backup_path):
             print("MySQL connection is closed")
 
 
-
 def restore_database(host, user, password, database, backup_path):
     try:
         # 连接到数据库
@@ -72,42 +71,52 @@ def restore_database(host, user, password, database, backup_path):
             connection.close()
             print("MySQL connection is closed")
 
+
 import mysql.connector
+
 
 def backup_database_to_sql_file(host, user, password, database, backup_file_path):
     try:
         # 连接到数据库
         connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+            host=host, user=user, password=password, database=database
         )
 
         cursor = connection.cursor()
         cursor.execute("SHOW TABLES")
         tables = cursor.fetchall()
 
-        with open(backup_file_path, 'w', encoding='utf-8') as backup_file:
+        with open(backup_file_path, "w", encoding="utf-8") as backup_file:
             for table in tables:
                 table_name = table[0]
-                
+
                 # 获取表创建语句
                 cursor.execute(f"SHOW CREATE TABLE {table_name}")
                 create_table_stmt = cursor.fetchone()[1]
                 backup_file.write(f"{create_table_stmt};\n\n")
-                
+
                 # 获取表数据
                 cursor.execute(f"SELECT * FROM {table_name}")
                 rows = cursor.fetchall()
                 columns = [desc[0] for desc in cursor.description]
-                
+
                 # 写入插入语句
                 for row in rows:
-                    values = ', '.join([f"'{str(value).replace('\'', '\\\'')}'" if value is not None else 'NULL' for value in row])
-                    backup_file.write(f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({values});\n")
+                    values = []
+                    for value in row:
+                        if value is not None:
+                            value = str(value).replace("'", "\\'")
+                            values.append(value)
+                        else:
+                            value = "NULL"
+                            values.append(value)
+
+                    values_str = ", ".join(values)
+                    backup_file.write(
+                        f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({values_str});\n"
+                    )
                 backup_file.write("\n\n")
-                
+
                 print(f"Table {table_name} backed up successfully.")
     except mysql.connector.Error as error:
         print(f"Error: {error}")
@@ -120,25 +129,23 @@ def backup_database_to_sql_file(host, user, password, database, backup_file_path
 
 import mysql.connector
 
+
 def restore_database_from_sql_file(host, user, password, database, backup_file_path):
     try:
         # 连接到数据库
         connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+            host=host, user=user, password=password, database=database
         )
 
         cursor = connection.cursor()
 
-        with open(backup_file_path, 'r', encoding='utf-8') as backup_file:
-            sql_statements = backup_file.read().split(';')
+        with open(backup_file_path, "r", encoding="utf-8") as backup_file:
+            sql_statements = backup_file.read().split(";")
             for statement in sql_statements:
                 if statement.strip():
                     cursor.execute(statement)
                     connection.commit()
-        
+
         print("Database restored successfully from SQL file.")
     except mysql.connector.Error as error:
         print(f"Error: {error}")
@@ -150,20 +157,12 @@ def restore_database_from_sql_file(host, user, password, database, backup_file_p
 
 
 def backup():
-    backup_database_to_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
+    backup_database_to_sql_file(
+        "localhost", "root", "123456", "auth_system", "./backup.sql"
+    )
+
 
 def restore():
-    restore_database_from_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
-
-
-if __name__ == "__main__":
-    # 使用示例
-    # 使用示例
-    backup_database("localhost", "root", "password", "database_name", "./backup")
-    restore_database("localhost", "root", "password", "database_name", "./backup")
-    # 使用示例
-    backup_database_to_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
-    # 使用示例
-    restore_database_from_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
-
-
+    restore_database_from_sql_file(
+        "localhost", "root", "123456", "auth_system2", "./backup.sql"
+    )
