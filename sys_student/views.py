@@ -1,28 +1,23 @@
 import json
-import re
 from collections import OrderedDict
-from itertools import chain, zip_longest
 from openpyxl import load_workbook
 import numpy as np
 import pandas as pd
 
 from django.core.paginator import Paginator
-from django.db.models import Count, Sum, Avg, Q, Max
+from django.db.models import Count, Sum, Avg, Q
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, HttpResponse
-from pandas.core.reshape import pivot
+from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from common.API import res_josn_data
-from common.API.auth import login_required, authorize
-from student_score import models
-from student_score.utils.bootstrap import BootStrapModelForm
+from sys_common.API import res_josn_data
+from sys_student import models
 from rest_framework import views
-from student_score.management import serializer as ser
+from sys_student.management import serializer as ser
 
-from student_score import models as m_model
-from student_score.models import StudentCourseMemberShip
+from sys_student import models as m_model
+from sys_student.models import StudentCourseMemberShip
 
 
 # Create your views here.
@@ -54,11 +49,11 @@ class Pagination(PageNumberPagination):
 
 
 def college_manage(request):
-    return render(request, 'student_score/college_main.html')
+    return render(request, 'sys_student/college_main.html')
 
 
 def college_add(request):
-    return render(request, 'student_score/college_add.html')
+    return render(request, 'sys_student/college_add.html')
 
 
 class CollegeManage(views.APIView):
@@ -201,11 +196,11 @@ class CollegeManage(views.APIView):
 
 
 def grade_manage(request):
-    return render(request, 'student_score/grade_main.html')
+    return render(request, 'sys_student/grade_main.html')
 
 
 def grade_add(request):
-    return render(request, 'student_score/grade_add.html')
+    return render(request, 'sys_student/grade_add.html')
 
 
 class GradeManage(views.APIView):
@@ -355,11 +350,11 @@ class GradeManage(views.APIView):
 
 
 def class_manage(request):
-    return render(request, 'student_score/class_main.html')
+    return render(request, 'sys_student/class_main.html')
 
 
 def class_add(request):
-    return render(request, 'student_score/class_add.html')
+    return render(request, 'sys_student/class_add.html')
 
 
 class ClassManage(views.APIView):
@@ -520,11 +515,11 @@ class ClassManage(views.APIView):
 
 
 def course_manage(request):
-    return render(request, 'student_score/course_main.html')
+    return render(request, 'sys_student/course_main.html')
 
 
 def course_add(request):
-    return render(request, 'student_score/course_add.html')
+    return render(request, 'sys_student/course_add.html')
 
 
 class courseManage(views.APIView):
@@ -698,15 +693,15 @@ class courseManage(views.APIView):
 
 
 def student_manage(request):
-    return render(request, 'student_score/student_main.html')
+    return render(request, 'sys_student/student_main.html')
 
 
 def student_add(request):
-    return render(request, 'student_score/student_add.html')
+    return render(request, 'sys_student/student_add.html')
 
 
 def student_upload_add(request):
-    return render(request, 'student_score/student_upload_add.html')
+    return render(request, 'sys_student/student_upload_add.html')
 
 
 class studentManage(views.APIView):
@@ -968,7 +963,7 @@ def score_manage(request):
         "grade": grade,
         "course": course,
     }
-    return render(request, 'student_score/score_main.html', context)
+    return render(request, 'sys_student/score_main.html', context)
 
 
 class ScoreManage(views.APIView):
@@ -1122,7 +1117,7 @@ class ScoreManage(views.APIView):
 
 
 def banji_score(request):
-    return render(request, 'student_score/banji_score_main.html')
+    return render(request, 'sys_student/banji_score_main.html')
 
 
 class banji_score_count(views.APIView):
@@ -1199,7 +1194,7 @@ class banji_score_count(views.APIView):
 
 
 def stu_score_manage(request):
-    return render(request, 'student_score/stu_score_main.html')
+    return render(request, 'sys_student/stu_score_main.html')
 
 
 class stu_ScoreManage(views.APIView):

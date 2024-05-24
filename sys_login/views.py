@@ -4,34 +4,41 @@ from django.contrib.auth import logout
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-
-# Create your views here.
-from common.API import res_josn_data
-from common.API.auth import add_auth_session, login_required
-from common.API.captcha import make_captcha
-from common.API.code import check_code
-from common.API.echarts import echarts_pie, json_response
-from common.API.log import login_log
-from login.models import Logo, Log
+from sys_common.API import res_josn_data
+from sys_common.API.auth import add_auth_session
+from sys_common.API.captcha import make_captcha
+from sys_common.API.code import check_code
+from sys_common.API.echarts import echarts_pie, json_response
+from sys_common.API.log import login_log
+from sys_login.models import Logo, Log
 from sys_manage.models import User, Role, Power, RolePower
-from student_score import models as m_model
-from common.API.auth import login_required, authorize
+from sys_common.API.auth import login_required
 
 
 @login_required
 def index(request):
     if request.method == "GET":
-        return render(request, "login/index.html")
+        return render(request, "sys_login/index.html")
 
 
 def home(request):
     if request.method == "GET":
-        return render(request, "login/home.html")
+        return render(request, "sys_login/home.html")
+
+
+def page_not_found(request, exception):
+    if request.method == "GET":
+        return render(request, "errors/404.html")
+
+
+def page_error(request):
+    if request.method == "GET":
+        return render(request, "errors/500.html")
 
 
 def login(request):
     if request.method == "GET":
-        return render(request, "login/login.html")
+        return render(request, "sys_login/login.html")
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -114,7 +121,7 @@ def get_captcha(request):
 def login_in(request):
     user_id = request.session.get("user_id")
     if user_id:
-        return render(request, "login/index.html", {"user_id": user_id})
+        return render(request, "sys_login/index.html", {"user_id": user_id})
 
 
 @login_required
@@ -122,7 +129,7 @@ def login_out(request):
     user_id = request.session.get("user_id")
     login_log(request, uid=user_id, is_access=True, desc="退出登录")
     logout(request)
-    return redirect("/login")
+    return redirect("/sys_login")
 
 
 @login_required
@@ -201,7 +208,7 @@ def echarts(request):
 @login_required
 def user_setting(request):
     if request.method == "GET":
-        return render(request, "login/user_setting.html")
+        return render(request, "sys_login/user_setting.html")
     if request.method == "POST":
         post_data = request.POST
         print(post_data)
@@ -243,7 +250,7 @@ def user_info_query(request):
 @login_required
 def user_password(request):
     if request.method == "GET":
-        return render(request, "login/user_password.html")
+        return render(request, "sys_login/user_password.html")
     if request.method == "POST":
         post_data = request.POST
         print(post_data)
@@ -262,7 +269,6 @@ def user_password(request):
             **{"id_password": make_password(new_password)}
         )
         return res_josn_data.success_api(msg="修改成功!")
-
 
 # def page_not_found(request, exception):
 #     return render(request, "errors/404.html", exception)

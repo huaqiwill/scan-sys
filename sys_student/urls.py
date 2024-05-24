@@ -1,6 +1,6 @@
 from django.urls import path
 
-from student_score import views
+from sys_student import views
 
 urlpatterns = [
     path("college_manage", views.college_manage),  # 学校管理页面

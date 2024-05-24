@@ -1,4 +1,4 @@
-from login.models import Log
+from sys_login.models import Log
 
 
 def xss_escape(s: str):

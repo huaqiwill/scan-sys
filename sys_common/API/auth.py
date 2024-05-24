@@ -1,8 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import redirect
 
-from common.API import res_josn_data
-from common.API.log import exec_log
+from sys_common.API import res_josn_data
+from sys_common.API.log import exec_log
 from sys_manage.models import RolePower, Power
 
 
@@ -34,7 +34,7 @@ def login_required(info):
         user_id = request.session.get("user_id")
         if not user_id:
             print("用户session过期, 需重新登陆")
-            return redirect("/login")
+            return redirect("/sys_login")
         return info(request, *args, **kwargs)
 
     return wrapper

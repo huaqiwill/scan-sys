@@ -9,9 +9,9 @@ import json
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from common.API import res_josn_data
-from common.API.auth import authorize, login_required
-from login.models import Log
+from sys_common.API import res_josn_data
+from sys_common.API.auth import authorize, login_required
+from sys_login.models import Log
 
 
 @login_required

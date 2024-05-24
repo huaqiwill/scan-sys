@@ -1,9 +1,9 @@
 from django.urls import path
-from login import views
+from sys_login import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("login/", views.login, name="登录"),
+    path("login", views.login, name="登录"),
     path("get-captcha", views.get_captcha, name="获取验证码"),
     path("login-in", views.login_in, name="登录成功"),
     path("login-out", views.login_out, name="退出登录"),
@@ -15,6 +15,5 @@ urlpatterns = [
     path("user-password", views.user_password, name="用户密码修改"),
 ]
 
-
-# handler404 = 'login.views.page_not_found'
-# handler500 = 'login.views.page_error'
+# handler404 = 'sys_login.views.page_not_found'
+# handler500 = 'sys_login.views.page_error'

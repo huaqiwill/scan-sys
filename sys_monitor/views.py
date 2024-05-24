@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .utils.mail import EMail
-from common.API import res_josn_data
-from common.API.auth import authorize, login_required
-from login.models import Log
-import json
+from sys_common.API import res_josn_data
+from sys_common.API.auth import login_required
 from .models import Monitor, Notify
 from django.http import JsonResponse
 from .utils import sqlbak
@@ -21,7 +18,7 @@ def ratelimit_handler(request):
 @login_required
 def monitor(request):
     """事件监控预警"""
-    return render(request, "monitor/monitor.html")
+    return render(request, "sys_monitor/monitor.html")
 
 
 @login_required
@@ -66,7 +63,7 @@ def monitor_delete(request):
 def notify(request):
     """通知管理"""
     # EMail().send_email()
-    return render(request, "monitor/notify.html")
+    return render(request, "sys_monitor/notify.html")
 
 
 @login_required
@@ -81,7 +78,7 @@ def notify_delete(request):
 
 @login_required
 def handle(request):
-    return render(request, "monitor/handle.html")
+    return render(request, "sys_monitor/handle.html")
 
 
 @login_required
@@ -96,7 +93,7 @@ def handle_delete(request):
 
 @login_required
 def recover(request):
-    return render(request, "monitor/recover.html")
+    return render(request, "sys_monitor/recover.html")
 
 
 @login_required
@@ -118,7 +115,7 @@ def mysql_restore(request):
 
 
 def dashboard(request):
-    return render(request, "monitor/dashboard.html")
+    return render(request, "sys_monitor/dashboard.html")
 
 
 def get_attack_data(request):
@@ -139,7 +136,7 @@ def get_system_data(request):
 
 
 def restore_page(request):
-    return render(request, "monitor/recover.html")
+    return render(request, "sys_monitor/recover.html")
 
 
 from .models import RestoreRecord

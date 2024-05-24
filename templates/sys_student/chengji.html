@@ -1,5 +1,5 @@
 
-{% extends 'student_score/layout.html' %}
+{% extends 'sys_student/layout.html' %}
 {% block content %}
 
 <div class="layuimini-container">
@@ -69,7 +69,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: 'list/',
+            url: 'data/',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -80,11 +80,12 @@
                 {type: "checkbox", width: 50},
                 {align:'center', title: '编号', sort: true,type:'numbers',width:80}, //编号列
                 {field: 'id', width: 80, title: 'ID', sort: true, hide:true},//隐藏ID列
-                {field: 'schoolname', width: 120, title: '学校名称',width:120},
-                {field: 'nianji', width: 100, title: '年级'},
-                {field: 'banji', width: 100,title: '班级'},
-                {field: 'xueke', width: 100, title: '学科', sort: true },
-                 {field: 'name', width: 100, title: '任课教师', sort: true },
+                {field: 'username', width: 120, title: '学校名称',width:120},
+                {field: 'sex', width: 80, title: '姓名', sort: true},
+                {field: 'city', width: 100, title: '年级'},
+                {field: 'sign', width: 100,title: '班级'},
+                {field: 'experience', width: 100, title: '学科', sort: true },
+                {field: 'score', width: 100, title: '得分', sort: true, edit: 'text'},
                 { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -169,7 +170,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/teacher-add',
+                    content: '../page/table/add.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -227,27 +228,21 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function(index) {
-                   $.ajax({
-						url:"/teacher-delete",
-						type:"post",
-						data:obj.data,
-						success:function(result){
-							 // 表格页面重载
-                            layui.table.reload('currentTableId')
-                            if (result.success){
-								layer.msg(result.msg, { icon: 1 });
-
-							}
-							else{
-								layer.msg(result.msg, { icon: 2 });
-							}
-
-						},
-						error:function(result){
-							alert("接口错误！！");
-						}
-					});
-                   return false;
+                    $.ajax({
+                        data:{'Nodeip':obj.data["id"]},
+                        url:"delete/",
+                        type:"POST",
+                        dataType: "json",
+                        success:function (arg){
+                            if(arg.status==="ok"){
+                                obj.del();
+                                layer.close(index);
+                            }
+                            else {
+                                console.log(arg.msg)
+                            }
+                        }
+                    })
                 });
             }
         });
@@ -266,13 +261,16 @@
             contentType: "application/json;charset=UTF-8",
             url: '/chengji/up_data/',
             data: { id: data.id, name: obj.value},
-            success: function(res) {
-                if(!handleResponseData(res, layer)) {
-                    setTimeout(function () {
-                        location.href = '';
-                    }, delayTime);
+            success:function(result){
+                //弹出消息
+                    if (result.success){
+                        layer.msg(result.msg);
+                    }
+                    else{
+                        layer.msg(result.msg);
+                    }
+
                 }
-            }
         });
         });
 

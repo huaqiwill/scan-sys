@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from student_score import models as m_model
+from sys_student import models as m_model
 
 
 class CollegeSerializer(serializers.ModelSerializer):

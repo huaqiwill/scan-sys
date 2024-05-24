@@ -4,12 +4,12 @@ import json
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from student_score import models as m_model
+from sys_student import models as m_model
 
 # Create your views here.
 
-from common.API import res_josn_data
-from common.API.auth import login_required, authorize
+from sys_common.API import res_josn_data
+from sys_common.API.auth import login_required, authorize
 from sys_manage.models import User, Role
 
 
