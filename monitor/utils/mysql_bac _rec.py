@@ -5,75 +5,165 @@
 import datetime
 import os
 import pymysql
+import mysql.connector
+import pandas as pd
+
+
+def backup_database(host, user, password, database, backup_path):
+    try:
+        # 连接到数据库
+        connection = mysql.connector.connect(
+            host=host, user=user, password=password, database=database
+        )
+
+        cursor = connection.cursor()
+        cursor.execute("SHOW TABLES")
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_name = table[0]
+            query = f"SELECT * FROM {table_name}"
+            df = pd.read_sql(query, connection)
+            df.to_csv(f"{backup_path}/{table_name}.csv", index=False)
+            print(f"Table {table_name} backed up successfully.")
+    except mysql.connector.Error as error:
+        print(f"Error: {error}")
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
+
+
+def restore_database(host, user, password, database, backup_path):
+    try:
+        # 连接到数据库
+        connection = mysql.connector.connect(
+            host=host, user=user, password=password, database=database
+        )
+
+        cursor = connection.cursor()
+
+        for file in os.listdir(backup_path):
+            if file.endswith(".csv"):
+                table_name = file.split(".")[0]
+                file_path = os.path.join(backup_path, file)
+                df = pd.read_csv(file_path)
+
+                # 删除表中的所有数据
+                cursor.execute(f"DELETE FROM {table_name}")
+
+                # 恢复数据
+                for index, row in df.iterrows():
+                    placeholders = ", ".join(["%s"] * len(row))
+                    columns = ", ".join(row.index)
+                    sql = (
+                        f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+                    )
+                    cursor.execute(sql, tuple(row))
+                connection.commit()
+                print(f"Table {table_name} restored successfully.")
+    except mysql.connector.Error as error:
+        print(f"Error: {error}")
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
+import mysql.connector
+
+def backup_database_to_sql_file(host, user, password, database, backup_file_path):
+    try:
+        # 连接到数据库
+        connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+
+        cursor = connection.cursor()
+        cursor.execute("SHOW TABLES")
+        tables = cursor.fetchall()
+
+        with open(backup_file_path, 'w', encoding='utf-8') as backup_file:
+            for table in tables:
+                table_name = table[0]
+                
+                # 获取表创建语句
+                cursor.execute(f"SHOW CREATE TABLE {table_name}")
+                create_table_stmt = cursor.fetchone()[1]
+                backup_file.write(f"{create_table_stmt};\n\n")
+                
+                # 获取表数据
+                cursor.execute(f"SELECT * FROM {table_name}")
+                rows = cursor.fetchall()
+                columns = [desc[0] for desc in cursor.description]
+                
+                # 写入插入语句
+                for row in rows:
+                    values = ', '.join([f"'{str(value).replace('\'', '\\\'')}'" if value is not None else 'NULL' for value in row])
+                    backup_file.write(f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({values});\n")
+                backup_file.write("\n\n")
+                
+                print(f"Table {table_name} backed up successfully.")
+    except mysql.connector.Error as error:
+        print(f"Error: {error}")
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
+
+import mysql.connector
+
+def restore_database_from_sql_file(host, user, password, database, backup_file_path):
+    try:
+        # 连接到数据库
+        connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+
+        cursor = connection.cursor()
+
+        with open(backup_file_path, 'r', encoding='utf-8') as backup_file:
+            sql_statements = backup_file.read().split(';')
+            for statement in sql_statements:
+                if statement.strip():
+                    cursor.execute(statement)
+                    connection.commit()
+        
+        print("Database restored successfully from SQL file.")
+    except mysql.connector.Error as error:
+        print(f"Error: {error}")
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
 
 
 def backup():
-    # 数据库连接信息
-    db_host = "localhost"
-    db_user = "root"
-    db_password = "123456"
-    db_name = "tp_admin"
+    backup_database_to_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
 
-    # 备份文件保存路径
-    backup_path = "D:/Data/Desktop/"
-    backup_file = os.path.join(
-        backup_path, f'{db_name}_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.sql'
-    )
-
-    # 连接数据库
-    connection = pymysql.connect(
-        host=db_host, user=db_user, password=db_password, database=db_name
-    )
-    cursor = connection.cursor()
-
-    # 执行备份命令
-    dump_command = (
-        f"mysqldump -u {db_user} -p{db_password} --databases {db_name} > {backup_file}"
-    )
-    os.system(dump_command)
-
-    # 关闭数据库连接
-    cursor.close()
-    connection.close()
-
-    print(f"数据库 {db_name} 已成功备份到 {backup_file}")
+def restore():
+    restore_database_from_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
 
 
-def recover():
-    # 数据库连接信息
-    db_host = "localhost"
-    db_user = "your_username"
-    db_password = "your_password"
-    db_name = "your_database_name"
+if __name__ == "__main__":
+    # 使用示例
+    # 使用示例
+    backup_database("localhost", "root", "password", "database_name", "./backup")
+    restore_database("localhost", "root", "password", "database_name", "./backup")
+    # 使用示例
+    backup_database_to_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
+    # 使用示例
+    restore_database_from_sql_file('localhost', 'root', 'password', 'database_name', './backup.sql')
 
-    # 备份文件路径
-    backup_file = "/path/to/your/backup/file.sql"
 
-    # 连接数据库
-    connection = pymysql.connect(host=db_host, user=db_user, password=db_password)
-    cursor = connection.cursor()
-
-    # 创建数据库（如果不存在）
-    create_db_query = f"CREATE DATABASE IF NOT EXISTS {db_name};"
-    cursor.execute(create_db_query)
-
-    # 选择数据库
-    use_db_query = f"USE {db_name};"
-    cursor.execute(use_db_query)
-
-    # 读取备份文件内容并执行
-    with open(backup_file, "r") as file:
-        for line in file:
-            # 跳过注释和空行
-            if line.startswith("--") or line.strip() == "":
-                continue
-            cursor.execute(line)
-
-    # 提交事务
-    connection.commit()
-
-    # 关闭数据库连接
-    cursor.close()
-    connection.close()
-
-    print(f"数据库 {db_name} 已成功从 {backup_file} 恢复")
