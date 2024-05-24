@@ -7,8 +7,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../static/lib/layui-v2.6.3/css/layui.css" media="all">
-    <link rel="stylesheet" href="./../../static/css/public.css" media="all">
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
 </head>
 
 <body>
@@ -20,6 +20,7 @@
                 <div style="margin: 10px 10px 10px 10px">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-form-item">
+
                             <div class="layui-inline">
                                 <label class="layui-form-label">角色ID</label>
                                 <div class="layui-input-inline">
@@ -60,45 +61,39 @@
                             </div>
 
                             <div class="layui-inline">
-
                                 <button type="submit" class="layui-btn layui-btn-normal" lay-submit
-                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询</button>
-
-                                <button type="reset" class="layui-btn layui-btn-primary"><i
-                                        class="layui-icon layui-icon-refresh"></i> 重 置</button>
+                                    lay-filter="data-search-btn">
+                                    <i class="layui-icon"></i>
+                                    查 询
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">
+                                    <i class="layui-icon layui-icon-refresh"></i>
+                                    重 置
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </fieldset>
 
-            <script type="text/html" id="toolbarUser">
-            <div class="layui-btn-container">
-				{% if "role:add" in request.session.permissions %}
-					<button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm data-add-btn" lay-event="add"> 新增 </button>
-				{% endif %}
-				
-            </div>
-        </script>
-
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
-            <script type="text/html" id="currentTableBar">
-
-			{% if "role:power" in request.session.permissions %}
-				<a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="power">权限</a>
-			{% endif %}
-			
-			{% if "role:delete" in request.session.permissions %}
-				<a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
-			{% endif %}
-
-            
-        </script>
-
-
         </div>
     </div>
+    <script type="text/html" id="toolbarUser">
+        <div class="layui-btn-container">
+            {% if "role:add" in request.session.permissions %}
+                <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm data-add-btn" lay-event="add">新增</button>
+            {% endif %}
+        </div>
+    </script>
+    <script type="text/html" id="currentTableBar">
+        {% if "role:power" in request.session.permissions %}
+            <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="power">权限</a>
+        {% endif %}
+        {% if "role:delete" in request.session.permissions %}
+            <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+        {% endif %}
+    </script>
     <script src="../../../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
         layui.use(['form', 'table'], function () {
@@ -129,26 +124,14 @@
             let cols = [
                 { type: "checkbox", width: 50 },
                 { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                { field: 'roleID', width: 100, title: 'ID', align: 'center', sort: true, hide: true },
-                { field: 'roleValue', width: 100, title: '角色ID', align: 'center', sort: true, edit: 'text' },
-                { field: 'roleCode', width: 200, title: '名称', align: 'center', sort: true, edit: 'text' },
-                { field: 'roleName', width: 200, title: '中文名称', align: 'center', sort: true, edit: 'text' },
-                { field: 'remark', width: 360, title: '权限说明', align: 'center', sort: true, edit: 'text' },
-                {
-                    field: 'enable', width: 180, title: '是否启用', align: 'center', sort: true, templet: function (res) {
-                        if (res.enable == 1) {
-                            return '<input type="checkbox" checked="checked" lay-filter="role-enable" lay-skin="switch" lay-text="启用|禁用" roleID=' + res.roleID + '>'
-                        } else {
-                            return '<input type="checkbox" lay-filter="role-enable" lay-skin="switch" lay-text="启用|禁用" roleID=' + res.roleID + '>'
-                        }
-                    },
-                },
-                { title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center" }
+                { field: 'roleID', width: 100, title: '通报ID', align: 'center', sort: true, hide: true },
+                { field: 'roleValue', width: 100, title: '通报类型', align: 'center', sort: true },
+                { field: 'roleCode', width: 200, title: '通报邮箱', align: 'center', sort: true },
+                { field: 'roleName', width: 200, title: '接收人', align: 'center', sort: true },
+                { field: 'remark', width: 360, title: '接受内容', align: 'center', sort: true },
+                { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center" }
             ]
-            let hasRoleEnablePermission = `{% if "role:enable" in request.session.permissions %}1{% endif %}` === "1" ? true : false;
-            if (!hasRoleEnablePermission) {
-                cols = cols.filter(item => item.field !== 'enable')
-            }
+
 
             table.render({
                 elem: '#currentTableId',

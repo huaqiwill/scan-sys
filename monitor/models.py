@@ -2,38 +2,43 @@ from django.db import models
 
 
 # Create your models here.
-# class Monitor(models.Model):
-#     id_ = models.AutoField(primary_key=True)
+class Monitor(models.Model):
+    user_id = models.CharField(max_length=200)
+    request_method = models.CharField(max_length=200)
+    request_url = models.CharField(max_length=200)
+    ip = models.CharField(max_length=200)
+    type = models.CharField(max_length=200)
+    login_time = models.DateTimeField(auto_now_add=True)
+    message = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = "mon_montitor"
+
+
+class Notify(models.Model):
+    id = models.AutoField(primary_key=True)
+    notify_type = models.CharField(max_length=200)
+    mail_from = models.CharField(max_length=200)
+    mail_to = models.CharField(max_length=200)
+    mail_content = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = "mon_notify"
+
+
+# class HandleLog(models):
+#     id = models.AutoField(primary_key=True)
 #     name = models.CharField(max_length=200)
-#     ip = models.CharField(max_length=200)
-#     port = models.CharField(max_length=200)
-#     username = models.CharField(max_length=200)
-#     password = models.CharField(max_length=200)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+#     notify = models.CharField(max_length=200)
+
+#     class Meta:
+#         db_table = "mon_handle"
 
 
-# class Notify(models.Model):
-#     id_ = models.AutoField(primary_key=True)
-#     notify_type = models.CharField(max_length=200)
-#     mail_from = models.ForeignKey(Monitor, on_delete=models.CASCADE)
-#     mail_to = models.ForeignKey(Monitor, on_delete=models.CASCADE)
-#     mail_content = models.CharField(max_length=200)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-
-# class Handle(models.Model):
-#     id_ = models.AutoField(primary_key=True)
+# class RecoverLog(models):
+#     id = models.AutoField(primary_key=True)
 #     name = models.CharField(max_length=200)
-#     notify = models.ForeignKey(Notify, on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+#     handle = models.CharField(max_length=200)
 
-
-# class Recover(models.Model):
-#     id_ = models.AutoField(primary_key=True)
-#     name = models.CharField(max_length=200)
-#     handle = models.ForeignKey(Handle, on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+#     class Meta:
+#         db_table = "mon_recover"

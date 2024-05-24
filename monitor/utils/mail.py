@@ -2,28 +2,35 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
+import configparser
+import os
+import asyncio
 
 
 mail_template = """
-<h2 style="color:red">我的Python教程，官方微信公众号：wdPython</h2>
-<p>这是一个简单的HTML</p>
-<h2 style="color:red">我的Python教程，官方微信公众号：wdPython</h2>
-<p>这是一个简单的HTML</p>
-<p>刘亦菲的图片</p>
-<center>点击下方我的Python教程历史博文集合</center>
-<a href='https://mp.weixin.qq.com/s/LwaDH9PFLowLl8sIzaE6_w'>Python博文精选</a>
+<h2 style="color:red">{content}</h2>
+<p>{content}</p>
 """
 
 
 class EMail:
     def __init__(self):
-        self.from_addr = "huaqiwill@qq.com"
-        self.subject = "测试邮件"
-        self.password = "nhrdvawdinovdeba"
-        self.to_addr = "3173484026@qq.com"
+        config = configparser.ConfigParser()
+        config.read(os.path.join(os.getcwd(), "config.ini"), encoding="utf8")
+        mail_config = config["mail"]
+
+        self.from_addr = mail_config["from_addr"]
+        self.subject = mail_config["subject"]
+        self.password = mail_config["password"]
+        self.to_addr = mail_config["to_addr"]
         self.content = mail_template
 
-    def send_email(self):
+        self.host = mail_config["host"]
+        self.port = int(mail_config["port"])
+
+    def send_email(self, content):
+        self.content = self.content.replace("{content}", content)
+
         # 创建邮件对象
         msg = MIMEMultipart()
 
@@ -42,12 +49,15 @@ class EMail:
         msg.attach(MIMEText(self.content, "html", "utf-8"))
 
         # 3.发送邮件
-        smtp = smtplib.SMTP_SSL(f"smtp.qq.com", 465)
+        smtp = smtplib.SMTP_SSL(self.host, self.port)
 
         # 登录邮箱(如果是qq邮箱需要账号和授权码，其他的邮箱账号密码登入即可)
         smtp.login(self.from_addr, self.password)
         smtp.sendmail(self.from_addr, self.to_addr, msg.as_string())
         smtp.quit()
+
+    def send_email_sync(self, content):
+        asyncio.create_task(self.send_email(content))
 
 
 if __name__ == "__main__":

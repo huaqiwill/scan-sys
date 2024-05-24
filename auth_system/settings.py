@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+import configparser
+
+config = configparser.ConfigParser()
+config.read(os.path.join(os.getcwd(), "config.ini"), encoding="utf8")
+db_config = config["sql"]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +46,10 @@ INSTALLED_APPS = [
     "sys_manage",
     "student_score",
     "rest_framework",
+    # 访问频率限制
+    "ratelimit",
+    # XSS攻击检测
+    # "xss_protector",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +60,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "monitor.middlewares.StrongCsrfViewMiddleware",
+    "monitor.middlewares.SqlInjectionMiddleware",
+    # "monitor.middlewares.CustomXssProtectorMiddleware"
 ]
 
 ROOT_URLCONF = "auth_system.urls"
@@ -86,11 +98,11 @@ WSGI_APPLICATION = "auth_system.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "auth_system",
-        "USER": "root",
-        "PASSWORD": "123456",
-        "PORT": "3306",
-        "HOST": "localhost",
+        "NAME": db_config["database"],
+        "USER": db_config["user"],
+        "PASSWORD": db_config["password"],
+        "PORT": db_config["port"],
+        "HOST": db_config["host"],
     },
 }
 
@@ -136,3 +148,11 @@ STATICFILES_DIRS = [(os.path.join(BASE_DIR, "static"))]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+"""访问频率限制工具"""
+RATELIMIT_ENABLE = True  # 启用速率限制功能
+RATELIMIT_USE_CACHE = "default"  # 使用默认缓存设置
+RATELIMIT_VIEW = "monitor.views.ratelimit_handler"  # 自定义速率限制处理视图函数
+RATELIMIT_RATE = "10/m"  # 允许每分钟10个请求
+"""XSS攻击检测"""
+# XSS_PROTECTION_ENABLED = True
