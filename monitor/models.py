@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Monitor(models.Model):
     user_id = models.CharField(max_length=200)
     request_method = models.CharField(max_length=200)
@@ -11,20 +10,32 @@ class Monitor(models.Model):
     login_time = models.DateTimeField(auto_now_add=True)
     message = models.CharField(max_length=200)
 
-    class Meta:
-        db_table = "mon_montitor"
-
 
 class Notify(models.Model):
     notify_type = models.CharField("通报类型", max_length=200)
     notify_mail = models.CharField("通报邮箱", max_length=200)
     notify_subject = models.CharField("通报主题", max_length=200)
     notify_content = models.CharField("通报内容", max_length=200)
-    notify_time = models.CharField("通报时间", max_length=200)
+    notify_time = models.DateTimeField("通报时间", max_length=200)
     notify_status = models.CharField("通报状态", max_length=200)
 
-    class Meta:
-        db_table = "mon_notify"
+    def __str__(self) -> str:
+        return (
+            "{"
+            + "notify_type :"
+            + self.notify_type
+            + ", notify_mail :"
+            + self.notify_mail
+            + ", notify_subject :"
+            + self.notify_subject
+            + ", notify_content :"
+            + self.notify_content
+            + ", notify_time :"
+            + str(self.notify_time)
+            + ", notify_status :"
+            + self.notify_status
+            + "}"
+        )
 
 
 class Attack(models.Model):
@@ -59,16 +70,10 @@ class Handle(models.Model):
     handled_action = models.TextField()
     handled_details = models.TextField()
 
-    class Meta:
-        db_table = "mon_handle"
-
 
 class Recover(models.Model):
     name = models.CharField(max_length=200)
     handle = models.CharField(max_length=200)
-
-    class Meta:
-        db_table = "mon_recover"
 
 
 class RestoreRecord(models.Model):

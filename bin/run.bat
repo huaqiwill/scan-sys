@@ -1,1 +1,0 @@
-python manage.py runserver --insecure localhost:8080

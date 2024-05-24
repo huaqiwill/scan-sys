@@ -7,6 +7,9 @@ from login.models import Log
 import json
 from .models import Monitor, Notify
 from django.http import JsonResponse
+from .utils import sqlbak
+from .models import Attack
+import psutil
 
 
 def ratelimit_handler(request):
@@ -37,6 +40,21 @@ def monitor_query(request):
     count = (int(page) - 1) * int(limit)
 
     return res_josn_data.table_api(count=len(user_obj), data=page_data)
+
+
+@login_required
+def notify_list(request):
+    page = request.POST.get("page", 1)
+    limit = request.POST.get("limit", 10)
+
+    notify_data_list = Notify.objects.all()
+    print(notify_data_list)
+
+    user_obj = Notify.objects.filter().order_by("id")
+    page_data = Paginator(user_obj, limit).page(page)
+
+    return res_josn_data.table_api(count=len(user_obj), data=notify_data_list)
+    # return render(request, "notify_list.html", {"notifies": notifies})
 
 
 @login_required
@@ -91,19 +109,12 @@ def recover_delete(request):
     return res_josn_data.success_api("success")
 
 
-from .utils import sqlbak
-
-
 def mysql_backup(request):
     sqlbak.backup()
 
 
 def mysql_restore(request):
     sqlbak.restore()
-
-
-from .models import Attack
-import psutil
 
 
 def dashboard(request):
@@ -139,3 +150,43 @@ def get_restore_records(request):
         "timestamp", "filename", "status", "details"
     )
     return JsonResponse(list(records), safe=False)
+
+
+from .forms import NotifyForm
+from django.shortcuts import get_object_or_404, redirect
+
+
+def notify_detail(request, pk):
+    notify = get_object_or_404(Notify, pk=pk)
+    return render(request, "notify_detail.html", {"notify": notify})
+
+
+def notify_create(request):
+    if request.method == "POST":
+        form = NotifyForm(request.POST)
+        if form.is_valid():
+            notify = form.save()
+            return redirect("notify_detail", pk=notify.pk)
+    else:
+        form = NotifyForm()
+    return render(request, "notify_form.html", {"form": form})
+
+
+def notify_update(request, pk):
+    notify = get_object_or_404(Notify, pk=pk)
+    if request.method == "POST":
+        form = NotifyForm(request.POST, instance=notify)
+        if form.is_valid():
+            notify = form.save()
+            return redirect("notify_detail", pk=notify.pk)
+    else:
+        form = NotifyForm(instance=notify)
+    return render(request, "notify_form.html", {"form": form})
+
+
+def notify_delete(request, pk):
+    notify = get_object_or_404(Notify, pk=pk)
+    if request.method == "POST":
+        notify.delete()
+        return redirect("/notify_list")
+    return render(request, "notify_confirm_delete.html", {"notify": notify})
