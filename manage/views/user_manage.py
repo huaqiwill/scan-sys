@@ -4,7 +4,6 @@ import json
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from student import models as m_model
 
 # Create your views here.
 
@@ -141,17 +140,6 @@ def user_role_query(request):
             data_list.append(item_data)
         print(data_list)
         return res_josn_data.table_api(data=data_list, count=len(role_data))
-
-
-def school_query(request):
-    if request.method == "POST":
-        data_list = []
-
-        school_data = m_model.College.objects.all()
-        for item in school_data:
-            item_data = {"schoolID": item.id, "schoolName": item.name}
-            data_list.append(item_data)
-        return res_josn_data.table_api(data=data_list, count=len(school_data))
 
 
 @authorize(power="user:delete", log=True)

@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     "login",
     "monitor",
     "manage",
-    "student",
     "rest_framework",
     # 访问频率限制
     "ratelimit",

@@ -11,7 +11,6 @@ urlpatterns = [
     path("user-query", user_manage.user_query),  # 用户查询
     path("user-add", user_manage.user_add),  # 用户新增
     path("user-role-query", user_manage.user_role_query),  # 用户新增页面查询所有角色
-    path("school-query", user_manage.school_query),  # 用户新增页面查询所有学校
     path("user-delete", user_manage.user_delete),  # 用户删除
     path("user-multi-delete", user_manage.user_multi_delete),  # 用户批量删除
     path("user-cell-edit", user_manage.user_cell_edit),  # 用户表格单元编辑
