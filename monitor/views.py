@@ -32,8 +32,10 @@ def monitor(request):
     """事件监控预警"""
     return render(request, "monitor/monitor.html")
 
+
 def index(request):
     return render(request, 'monitor/index.html')
+
 
 def get_system_info(request):
     cpu_percent = psutil.cpu_percent(percpu=True)
@@ -60,7 +62,7 @@ def get_system_info(request):
             'bytes_recv': net_io.bytes_recv,
         }
     }
-    
+
     return JsonResponse(data)
 
 
