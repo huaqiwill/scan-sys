@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {
+            width: auto;
+            padding-right: 10px;
+            line-height: 38px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-form layuimini-form">
+            <div class="layui-form-item">
+                <h2 align="center">用户信息</h2>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">账号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="userID" lay-verify="required" lay-reqtext="账号不能为空" disabled="disabled"
+                           value="{{ userid }}" class="layui-input" id="userid">
+                    <!-- <tip>填写自己管理账号的名称。</tip> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="userName" lay-verify="required" lay-reqtext="姓名不能为空"
+                           placeholder="请输入姓名" value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">部门</label>
+                <div class="layui-input-block">
+                    <input type="text" name="department" placeholder="请输入部门" value="" class="layui-input">
+                    <!-- <select name="department" id="department">
+                 </select> -->
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">角色</label>
+                <div class="layui-input-block">
+                    <input type="text" name="role" placeholder="请输入角色" value="" class="layui-input"
+                           disabled="disabled">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">职位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="position" placeholder="请输入职位" value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="email" name="email" placeholder="请输入邮箱" value="" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'miniTab', 'layer'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            miniTab = layui.miniTab;
+        var $ = layui.$;
+        // ajax 头部增加csrf_token
+        var token = "{{ csrf_token }}";
+        $.ajaxSetup({
+            headers: {'X-CSRFTOKEN': `${token}`}, // 这里是headers，不是data,  CSRF
+        });
+
+        var login_user = $("#login_user", top.document).text();
+
+        $(function () {   //js 加载时，AJAX请求
+            $.ajax({
+                url: '/user-info-query',
+                type: 'post',
+                data: {'login_id': login_user},
+                dataType: 'json',
+                success: function (result) {
+                    var username = result.username;
+                    var dep = result.dep;
+                    var position = result.position;
+                    var role = result.role;
+                    var email = result.email;
+                    var list = result.data;
+                    var str = "<option value=\"" + dep + "\">" + dep + "</option>"
+                    // for (var i=0; i<list.length;i++) {
+                    // 	str += "<option value=\""+list[i].department+"\">"+ list[i].department+"</option>"
+                    // }
+                    // console.log(str);
+                    $("input[name='userID']").val(login_user)
+                    $("input[name='userName']").val(username)
+                    $("input[name='position']").val(position)
+                    $("input[name='email']").val(email)
+                    $("input[name='role']").val(role)
+                    // $('#department').html(str);
+                    form.render();   //重新渲染 form select内容
+                },
+                error: function () {
+                    layer.msg('部门查询API出错！');
+                }
+            })
+        });
+
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                url: '/user-setting',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 2000}, function () {
+                            miniTab.deleteCurrentByIframe();
+                            parent.layui.table.reload('currentTableId');
+                        })
+                    } else {
+                        layer.alert(result.msg);
+                    }
+                },
+                error: function () {
+                    layer.msg('API出错！');
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+
+</html>
