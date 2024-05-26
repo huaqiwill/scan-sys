@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.2/css/layui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.2.2/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row " style="margin-top: 20px">
+        <div class="layui-col-md3">
+            <div id="cpu-chart" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="layui-col-md3">
+            <div id="memory-chart" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="layui-col-md3">
+            <div id="disk-chart" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="layui-col-md3">
+            <div id="network-chart" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function fetchSystemInfo() {
+        $.get('/monitor/system_info', function (data) {
+            cpuChart.setOption({
+                series: [{
+                    data: data.cpu_percent
+                }]
+            });
+
+            memoryChart.setOption({
+                series: [{
+                    data: [
+                        {value: data.memory.used, name: 'Used'},
+                        {value: data.memory.free, name: 'Free'}
+                    ]
+                }]
+            });
+
+            diskChart.setOption({
+                series: [{
+                    data: [
+                        {value: data.disk.used, name: 'Used'},
+                        {value: data.disk.free, name: 'Free'}
+                    ]
+                }]
+            });
+
+            networkChart.setOption({
+                series: [{
+                    data: [
+                        {value: data.network.bytes_sent, name: 'Bytes Sent'},
+                        {value: data.network.bytes_recv, name: 'Bytes Received'}
+                    ]
+                }]
+            });
+        });
+    }
+
+    var cpuChart = echarts.init(document.getElementById('cpu-chart'));
+    var memoryChart = echarts.init(document.getElementById('memory-chart'));
+    var diskChart = echarts.init(document.getElementById('disk-chart'));
+    var networkChart = echarts.init(document.getElementById('network-chart'));
+
+    var cpuOption = {
+        title: {text: 'CPU使用情况'},
+        tooltip: {},
+        xAxis: {type: 'category', data: ['Core 1', 'Core 2', 'Core 3', 'Core 4']},
+        yAxis: {type: 'value'},
+        series: [{type: 'bar', data: []}]
+    };
+
+    var memoryOption = {
+        title: {text: '内存使用情况'},
+        tooltip: {trigger: 'item'},
+        series: [{type: 'pie', data: []}]
+    };
+
+    var diskOption = {
+        title: {text: '磁盘使用情况'},
+        tooltip: {trigger: 'item'},
+        series: [{type: 'pie', data: []}]
+    };
+
+    var networkOption = {
+        title: {text: '网络使用情况'},
+        tooltip: {trigger: 'item'},
+        series: [{type: 'pie', data: []}]
+    };
+
+    cpuChart.setOption(cpuOption);
+    memoryChart.setOption(memoryOption);
+    diskChart.setOption(diskOption);
+    networkChart.setOption(networkOption);
+
+    fetchSystemInfo();
+    setInterval(fetchSystemInfo, 5000);
+</script>
+</body>
+</html>

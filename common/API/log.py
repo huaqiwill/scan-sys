@@ -1,10 +1,15 @@
 from login.models import Log
+from monitor.models import Monitor
+from django.utils import timezone
 
 
 def xss_escape(s: str):
     if s is None:
         return None
     else:
+        print("可疑的XSS攻击")
+        # Monitor.objects.create(request_url="")
+
         return (
             s.replace("&", "&amp;")
             .replace(">", "&gt;")
@@ -33,6 +38,16 @@ def login_log(request, uid, is_access, desc):
         method=info.get("method"),
         success=info.get("success"),
     )
+    monitor = Monitor(
+        request_url=info.get("url"),
+        request_method=info.get("method"),
+        request_data=info.get("desc"),
+        request_ip=info.get("ip"),
+        attack_type="XSS",
+        attack_time=timezone.now(),
+        description=info.get("desc"),
+    )
+    monitor.save()
     log.save()
     return log
 
@@ -60,5 +75,16 @@ def exec_log(request, is_access, desc):
         success=info.get("success"),
     )
     log.save()
+    monitor = Monitor(
+        user_id=info.get("uid"),
+        request_url=info.get("url"),
+        request_method=info.get("method"),
+        request_data=info.get("desc"),
+        request_ip=info.get("ip"),
+        attack_type="XSS",
+        attack_time=timezone.now(),
+        description=info.get("desc"),
+    )
+    monitor.save()
 
     return log

@@ -25,42 +25,44 @@ def ratelimit_handler(request):
 事件监控预警
 """
 
+from .models import Monitor
 
 @login_required
 @require_http_methods(["GET", "POST"])
 def monitor(request):
     """事件监控预警"""
+    Monitor.objects.create()
     return render(request, "monitor/monitor.html")
 
 
 def index(request):
-    return render(request, 'monitor/index.html')
+    return render(request, "monitor/index.html")
 
 
 def get_system_info(request):
     cpu_percent = psutil.cpu_percent(percpu=True)
     memory_info = psutil.virtual_memory()
-    disk_usage = psutil.disk_usage('/')
+    disk_usage = psutil.disk_usage("/")
     net_io = psutil.net_io_counters()
 
     data = {
-        'cpu_percent': cpu_percent,
-        'memory': {
-            'total': memory_info.total,
-            'used': memory_info.used,
-            'free': memory_info.available,
-            'percent': memory_info.percent,
+        "cpu_percent": cpu_percent,
+        "memory": {
+            "total": memory_info.total,
+            "used": memory_info.used,
+            "free": memory_info.available,
+            "percent": memory_info.percent,
         },
-        'disk': {
-            'total': disk_usage.total,
-            'used': disk_usage.used,
-            'free': disk_usage.free,
-            'percent': disk_usage.percent,
+        "disk": {
+            "total": disk_usage.total,
+            "used": disk_usage.used,
+            "free": disk_usage.free,
+            "percent": disk_usage.percent,
         },
-        'network': {
-            'bytes_sent': net_io.bytes_sent,
-            'bytes_recv': net_io.bytes_recv,
-        }
+        "network": {
+            "bytes_sent": net_io.bytes_sent,
+            "bytes_recv": net_io.bytes_recv,
+        },
     }
 
     return JsonResponse(data)
@@ -69,6 +71,8 @@ def get_system_info(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def monitor_query(request):
+    if request.method == "GET":
+        return render(request, "monitor/monitor_query.html")
     """监控预警查询"""
     # if request.method != "POST":
     #     return res_josn_data.fail_api("不支持的请求格式")
@@ -127,27 +131,39 @@ def notify(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def notify_query(request):
-    notifies = Notify.objects.all()
+    params = request.POST.get("Params")
+    fields = ["notify_type", "notify_status"]
+    filters = {}
+    if params not in [None, ""]:
+        req = json.loads(params)
+        for field in fields:
+            if req.get(field) not in [None, ""]:
+                filters[field] = req[field]
+        print("查询参数：", filters)
+
+    notifies = Notify.objects.filter(**filters).all()
     print(notifies)
     data_list = []
     for notify_ in notifies:
-        data_list.append({
-            "id": notify_.id,
-            "notify_type": notify_.notify_type,
-            "notify_mail": notify_.notify_mail,
-            "notify_subject": notify_.notify_subject,
-            "notify_content": notify_.notify_content,
-            "notify_time": notify_.notify_time,
-            "notify_status": notify_.notify_status,
-        })
-    print(data_list)
+        data_list.append(
+            {
+                "id": notify_.id,
+                "notify_type": notify_.notify_type,
+                "notify_mail": notify_.notify_mail,
+                "notify_subject": notify_.notify_subject,
+                "notify_content": notify_.notify_content,
+                "notify_time": notify_.notify_time,
+                "notify_status": notify_.notify_status,
+            }
+        )
     return res_josn_data.table_api(count=10, data=data_list)
 
 
 @login_required
 @require_http_methods(["POST"])
 def notify_delete(request):
-    Notify.objects.filter(id=request.POST.get("id")).delete()
+    notify_id = request.POST.get("id")
+    Notify.objects.filter(id=notify_id).delete()
     return res_josn_data.success_api("刪除成功")
 
 
@@ -157,10 +173,11 @@ def sub_email(request):
     """
     订阅列表页面
     """
-    return render(request, "monitor/sub_email.html")
+    return render(request, "monitor/subemail.html")
 
 
 from .utils.serializer import SubEmailSerializer
+import json
 
 
 @login_required
@@ -169,7 +186,17 @@ def sub_email_query(request):
     """
     订阅列表查询
     """
-    sub_emails = SubEmail.objects.all()
+    params = request.POST.get("Params")
+    fields = ["sub_name", "sub_email", "sub_status"]
+    filters = {}
+    if params not in (None, ""):
+        req = json.loads(params)
+        for field in fields:
+            if req.get(field) not in (None, ""):
+                filters[field] = req.get(field)
+        print("搜索参数：", filters)
+
+    sub_emails = SubEmail.objects.filter(**filters).all()
 
     data_list = []
     for email in sub_emails:
@@ -193,7 +220,7 @@ def sub_email_add(request):
     订阅列表添加
     """
     if request.method == "GET":
-        return render(request, "monitor/sub_email_add.html")
+        return render(request, "monitor/subemail_add.html")
     else:
         try:
             sub_name = request.POST.get("sub_name")
@@ -201,8 +228,13 @@ def sub_email_add(request):
             sub_status = request.POST.get("sub_status")
             sub_date = datetime.now()
             user_id = 1
-            email = SubEmail.objects.create(sub_name=sub_name, sub_email=sub_email_, sub_status=sub_status,
-                                            sub_date=sub_date, user_id=user_id)
+            email = SubEmail.objects.create(
+                sub_name=sub_name,
+                sub_email=sub_email_,
+                sub_status=sub_status,
+                sub_date=sub_date,
+                user_id=user_id,
+            )
             if email.id is not None:
                 return res_josn_data.success_api("添加成功")
         except:
@@ -212,15 +244,15 @@ def sub_email_add(request):
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["POST"])
 def sub_email_delete(request):
     """
     删除订阅记录
     """
-    sub_email_ = request.POST["sub_email"]
-    print(sub_email_)
-    SubEmail.objects.filter(sub_email=sub_email_).delete()
-    return res_josn_data.success_api(f"订阅邮件:{sub_email_} 删除成功")
+    sub_id = request.POST.get("id")
+    print(sub_id)
+    SubEmail.objects.filter(id=sub_id).delete()
+    return res_josn_data.success_api(f"删除成功")
 
 
 def to_dict(**kwargs):
@@ -234,11 +266,17 @@ def sub_email_edit(request):
     修改订阅信息
     """
     print("AJAX数据:", request.POST)
-    sub_name = request.POST["sub_name"]
-    sub_email_ = request.POST["sub_email"]
-    sub_status = request.POST["sub_status"]
-    SubEmail.objects.filter(sub_email=sub_email_).update(sub_name=sub_name, sub_status=sub_status,
-                                                         sub_email=sub_email_)
+    sub_id = request.POST.get("id")
+
+    datas = {}
+    fields = ["sub_name", "sub_email", "sub_status"]
+    for field in fields:
+        if field in request.POST:
+            datas[field] = request.POST[field]
+
+    print(datas)
+
+    SubEmail.objects.filter(id=sub_id).update(**datas)
     return res_josn_data.success_api(f"更新成功")
 
 
@@ -265,18 +303,20 @@ def handle_query(request):
     handles = Handle.objects.all()
     data_list = []
     for handle_ in handles:
-        data_list.append({
-            "id": handle_.id,
-            "request_time": handle_.request_time,
-            "request_method": handle_.request_method,
-            "request_path": handle_.request_path,
-            "response_status": handle_.response_status,
-            "response_time": handle_.response_time,
-            "disposal_time": handle_.disposal_time,
-            "source_ip": handle_.source_ip,
-            "attack_type": handle_.attack_type,
-            "details": handle_.details,
-        })
+        data_list.append(
+            {
+                "id": handle_.id,
+                "request_time": handle_.request_time,
+                "request_method": handle_.request_method,
+                "request_path": handle_.request_path,
+                "response_status": handle_.response_status,
+                "response_time": handle_.response_time,
+                "disposal_time": handle_.disposal_time,
+                "source_ip": handle_.source_ip,
+                "attack_type": handle_.attack_type,
+                "details": handle_.details,
+            }
+        )
     return res_josn_data.table_api(count=10, data=data_list)
 
 

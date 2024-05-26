@@ -5,8 +5,6 @@ from django.http import HttpResponseBadRequest
 from .utils.mail import EMail
 
 
-
-
 class StrongCsrfViewMiddleware(CsrfViewMiddleware):
     def __init__(self, get_response=None):
         super().__init__(get_response)
@@ -18,6 +16,10 @@ class StrongCsrfViewMiddleware(CsrfViewMiddleware):
     def process_view(self, request, callback, chain):
         print("处理响应中间件1")
         super().process_view(request, callback, chain)
+
+
+from django.utils import timezone
+from .models import Monitor
 
 
 class SqlInjectionMiddleware:
@@ -38,7 +40,34 @@ class SqlInjectionMiddleware:
         if request.method == "POST":
             query_string = request.body.decode("utf-8")
         if self.is_sql_injection(query_string):
+            desc = "可疑的SQL注入尝试"
+            user_id = request.session.get("user_id")
+            is_access = False
+            # desc = str(dict(request.values).get('Params'))
+            print("desc:", desc)
+            info = {
+                "method": request.method,
+                "url": request.path,
+                "ip": request.META.get("REMOTE_ADDR"),
+                "desc": desc,
+                "uid": user_id,
+                "success": int(is_access),
+            }
             print("可疑的SQL注入尝试")
+            if user_id is None or user_id == "":
+                user_id = 0
+                is_access = False
+
+            Monitor.objects.create(
+                user_id=user_id,
+                request_url=info.get("url"),
+                request_method=info.get("method"),
+                request_data=info.get("desc"),
+                request_ip=info.get("ip"),
+                attack_type="XSS",
+                attack_time=timezone.now(),
+                description=info.get("desc"),
+            )
             # EMail().send_email_sync("可疑的SQL注入尝试")
 
     def is_sql_injection(self, value):

@@ -5,6 +5,7 @@ class Monitor(models.Model):
     """
     监控事件
     """
+
     ATTACK_TYPES = (
         ("XSS", "XSS Attack"),  # XSS攻击
         ("CSRF", "CSRF Attack"),  # CSRF攻击
@@ -21,24 +22,24 @@ class Monitor(models.Model):
 
     def __str__(self):
         return (
-                "{"
-                + "id :"
-                + str(self.id)
-                + "user_id:"
-                + self.user_id
-                + ", request_method :"
-                + self.request_method
-                + ", request_url :"
-                + self.request_url
-                + ", request_ip :"
-                + self.request_ip
-                + ", attack_type :"
-                + self.attack_type
-                + ", attack_time :"
-                + str(self.attack_time)
-                + ", description :"
-                + self.description
-                + "}"
+            "{"
+            + "id :"
+            + str(self.id)
+            + "user_id:"
+            + self.user_id
+            + ", request_method :"
+            + self.request_method
+            + ", request_url :"
+            + self.request_url
+            + ", request_ip :"
+            + self.request_ip
+            + ", attack_type :"
+            + self.attack_type
+            + ", attack_time :"
+            + str(self.attack_time)
+            + ", description :"
+            + self.description
+            + "}"
         )
 
 
@@ -46,6 +47,7 @@ class Notify(models.Model):
     """
     通报记录
     """
+
     notify_type = models.CharField("通报类型", max_length=200)
     notify_mail = models.CharField("通报邮箱", max_length=200)
     notify_subject = models.CharField("通报主题", max_length=200)
@@ -55,20 +57,20 @@ class Notify(models.Model):
 
     def __str__(self) -> str:
         return (
-                "{"
-                + "notify_type :"
-                + self.notify_type
-                + ", notify_mail :"
-                + self.notify_mail
-                + ", notify_subject :"
-                + self.notify_subject
-                + ", notify_content :"
-                + self.notify_content
-                + ", notify_time :"
-                + str(self.notify_time)
-                + ", notify_status :"
-                + self.notify_status
-                + "}"
+            "{"
+            + "notify_type :"
+            + self.notify_type
+            + ", notify_mail :"
+            + self.notify_mail
+            + ", notify_subject :"
+            + self.notify_subject
+            + ", notify_content :"
+            + self.notify_content
+            + ", notify_time :"
+            + str(self.notify_time)
+            + ", notify_status :"
+            + self.notify_status
+            + "}"
         )
 
 
@@ -76,8 +78,12 @@ class SubEmail(models.Model):
     """
     通知订阅者
     """
+    SubStaus = (
+        ("enable", "启用"),
+        ("disable", "禁用"),
+    )
     sub_email = models.CharField("订阅者邮件", max_length=200)
-    sub_status = models.IntegerField("订阅状态")
+    sub_status = models.CharField("订阅状态", max_length=50, choices=SubStaus)
     sub_date = models.DateField("订阅日期")
     sub_name = models.CharField("订阅人", max_length=200)
     user_id = models.CharField("当前用户ID", max_length=200)
@@ -96,6 +102,7 @@ class Handle(models.Model):
     """
     应急处置记录
     """
+
     status_choices = (
         ("SUCCESS", "Success"),
         ("FAILED", "Failed"),
