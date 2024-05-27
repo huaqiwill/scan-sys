@@ -28,9 +28,16 @@ class EMail:
         self.host = mail_config["host"]
         self.port = int(mail_config["port"])
 
-    def send_email(self, content):
+    def send_email(
+        self,
+        content,
+        subject,
+        to_addr,
+    ):
         self.content = self.content.replace("{content}", content)
-
+        self.to_addr = to_addr
+        self.subject = subject
+        
         # 创建邮件对象
         msg = MIMEMultipart()
 

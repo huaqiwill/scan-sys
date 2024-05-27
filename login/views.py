@@ -55,7 +55,7 @@ def login(request):
         request.session["code"] = None
 
         if not all([code, s_code]):
-            # login_log(request, uid=username, is_access=False, desc='验证码错误,请刷新验证码')
+            login_log(request, uid=username, is_access=False, desc='验证码错误,请刷新验证码')
             return res_josn_data.fail_api(msg="验证码错误,请刷新验证码!")
 
         if code != s_code:

@@ -16,7 +16,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .utils import json_response
 
 
-# 定时任务 
+# 定时任务
 def confdict_handle():
     # try:
     # 	objs = CondDict.objects.all()
@@ -26,6 +26,7 @@ def confdict_handle():
     # except Exception as e:
     #     print('发生错误，错误信息为：', e)
     pass
+
 
 def ratelimit_handler(request):
     """访问限制处理工具"""
@@ -85,20 +86,43 @@ def get_system_info(request):
 def monitor_query(request):
     if request.method == "GET":
         return render(request, "monitor/monitor_query.html")
-    """监控预警查询"""
-    # if request.method != "POST":
-    #     return res_josn_data.fail_api("不支持的请求格式")
+    print("请求参数：", request.POST)
 
-    # 获取必填参数
-    page = request.POST.get("page", 1)
-    limit = request.POST.get("limit", 10)
-    user_obj = Monitor.objects.filter().order_by("id")
-    page_data = Paginator(user_obj, limit).page(page)
+    page = request.POST.get("page")
+    limit = request.POST.get("limit")
 
-    # 序号
-    count = (int(page) - 1) * int(limit)
+    filters = {}
+    fields = []
+    params = request.POST.get("Params")
+    if params not in (None, ""):
+        req = json.loads(params)
+        for field in fields:
+            if req.get(field) not in (None, ""):
+                filters[field] = req.get(field)
 
-    return res_josn_data.table_api(count=len(user_obj), data=page_data)
+    monitors = Monitor.objects.filter(**filters).all()
+
+    page_data = Paginator(monitors, limit).page(page)
+    count = len(monitors)
+    print("count大小：", count)
+
+    data_list = []
+    for monitor in page_data:
+        data_list.append(
+            {
+                "id": monitor.id,
+                "user_id": monitor.user_id,
+                "request_url": monitor.request_url,
+                "request_method": monitor.request_method,
+                "request_data": monitor.request_data,
+                "request_ip": monitor.request_ip,
+                "attack_type": monitor.attack_type,
+                "attack_time": monitor.attack_time,
+                "description": monitor.description,
+            }
+        )
+
+    return res_josn_data.table_api(count=count, data=data_list)
 
 
 @login_required
@@ -143,6 +167,9 @@ def notify(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def notify_query(request):
+    page = request.POST.get("page")
+    limit = request.POST.get("limit")
+
     params = request.POST.get("Params")
     fields = ["notify_type", "notify_status"]
     filters = {}
@@ -155,8 +182,12 @@ def notify_query(request):
 
     notifies = Notify.objects.filter(**filters).all()
     print(notifies)
+
+    page_data = Paginator(notifies, limit).page(page)
+    count = len(notifies)
+
     data_list = []
-    for notify_ in notifies:
+    for notify_ in page_data:
         data_list.append(
             {
                 "id": notify_.id,
@@ -168,7 +199,8 @@ def notify_query(request):
                 "notify_status": notify_.notify_status,
             }
         )
-    return res_josn_data.table_api(count=10, data=data_list)
+    print("数量", count)
+    return res_josn_data.table_api(count=count, data=data_list)
 
 
 @login_required

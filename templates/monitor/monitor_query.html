@@ -99,11 +99,12 @@
             const query = () => {
                 let cols = [
                     { type: "checkbox", width: 50 },
-                    { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                    { field: 'sub_name', width: 200, title: '订阅人', align: 'center', sort: true, edit: 'text' },
-                    { field: 'sub_email', width: 250, title: '订阅者邮件', align: 'center', sort: true, edit: 'text' },
-                    { field: 'sub_status', width: 100, title: '订阅状态', align: 'center', sort: true, edit: 'text' },
-                    { field: 'sub_date', width: 200, title: '订阅日期', align: 'center', sort: true, edit: 'text' },
+                    { field: 'id', width: 100, title: 'ID', align: 'center', sort: true, hide: false },
+                    { field: 'request_url', width: 200, title: '请求url', align: 'center', sort: true },
+                    { field: 'request_method', width: 250, title: '请求方法', align: 'center', sort: true },
+                    { field: 'request_data', width: 100, title: '请求数据', align: 'center', sort: true },
+                    { field: 'request_ip', width: 200, title: '请求IP', align: 'center', sort: true },
+                    { field: 'attack_time', width: 200, title: '请求时间', align: 'center', sort: true },
                     { title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center" }
                 ]
                 let hasRoleEnablePermission = `{% if "role:enable" in request.session.permissions %}1{% endif %}` === "1";

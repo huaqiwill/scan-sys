@@ -3,7 +3,7 @@ from django.middleware.csrf import CsrfViewMiddleware
 import re
 from django.http import HttpResponseBadRequest
 from .utils.mail import EMail
-
+from common.API.log import exec_log
 
 class StrongCsrfViewMiddleware(CsrfViewMiddleware):
     def __init__(self, get_response=None):
@@ -57,6 +57,8 @@ class SqlInjectionMiddleware:
             if user_id is None or user_id == "":
                 user_id = 0
                 is_access = False
+            
+            exec_log(request,is_access=False, desc='可疑的SQL注入攻击')
 
             Monitor.objects.create(
                 user_id=user_id,
