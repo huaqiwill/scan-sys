@@ -78,6 +78,7 @@ class SubEmail(models.Model):
     """
     通知订阅者
     """
+
     SubStaus = (
         ("enable", "启用"),
         ("disable", "禁用"),
@@ -104,23 +105,31 @@ class Handle(models.Model):
     """
 
     status_choices = (
-        ("SUCCESS", "Success"),
-        ("FAILED", "Failed"),
+        ("success", "success"),
+        ("falied", "falied"),
     )
-    request_time = models.DateTimeField("请求时间")
-    request_method = models.CharField(max_length=10)
-    request_path = models.CharField(max_length=255)
-    response_status = models.IntegerField()
-    response_time = models.FloatField()
-    disposal_time = models.DateTimeField()
-    source_ip = models.GenericIPAddressField()
-    attack_type = models.CharField(max_length=10)
-    details = models.TextField()
-    auto_handled = models.BooleanField()
-    handled_status = models.CharField(max_length=20)
-    handled_action = models.TextField()
-    handled_details = models.TextField()
-    filename = models.CharField("备份文件名", max_length=255)
-    timestamp = models.DateTimeField("备份时间", auto_now_add=True)
-    status = models.CharField("处置状态", max_length=10, choices=status_choices)
-    is_restore = models.IntegerField("是否恢复")
+    status_yes_no = (
+        ("yes", "yes"),
+        ("no,", "no"),
+    )
+    attack_type = (
+        ("qss", "QSS"),
+        ("sql", "sql"),
+        ("xss", "XSS"),
+        ("csrf", "CSRF"),
+    )
+    handle_event = models.CharField("处置事件", max_length=100)
+    handle_attack_type = models.CharField(
+        "处理攻击类型", max_length=100, choices=attack_type
+    )
+    handle_auto = models.CharField(
+        "是否自动处理", max_length=100, choices=status_yes_no
+    )
+    handle_action = models.CharField("处理动作", max_length=100)
+    handle_ip = models.CharField("源IP", max_length=100)
+    handle_file = models.CharField("处理文件", max_length=100)
+    handle_detail = models.CharField("处理详情", max_length=100)
+    handle_status = models.CharField("是否处理", max_length=100, choices=status_yes_no)
+    handle_restore = models.CharField("是否恢复", max_length=100, choices=status_yes_no)
+    handle_backup_time = models.DateTimeField("备份时间", auto_now_add=True)
+    handle_restore_time = models.DateTimeField("还原时间", auto_now_add=True)

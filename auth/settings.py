@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "ratelimit",
     # XSS攻击检测
     # "xss_protector",
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,22 @@ EMAIL_HOST_USER = email_config["from_addr"]
 EMAIL_HOST_PASSWORD = email_config["password"]
 # DEFAULT_FROM_EMAIL = ""
 EMAIL_USE_TLS = False
+
+# 定时任务
+"""
+*    *    *    *    * ：分别表示 分(0-59)、时(0-23)、天(1 - 31)、月(1 - 12) 、周(星期中星期几 (0 - 7) (0 7 均为周天))
+crontab范例：
+每五分钟执行    */5 * * * *
+每小时执行     0 * * * *
+每天执行       0 0 * * *
+每周一执行       0 0 * * 1
+每月执行       0 0 1 * *
+每天23点执行   0 23 * * *
+"""
+CRONJOBS = [
+    (
+        "*/1 * * * *",
+        "base.crontabs.confdict_handle",
+        " >> /tmp/logs/confdict_handle.log",
+    ),  # 注意：/tmp/base_api 目录要手动创建
+]

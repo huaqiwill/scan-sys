@@ -22,9 +22,9 @@
                         <div class="layui-form-item">
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">状态</label>
+                                <label class="layui-form-label">处置事件</label>
                                 <div class="layui-input-inline">
-                                    <select name="enable">
+                                    <select name="handle_event">
                                         <option value=""></option>
                                         <option value="1">成功</option>
                                         <option value="0">失败</option>
@@ -33,23 +33,13 @@
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">恢复时间</label>
+                                <label class="layui-form-label">还原状态</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="codeName" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">文件名</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="roleName" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">详情</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="roleName" autocomplete="off" class="layui-input">
+                                    <select name="handle_restore">
+                                        <option value=""></option>
+                                        <option value="success">成功</option>
+                                        <option value="failed">失败</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -99,21 +89,13 @@
             const restore_query = () => {
                 let cols = [
                     { type: "checkbox", width: 50 },
-                    { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                    { field: 'request_time', width: 100, title: '请求时间', align: 'center', sort: true, hide: true },
-                    { field: 'request_method', width: 100, title: '请求方法', align: 'center', sort: true },
-                    { field: 'request_path', width: 200, title: '请求路径', align: 'center', sort: true },
-                    { field: 'response_status', width: 200, title: '响应状态', align: 'center', sort: true },
-                    { field: 'disposal_time', width: 200, title: '响应时间', align: 'center', sort: true },
-                    { field: 'source_ip', width: 200, title: '处置事件', align: 'center', sort: true },
-                    { field: 'roleCode', width: 200, title: '源IP', align: 'center', sort: true },
-                    { field: 'attack_type', width: 200, title: '攻击类型', align: 'center', sort: true },
-                    { field: 'details', width: 200, title: '详情信息', align: 'center', sort: true },
-                    { field: 'auto_handled', width: 200, title: '是否自动处理', align: 'center', sort: true },
-                    { field: 'handled_status', width: 200, title: '处理状态', align: 'center', sort: true },
-                    { field: 'handled_action', width: 200, title: '处理动作', align: 'center', sort: true },
-                    { field: 'handled_details', width: 200, title: '处理详情', align: 'center', sort: true },
-                    { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center" }
+                    { field: 'id', width: 100, title: 'ID', align: 'center', sort: true, hide: false },
+                    { field: 'handle_event', width: 150, title: '处置事件', align: 'center', sort: true },
+                    { field: 'handle_file', minWidth: 200, title: '处置文件', align: 'center', sort: true },
+                    { field: 'handle_action', width: 150, title: '还原动作', align: 'center', sort: true },
+                    { field: 'handle_restore', width: 200, title: '还原状态', align: 'center', sort: true },
+                    { field: 'handle_detail', width: 200, title: '还原详情', align: 'center', sort: true },
+                    { title: '操作', width: 120, toolbar: '#currentTableBar', align: "center" }
                 ]
                 table.render({
                     elem: '#currentTableId',

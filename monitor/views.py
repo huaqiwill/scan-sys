@@ -16,6 +16,17 @@ from django.shortcuts import get_object_or_404, redirect
 from .utils import json_response
 
 
+# 定时任务 
+def confdict_handle():
+    # try:
+    # 	objs = CondDict.objects.all()
+    #     print(objs)
+    #     loca_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    #     print('本地时间：'+str(loca_time))
+    # except Exception as e:
+    #     print('发生错误，错误信息为：', e)
+    pass
+
 def ratelimit_handler(request):
     """访问限制处理工具"""
     return HttpResponse("访问过于频繁，请稍后再试")
@@ -26,6 +37,7 @@ def ratelimit_handler(request):
 """
 
 from .models import Monitor
+
 
 @login_required
 @require_http_methods(["GET", "POST"])
@@ -300,35 +312,41 @@ def handle_query(request):
     """
     应急响应处置查询
     """
-    handles = Handle.objects.all()
+    params = request.POST.get("Params")
+    fields = ["handle_event", "handle_status", "handle_ip"]
+    filters = {}
+    if params not in (None, ""):
+        req = json.loads(params)
+        for field in fields:
+            if req.get(field) not in (None, ""):
+                filters[field] = req.get(field)
+
+    handles = Handle.objects.filter(**filters).all()
     data_list = []
-    for handle_ in handles:
+    for item in handles:
         data_list.append(
             {
-                "id": handle_.id,
-                "request_time": handle_.request_time,
-                "request_method": handle_.request_method,
-                "request_path": handle_.request_path,
-                "response_status": handle_.response_status,
-                "response_time": handle_.response_time,
-                "disposal_time": handle_.disposal_time,
-                "source_ip": handle_.source_ip,
-                "attack_type": handle_.attack_type,
-                "details": handle_.details,
+                "id": item.id,
+                "handle_event": item.handle_event,
+                "handle_attack_type": item.handle_attack_type,
+                "handle_auto": item.handle_auto,
+                "handle_action": item.handle_action,
+                "handle_ip": item.handle_ip,
+                "handle_file": item.handle_file,
+                "handle_detail": item.handle_detail,
             }
         )
     return res_josn_data.table_api(count=10, data=data_list)
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["POST"])
 def handle_delete(request):
     """
     应急响应处置删除
     """
-    handle_id = request.POST["id"]
-    print(handle_id)
-    SubEmail.objects.filter(id=handle_id).delete()
+    handle_id = request.POST.get("id")
+    Handle.objects.filter(id=handle_id).delete()
     return res_josn_data.success_api("刪除成功")
 
 
@@ -352,7 +370,31 @@ def restore_query(request):
     """
     业务数据恢复列表查询
     """
-    return res_josn_data.success_api("success")
+    params = request.POST.get("Params")
+    fields = ["handle_event", "handle_status", "handle_ip"]
+    filters = {"handle_restore": "yes"}
+    if params not in (None, ""):
+        req = json.loads(params)
+        for field in fields:
+            if req.get(field) not in (None, ""):
+                filters[field] = req.get(field)
+
+    handles = Handle.objects.filter(**filters).all()
+    data_list = []
+    for item in handles:
+        data_list.append(
+            {
+                "id": item.id,
+                "handle_event": item.handle_event,
+                "handle_attack_type": item.handle_attack_type,
+                "handle_auto": item.handle_auto,
+                "handle_action": item.handle_action,
+                "handle_ip": item.handle_ip,
+                "handle_file": item.handle_file,
+                "handle_detail": item.handle_detail,
+            }
+        )
+    return res_josn_data.table_api(count=10, data=data_list)
 
 
 @login_required

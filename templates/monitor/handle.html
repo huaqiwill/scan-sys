@@ -22,34 +22,27 @@
                         <div class="layui-form-item">
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">状态</label>
+                                <label class="layui-form-label">处置事件</label>
                                 <div class="layui-input-inline">
-                                    <select name="enable">
+                                    <input type="text" name="handle_type" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">源IP</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="handle_ip" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">处置状态</label>
+                                <div class="layui-input-inline">
+                                    <select name="handle_status">
                                         <option value=""></option>
-                                        <option value="1">成功</option>
-                                        <option value="0">失败</option>
+                                        <option value="success">处理成功</option>
+                                        <option value="fail">处理失败</option>
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">恢复时间</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="codeName" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">文件名</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="roleName" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">详情</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="roleName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
@@ -99,21 +92,14 @@
             const query = () => {
                 let cols = [
                     { type: "checkbox", width: 50 },
-                    { field: 'id', width: 100, title: '序号', align: 'center', sort: true, hide: false },
-                    { field: 'request_time', width: 100, title: '请求时间', align: 'center', sort: true, hide: true },
-                    { field: 'request_method', width: 100, title: '请求方法', align: 'center', sort: true },
-                    { field: 'request_path', width: 200, title: '请求路径', align: 'center', sort: true },
-                    { field: 'response_status', width: 200, title: '响应状态', align: 'center', sort: true },
-                    { field: 'disposal_time', width: 200, title: '响应时间', align: 'center', sort: true },
-                    { field: 'source_ip', width: 200, title: '处置事件', align: 'center', sort: true },
-                    { field: 'roleCode', width: 200, title: '源IP', align: 'center', sort: true },
-                    { field: 'attack_type', width: 200, title: '攻击类型', align: 'center', sort: true },
-                    { field: 'details', width: 200, title: '详情信息', align: 'center', sort: true },
-                    { field: 'auto_handled', width: 200, title: '是否自动处理', align: 'center', sort: true },
-                    { field: 'handled_status', width: 200, title: '处理状态', align: 'center', sort: true },
-                    { field: 'handled_action', width: 200, title: '处理动作', align: 'center', sort: true },
-                    { field: 'handled_details', width: 200, title: '处理详情', align: 'center', sort: true },
-                    { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center" }
+                    { field: 'id', width: 80, title: 'ID', align: 'center', sort: true, hide: false },
+                    { field: 'handle_event', width: 150, title: '处置事件', align: 'center', sort: true },
+                    { field: 'handle_ip', width: 150, title: '处置IP', align: 'center', sort: true },
+                    { field: 'handle_attack_type', width: 150, title: '处置攻击类型', align: 'center', sort: true },
+                    { field: 'handle_auto', width: 140, title: '是否自动处理', align: 'center', sort: true },
+                    { field: 'handle_status', width: 200, title: '处置状态', align: 'center', sort: true },
+                    { field: 'handle_action', width: 200, title: '处理动作', align: 'center', sort: true },
+                    { title: '操作', width: 100, toolbar: '#currentTableBar', align: "center" }
                 ]
                 table.render({
                     elem: '#currentTableId',
@@ -135,7 +121,6 @@
             form.on('submit(data-search-btn)', function (data) {
                 console.log(data.field);
                 const result = JSON.stringify(data.field);
-
                 //执行搜索重载
                 table.reload('currentTableId', {
                     page: {
@@ -145,7 +130,6 @@
                         Params: result
                     }
                 }, 'data');
-
                 return false;
             });
 
@@ -153,13 +137,15 @@
              * toolbar监听事件
              */
             table.on('toolbar(currentTableFilter)', function (obj) {
-
                 const del = () => {
                     layer.confirm('真的删除选中行吗?', { icon: 3, title: '确认删除' }, function (index) {
                         layer.close(index);
-                        const checkStatus = table.checkStatus('currentTableId'), data = checkStatus.data;
+                        const checkStatus = table.checkStatus('currentTableId')
+                        const data = {
+                            status: checkStatus.data
+                        }
                         //传给后台
-                        ajax.post("/handle/delete", { delParam: JSON.stringify(data) }, function (result) {
+                        ajax.post("/handle/delete", data, function (result) {
                             if (result.success) {
                                 layer.msg(result.msg, { icon: 1 });
                             } else {
@@ -234,10 +220,13 @@
 
                 const del = () => {
                     layer.confirm('真的删除行么?', { icon: 3, title: '确认删除' }, function (index) {
-                        // console.log(obj);
+                        console.log("数据", obj.data);
                         obj.del();
                         layer.close(index);
-                        ajax.post("/handle/delete", { delParam: JSON.stringify(data) }, function (result) {
+                        const data = {
+                            id: obj.data.id
+                        }
+                        ajax.post("/handle/delete", data, function (result) {
                             if (result.success) {
                                 layer.msg(result.msg, { icon: 1 });
                             } else {
