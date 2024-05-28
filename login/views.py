@@ -13,12 +13,14 @@ from common.API.log import login_log
 from login.models import Logo, Log
 from manage.models import User, Role, Power, RolePower
 from common.API.auth import login_required
+from django.views.decorators.http import require_http_methods
 
 
 @login_required
+@require_http_methods(["GET"])
 def index(request):
-    if request.method == "GET":
-        return render(request, "login/index.html")
+    data = {"title": ""}
+    return render(request, "login/index.html", data)
 
 
 def home(request):
@@ -36,6 +38,7 @@ def page_error(request):
         return render(request, "errors/500.html")
 
 
+@require_http_methods(["GET", "POST"])
 def login(request):
     if request.method == "GET":
         return render(request, "login/login.html")
@@ -55,7 +58,9 @@ def login(request):
         request.session["code"] = None
 
         if not all([code, s_code]):
-            login_log(request, uid=username, is_access=False, desc='验证码错误,请刷新验证码')
+            login_log(
+                request, uid=username, is_access=False, desc="验证码错误,请刷新验证码"
+            )
             return res_josn_data.fail_api(msg="验证码错误,请刷新验证码!")
 
         if code != s_code:
@@ -269,6 +274,7 @@ def user_password(request):
             **{"id_password": make_password(new_password)}
         )
         return res_josn_data.success_api(msg="修改成功!")
+
 
 # def page_not_found(request, exception):
 #     return render(request, "errors/404.html", exception)
