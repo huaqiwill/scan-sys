@@ -19,7 +19,7 @@ from django.views.decorators.http import require_http_methods
 @login_required
 @require_http_methods(["GET"])
 def index(request):
-    data = {"title": ""}
+    data = {"title": "登录 - 漏洞扫描系统"}
     return render(request, "login/index.html", data)
 
 
@@ -38,10 +38,13 @@ def page_error(request):
         return render(request, "errors/500.html")
 
 
+
+
 @require_http_methods(["GET", "POST"])
 def login(request):
     if request.method == "GET":
-        return render(request, "login/login.html")
+        data = {"title": "漏洞扫描系统"}
+        return render(request, "login/login.html", data)
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
