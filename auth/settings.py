@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # XSS攻击检测
     # "xss_protector",
     "django_crontab",
+    "scan"
 ]
 
 MIDDLEWARE = [
