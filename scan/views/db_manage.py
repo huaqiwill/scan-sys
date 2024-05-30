@@ -8,4 +8,4 @@ def index(request: HttpRequest):
 
 
 def config(request: HttpRequest):
-    return render(request, "scan/index.html")
+    return render(request, "scan/db/index.html")
