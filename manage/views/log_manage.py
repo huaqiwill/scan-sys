@@ -27,48 +27,48 @@ def log_query(request):
     limit = request.POST.get("limit", 10)
     post_data_str = request.POST.get("Params", None)
 
-    data_list = []
-    if post_data_str is None:
-        return res_josn_data.table_api(data=data_list, count=0)
-
-    post_data = json.loads(post_data_str)
-    user_id = post_data["UID"]
-    method = post_data["method"]
-    url = post_data["URL"]
-    desc = post_data["desc"]
-    log_status = post_data["status"]
-    log_time = post_data["time"]
-
     filters = {}  # 查询参数构造
-    # model或数据库对应字段
-    orm_field = [
-        "__gt",
-        "__gte",
-        "__lt",
-        "__lte",
-        "__exact",
-        "__iexact",
-        "__contains",
-        "__icontains",
-        "__startswith",
-        "__istartswith",
-        "__endswith",
-        "__iendswith",
-        "__range",
-        "__isnull",
-        "__in",
-    ]
-    filed_dict = {0: "uid", 1: "method", 2: "url", 3: "desc", 4: "success"}
-    param_list = [user_id, method, url, desc, log_status]
+    data_list = []
+    if post_data_str is not None:
+        post_data = json.loads(post_data_str)
+        user_id = post_data["UID"]
+        method = post_data["method"]
+        url = post_data["URL"]
+        desc = post_data["desc"]
+        log_status = post_data["status"]
+        log_time = post_data["time"]
 
-    for i in range(len(param_list)):
-        if param_list[i] not in (None, ""):
-            db_field = filed_dict[i] + orm_field[7]
-            filters[db_field] = param_list[i]
-    if log_time not in (None, ""):
-        filters["create_time__gte"] = log_time
+        # model或数据库对应字段
+        orm_field = [
+            "__gt",
+            "__gte",
+            "__lt",
+            "__lte",
+            "__exact",
+            "__iexact",
+            "__contains",
+            "__icontains",
+            "__startswith",
+            "__istartswith",
+            "__endswith",
+            "__iendswith",
+            "__range",
+            "__isnull",
+            "__in",
+        ]
 
-    print("filters:", filters)
+        filed_dict = {0: "uid", 1: "method", 2: "url", 3: "desc", 4: "success"}
+        param_list = [user_id, method, url, desc, log_status]
+
+        for i in range(len(param_list)):
+            if param_list[i] not in (None, ""):
+                db_field = filed_dict[i] + orm_field[7]
+                filters[db_field] = param_list[i]
+
+        if log_time not in (None, ""):
+            filters["create_time__gte"] = log_time
+
+        print("filters:", filters)
 
     user_obj = Log.objects.filter(**filters).order_by("-id")
     page_data = Paginator(user_obj, limit).page(page)
