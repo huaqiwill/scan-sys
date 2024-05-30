@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # "monitor.middlewares.StrongCsrfViewMiddleware",
-    "monitor.middlewares.SqlInjectionMiddleware",
+    # "monitor.middlewares.SqlInjectionMiddleware",
     # "monitor.middlewares.CustomXssProtectorMiddleware"
 ]
 

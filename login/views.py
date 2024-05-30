@@ -38,8 +38,6 @@ def page_error(request):
         return render(request, "errors/500.html")
 
 
-
-
 @require_http_methods(["GET", "POST"])
 def login(request):
     if request.method == "GET":
@@ -129,7 +127,8 @@ def get_captcha(request):
 def login_in(request):
     user_id = request.session.get("user_id")
     if user_id:
-        return render(request, "login/index.html", {"user_id": user_id})
+        data = {"title": "漏洞扫描系统", "user_id": user_id}
+        return render(request, "login/index.html", data)
 
 
 @login_required
