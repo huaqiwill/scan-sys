@@ -7,22 +7,16 @@ config.read(os.path.join(os.getcwd(), "config.ini"), encoding="utf8")
 db_config = config["sql"]
 email_config = config["mail"]
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+"""基础目录"""
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+"""密钥"""
 SECRET_KEY = "django-insecure-@g^5499a$7@l^$0i^gg@2aa_b8k^vzf#*r3r4@u^pjhw761)f5"
-
-# SECURITY WARNING: don't run with debug turned on in production!
+"""调试模式"""
 DEBUG = True
-
+"""允许的域名"""
 ALLOWED_HOSTS = ["*"]
 
-# Application definition
-
+"""APP"""
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -42,6 +36,7 @@ INSTALLED_APPS = [
     "scan"
 ]
 
+"""中间件"""
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -55,8 +50,10 @@ MIDDLEWARE = [
     # "monitor.middlewares.CustomXssProtectorMiddleware"
 ]
 
+"""跟路由"""
 ROOT_URLCONF = "auth.urls"
 
+"""模板文件"""
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -75,17 +72,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "auth.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
+"""数据库"""
 DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
+    #     }
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": db_config["database"],
@@ -118,18 +110,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "zh-hans"
-
 TIME_ZONE = "Asia/Shanghai"
-
 USE_I18N = True
-
 USE_TZ = False
 
-# Static files (CSS, JavaScript, Images)
+"""静态文件"""
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = "static/"
-
 STATICFILES_DIRS = [(os.path.join(BASE_DIR, "static"))]
 
 # Default primary key field type
@@ -144,9 +131,9 @@ RATELIMIT_ENABLE = True  # 启用速率限制功能
 RATELIMIT_USE_CACHE = "default"  # 使用默认缓存设置
 RATELIMIT_VIEW = "monitor.views.ratelimit_handler"  # 自定义速率限制处理视图函数
 RATELIMIT_RATE = "10/m"  # 允许每分钟10个请求
+
 """XSS攻击检测"""
 # XSS_PROTECTION_ENABLED = True
-
 
 """邮件配置"""
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -157,17 +144,7 @@ EMAIL_HOST_PASSWORD = email_config["password"]
 # DEFAULT_FROM_EMAIL = ""
 EMAIL_USE_TLS = False
 
-# 定时任务
-"""
-*    *    *    *    * ：分别表示 分(0-59)、时(0-23)、天(1 - 31)、月(1 - 12) 、周(星期中星期几 (0 - 7) (0 7 均为周天))
-crontab范例：
-每五分钟执行    */5 * * * *
-每小时执行     0 * * * *
-每天执行       0 0 * * *
-每周一执行       0 0 * * 1
-每月执行       0 0 1 * *
-每天23点执行   0 23 * * *
-"""
+"""定时任务"""
 CRONJOBS = [
     (
         "*/1 * * * *",

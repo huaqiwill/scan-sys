@@ -5,6 +5,7 @@ import nmap
 
 
 def identify_services(host):
+    """服务识别"""
     nm = nmap.PortScanner()
     nm.scan(host, arguments="-sV")
     services = []

@@ -115,28 +115,26 @@
 			//登陆超时跳转
 			$.ajaxSetup({
 				complete: function (XMLHttpRequest, textStatus) {
-					if (textStatus == "parsererror") {
+					if (textStatus === "parsererror") {
 						layer.msg('登陆过期, 请重新登陆', { icon: 2, time: 2000 }, function () {
 							window.location.href = '/';
 						})
-					} else if (textStatus == "error") {
+					} else if (textStatus === "error") {
 						$.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
 					}
 				}
 			});
 
-			let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1" ? true : false;
+			let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
 			let cols = [
 				{ type: "checkbox", width: 50 },
-				{ field: 'id', width: 100, title: '序号', align: 'center', sort: true },
-				{ field: 'powerId', width: 100, title: '权限ID', align: 'center', sort: true, hide: false },
-				{ field: 'powerName', width: 180, title: '名称', align: 'center', edit: 'text', sort: true },
-				{ field: 'powerCode', width: 240, title: 'Code', align: 'center', edit: 'text', sort: true },
-				{ field: 'powerType', width: 180, title: '类型', align: 'center', sort: true },
-				{ field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true },
-				{ field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text' },
-				{ field: 'sort', title: '排序', width: 100, minWidth: 150, align: 'center', edit: 'text', sort: true },
-				{ field: 'enable', width: 180, title: '是否启用', align: 'center', templet: '#power-enable', sort: true },
+				{ field: 'id', width: 100, title: 'IP地址', align: 'center', sort: true },
+				{ field: 'powerId', width: 100, title: '端口号', align: 'center', sort: true, hide: false },
+				{ field: 'powerName', width: 180, title: '协议', align: 'center', edit: 'text', sort: true },
+				{ field: 'powerCode', width: 240, title: '服务名称', align: 'center', edit: 'text', sort: true },
+				{ field: 'powerType', width: 180, title: '版本', align: 'center', sort: true },
+				{ field: 'parentId', width: 100, title: '状态', align: 'center', edit: 'text', sort: true },
+				{ field: 'icon', width: 200, title: '服务指纹', align: 'center', edit: 'text' },
 				{ title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center" }
 			];
 

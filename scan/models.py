@@ -1,10 +1,17 @@
 from django.db import models
 
-# Create your models here.
+"""
+notes 用户可以编辑
+
+主机发现记录、服务识别记录、端口扫描记录、漏洞检测记录
+网页漏洞扫描记录
+报告生成记录
+修复评估建议管理
+"""
 
 
 class Vulnerability(models.Model):
-    """漏洞"""
+    """漏洞检测记录"""
 
     name = models.CharField("漏洞名称", max_length=255)
     type = models.CharField("漏洞类型", max_length=255)
@@ -21,45 +28,39 @@ class Vulnerability(models.Model):
 
 
 class Host(models.Model):
-    """主机"""
-
-    host_id = models.AutoField(primary_key=True)
-    hostname = models.CharField(max_length=255)
-    host_type = models.CharField(max_length=255)
-    operating_system = models.CharField(max_length=255)
-    network_location = models.CharField(max_length=255)
-    scan_time = models.DateTimeField()
-    notes = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.hostname
+    """主机发现记录"""
+    hostname = models.CharField("主机名称", max_length=255)
+    host_type = models.CharField("主机类型", max_length=255)
+    operating_system = models.CharField("操作系统", max_length=255)
+    network_location = models.CharField("网络位置", max_length=255)
+    network_ip = models.CharField("网络IP", max_length=255)
+    network_mac = models.CharField("MAC地址", max_length=255)
+    scan_time = models.DateTimeField("扫描开始时间")
+    scan_end_time = models.DateTimeField("扫描结束时间")
+    notes = models.TextField("备注", blank=True)
 
 
 class Service(models.Model):
-    """服务识别"""
-
-    service_id = models.AutoField(primary_key=True)
-    service_name = models.CharField(max_length=255)
-    service_type = models.CharField(max_length=255)
-    port_number = models.IntegerField()
-    protocol_type = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
-    notes = models.TextField(blank=True)
+    """服务识别记录"""
+    service_name = models.CharField("服务名称", max_length=255)
+    service_type = models.CharField("服务类型", max_length=255)
+    port_number = models.IntegerField("端口号")
+    protocol_type = models.CharField("协议类型", max_length=255)
+    status = models.CharField("运行状态", max_length=255)
+    notes = models.TextField("备注", blank=True)
 
     def __str__(self):
         return self.service_name
 
 
 class PortScan(models.Model):
-    """端口扫描"""
-
-    scan_id = models.AutoField(primary_key=True)
-    target_ip = models.CharField(max_length=255)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    status = models.CharField(max_length=255)
-    result = models.TextField()
-    notes = models.TextField(blank=True)
+    """端口扫描记录"""
+    target_ip = models.CharField("目标IP", max_length=255)
+    result = models.TextField("扫描结果")
+    start_time = models.DateTimeField("开始时间")
+    end_time = models.DateTimeField("结束时间")
+    status = models.CharField("扫描状态", max_length=255)
+    notes = models.TextField("备注", blank=True)
 
     def __str__(self):
         return self.target_ip
