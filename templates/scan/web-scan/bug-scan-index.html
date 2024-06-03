@@ -110,87 +110,67 @@
 
 
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js"></script>
 <script>
-    layui.use(['form', 'table'], function () {
-        var $ = layui.jquery,
-            form = layui.form,
-            table = layui.table;
-        var token = "{{ csrf_token }}";
-        $.ajaxSetup({
-            headers: {'X-CSRFTOKEN': `${token}`}, // 这里是headers，不是data,  CSRF
-        });
+    layui.use(['form', 'table', 'ajax'], function () {
+        const $ = layui.jquery
+        const form = layui.form
+        const table = layui.table
+        const ajax = layui.ajax
 
-        //登陆超时跳转
-        $.ajaxSetup({
-            complete: function (XMLHttpRequest, textStatus) {
-                if (textStatus == "parsererror") {
-                    layer.msg('登陆过期, 请重新登陆', {icon: 2, time: 2000}, function () {
-                        window.location.href = '/';
-                    })
-                } else if (textStatus == "error") {
-                    $.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
-                }
+        const token = "{{ csrf_token }}"
+        ajax.setup(token)
+
+        const query = () => {
+            let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
+            let cols = [
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 100, title: '序号', align: 'center', sort: true},
+                {field: 'powerId', width: 100, title: '权限ID', align: 'center', sort: true, hide: false},
+                {field: 'powerName', width: 180, title: '名称', align: 'center', edit: 'text', sort: true},
+                {field: 'powerCode', width: 240, title: 'Code', align: 'center', edit: 'text', sort: true},
+                {field: 'powerType', width: 180, title: '类型', align: 'center', sort: true},
+                {field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true},
+                {field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text'},
+                {field: 'sort', title: '排序', width: 100, minWidth: 150, align: 'center', edit: 'text', sort: true},
+                {field: 'enable', width: 180, title: '是否启用', align: 'center', templet: '#power-enable', sort: true},
+                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+            ];
+
+            if (!enable) {
+                // 移除enale列
+                cols = cols.filter(col => col.field !== 'enable');
             }
-        });
 
-        let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1" ? true : false;
-        let cols = [
-            {type: "checkbox", width: 50},
-            {field: 'id', width: 100, title: '序号', align: 'center', sort: true},
-            {field: 'powerId', width: 100, title: '权限ID', align: 'center', sort: true, hide: false},
-            {field: 'powerName', width: 180, title: '名称', align: 'center', edit: 'text', sort: true},
-            {field: 'powerCode', width: 240, title: 'Code', align: 'center', edit: 'text', sort: true},
-            {field: 'powerType', width: 180, title: '类型', align: 'center', sort: true},
-            {field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true},
-            {field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text'},
-            {field: 'sort', title: '排序', width: 100, minWidth: 150, align: 'center', edit: 'text', sort: true},
-            {field: 'enable', width: 180, title: '是否启用', align: 'center', templet: '#power-enable', sort: true},
-            {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
-        ];
-
-        if (!enable) {
-            // 移除enale列
-            cols = cols.filter(col => col.field !== 'enable');
+            table.render({
+                elem: '#currentTableId',
+                url: '/power-query',
+                method: 'post',
+                toolbar: '#toolbarUser',
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [cols],
+                limits: [10, 20, 50, 100, 200, 500],
+                limit: 10,
+                page: true,
+                skin: 'row',
+                even: true
+            });
         }
+        query()
 
-        table.render({
-            elem: '#currentTableId',
-            url: '/power-query',
-            method: 'post',
-            toolbar: '#toolbarUser',
-            defaultToolbar: ['filter', 'exports', 'print'],
-            cols: [cols],
-            limits: [10, 20, 50, 100, 200, 500],
-            limit: 10,
-            page: true,
-            skin: 'row',
-            even: true
-        });
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            // console.log(data.field);
-            var result = JSON.stringify(data.field);
-
-            //执行搜索重载
+            const result = JSON.stringify(data.field);
             table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    Params: result
-                }
+                page: {curr: 1}, where: {Params: result}
             }, 'data');
-
             return false;
         });
 
-        /**
-         * toolbar监听事件
-         */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
+                const index = layer.open({
                     title: '新增',
                     type: 2,
                     shade: 0.2,
