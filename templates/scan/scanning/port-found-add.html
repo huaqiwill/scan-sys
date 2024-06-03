@@ -14,7 +14,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">IP地址</label>
         <div class="layui-input-block">
-            <input type="text" name="sub_name" lay-verify="required" lay-reqtext="IP地址不能为空" placeholder="请输入IP地址"
+            <input type="text" name="ip_addr" lay-verify="required" lay-reqtext="IP地址不能为空" placeholder="请输入IP地址"
                    value="" class="layui-input">
         </div>
     </div>
@@ -22,16 +22,16 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">起始端口</label>
         <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="起始端口不能为空" placeholder="请输入起始端口"
-                   value="" class="layui-input">
+            <input type="number" name="start_port" lay-affix="number" placeholder="请输入起始端口" step="1"
+                   class="layui-input" value="1" min="1" max="65535">
         </div>
     </div>
 
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label required">结束端口</label>
         <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="结束端口不能为空" placeholder="请输入结束端口"
-                   value="" class="layui-input">
+            <input type="number" name="start_port" lay-affix="number" placeholder="请输入结束端口" step="1"
+                   class="layui-input" value="65535" min="1" max="65535">
         </div>
     </div>
 
@@ -44,8 +44,34 @@
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js"></script>
 <script>
-    layui.use(['form', 'table', 'util', 'admin', 'formSelects'], function () {
+    layui.use(['form', 'table', 'ajax'], function () {
+        const form = layui.form;
+        const layer = layui.layer;
+        const ajax = layui.ajax;
 
+        console.log(ajax)
+        const $ = layui.$;
+
+        const token = "{{ csrf_token }}"
+        ajax.setup(token)
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            console.log(data.field);
+            const add = () => {
+                ajax.post("/host/port/add", data.field, function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 2000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                            parent.layui.table.reload('currentTableId')
+                        })
+                    } else {
+                        layer.alert(result.msg);
+                    }
+                })
+            }
+            add()
+        });
     });
 </script>
 </body>

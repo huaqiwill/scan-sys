@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods
 # Create your views here.
 from common.API import res_josn_data
 from scan.utils.scanning import start_host_discovery
+from scan.models import PortScan
 
 
 def index(request: HttpRequest):
@@ -29,8 +30,13 @@ def found(request: HttpRequest):
     print("主机发现")
 
 
+@require_http_methods(["GET", "POST"])
 def found_add(request: HttpRequest):
-    return render(request, "scan/scanning/host-found-add.html")
+    if request.method == "GET":
+        return render(request, "scan/scanning/host-found-add.html")
+
+    print("查询参数", request.POST)
+    return res_josn_data.success_api()
 
 
 @require_http_methods(["POST"])
@@ -117,5 +123,21 @@ def port_query(request: HttpRequest):
     return res_josn_data.table_api(count=1, data=data_list)
 
 
+@require_http_methods(["GET", "POST"])
 def port_add(request: HttpRequest):
-    return render(request, "scan/scanning/port-found-add.html")
+    if request.method == "GET":
+        return render(request, "scan/scanning/port-found-add.html")
+
+    print("端口扫描：", request.POST)
+
+    data_list = []
+    ports = start_port_scan()
+    print(ports)
+    for service in ports:
+        data_list.append({
+            "port": service["port"],
+            "state": service["state"],
+            "host": service["host"],
+        })
+
+    return res_josn_data.success_api()
