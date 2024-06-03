@@ -1,4 +1,4 @@
-from .host_discovery import discover_hosts
-from .port_scanning import scan_ports
-from .service_identification import identify_services
+from .host_discovery import start_host_discovery
+from .port_scanning import start_port_scan
+from .service_identification import start_service_discovery
 from .vulnerability_detection import *

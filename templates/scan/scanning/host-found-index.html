@@ -92,7 +92,7 @@
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
             <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
-                新增
+                主机发现
             </button>
         {% endif %}
         {% if "power:delete" in request.session.permissions %}
@@ -120,9 +120,9 @@
             let cols = [
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 100, title: '序号', align: 'center', sort: true},
-                {field: 'powerId', width: 100, title: '主机IP', align: 'center', sort: true, hide: false},
-                {field: 'powerName', width: 180, title: '主机名称', align: 'center', edit: 'text', sort: true},
-                {field: 'powerCode', width: 240, title: '主机MAC地址', align: 'center', edit: 'text', sort: true},
+                {field: 'ip', width: 150, title: '主机IP', align: 'center', sort: true, hide: false},
+                {field: 'name', width: 180, title: '主机名称', align: 'center', edit: 'text', sort: true},
+                {field: 'mac', width: 150, title: '主机MAC地址', align: 'center', edit: 'text', sort: true},
                 {field: 'powerType', width: 180, title: '类型', align: 'center', sort: true},
                 {field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true},
                 {field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text'},
@@ -138,7 +138,7 @@
 
             table.render({
                 elem: '#currentTableId',
-                url: '/power-query',
+                url: '/host/found/query',
                 method: 'post',
                 toolbar: '#toolbarUser',
                 defaultToolbar: ['filter', 'exports', 'print'],
@@ -179,7 +179,7 @@
                     maxmin: true,
                     shadeClose: true,
                     area: ['40%', '80%'],
-                    content: '/power-add',
+                    content: '/host/found/add',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

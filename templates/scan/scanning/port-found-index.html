@@ -83,7 +83,7 @@
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
             <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
-                新增
+                端口扫描
             </button>
         {% endif %}
         {% if "power:delete" in request.session.permissions %}
@@ -95,60 +95,52 @@
 </script>
 
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js"></script>
 <script>
-    layui.use(['form', 'table'], function () {
-        var $ = layui.jquery,
-            form = layui.form,
-            table = layui.table;
-        var token = "{{ csrf_token }}";
-        $.ajaxSetup({
-            headers: {'X-CSRFTOKEN': `${token}`}, // 这里是headers，不是data,  CSRF
-        });
+    layui.use(['form', 'table', 'ajax'], function () {
+        const $ = layui.jquery
+        const form = layui.form
+        const table = layui.table;
+        const ajax = layui.ajax;
 
-        //登陆超时跳转
-        $.ajaxSetup({
-            complete: function (XMLHttpRequest, textStatus) {
-                if (textStatus === "parsererror") {
-                    layer.msg('登陆过期, 请重新登陆', {icon: 2, time: 2000}, function () {
-                        window.location.href = '/';
-                    })
-                } else if (textStatus === "error") {
-                    $.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
-                }
+        const token = "{{ csrf_token }}";
+        ajax.setup(token)
+
+        const query = () => {
+            let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
+            let cols = [
+                {type: "checkbox", width: 50},
+                {field: 'host', width: 200, title: '主机IP', align: 'center', sort: true},
+                {field: 'port', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
+                {title: '操作', width: 150, toolbar: '#currentTableBar', align: "center"}
+            ];
+
+            if (!enable) {
+                // 移除enale列
+                cols = cols.filter(col => col.field !== 'enable');
             }
-        });
 
-        let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
-        let cols = [
-            {type: "checkbox", width: 50},
-            {field: 'id', width: 200, title: '主机IP', align: 'center', sort: true},
-            {field: 'powerId', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
-            {title: '操作', width: 150, toolbar: '#currentTableBar', align: "center"}
-        ];
-
-        if (!enable) {
-            // 移除enale列
-            cols = cols.filter(col => col.field !== 'enable');
+            table.render({
+                elem: '#currentTableId',
+                url: '/host/port/query',
+                method: 'post',
+                toolbar: '#toolbarUser',
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [cols],
+                limits: [10, 20, 50, 100, 200, 500],
+                limit: 10,
+                page: true,
+                skin: 'row',
+                even: true
+            });
         }
+        query();
 
-        table.render({
-            elem: '#currentTableId',
-            url: '/power-query',
-            method: 'post',
-            toolbar: '#toolbarUser',
-            defaultToolbar: ['filter', 'exports', 'print'],
-            cols: [cols],
-            limits: [10, 20, 50, 100, 200, 500],
-            limit: 10,
-            page: true,
-            skin: 'row',
-            even: true
-        });
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             // console.log(data.field);
-            var result = JSON.stringify(data.field);
+            const result = JSON.stringify(data.field);
 
             //执行搜索重载
             table.reload('currentTableId', {
@@ -167,32 +159,29 @@
          * toolbar监听事件
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
+            const add = () => {
+                const index = layer.open({
                     title: '新增',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
                     area: ['40%', '80%'],
-                    content: '/power-add',
+                    content: '/host/port/add',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
-                var checkStatus = table.checkStatus('currentTableId');
-                var data = checkStatus.data;
+            }
+
+            const del = () => {
+                const checkStatus = table.checkStatus('currentTableId');
+                const data = checkStatus.data;
                 if (data.length === 0) {
-                    layer.msg('未选中数据', {
-                        icon: 3,
-                        time: 1000
-                    })
+                    layer.msg('未选中数据', {icon: 3, time: 1000})
                     return false
                 } else {
                     layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-                        layer.close(index);
-
                         if (data.length === 0) {
                             layer.msg('请选择需要删除的数据!', {
                                 icon: 3,
@@ -200,31 +189,25 @@
                             })
                             return false
                         }
-                        //传给后台
-                        $.ajax({
-                            url: "/power-multi-delete",
-                            type: "post",
-                            data: {Params: JSON.stringify(data)},
-                            success: function (result) {
-                                if (result.success) {
-                                    // layer.msg(result.msg);
-                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                        table.reload('currentTableId');  //表格重载
-                                    })
-                                } else {
-                                    layer.msg(result.msg);
-                                }
-
-                            },
-                            error: function (result) {
-                                alert("接口错误！！");
+                        ajax.post("/power-multi-delete", {Params: JSON.stringify(data)}, function (result) {
+                            if (result.success) {
+                                layer.msg(result.msg, {icon: 1, time: 2000}, function () {
+                                    parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                                    table.reload('currentTableId');  //表格重载
+                                })
+                            } else {
+                                layer.msg(result.msg);
                             }
-                        });
-                        return false;
+                        })
+                        layer.close(index);
                     });
-
                 }
+            }
+
+            if (obj.event === 'add') {  // 监听添加操作
+                add()
+            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
+                del()
             } else if (obj.event === 'refresh') {
                 window.refresh()
             }

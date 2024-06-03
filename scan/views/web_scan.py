@@ -9,3 +9,7 @@ def index(request: HttpRequest):
 
 def scan(request: HttpRequest):
     return render(request, "scan/web-scan/bug-scan-index.html")
+
+
+def scan_add(request: HttpRequest):
+    return render(request, "scan/web-scan/bug-scan-add.html")

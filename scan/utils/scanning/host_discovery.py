@@ -55,11 +55,17 @@ def print_devices(devices):
         print(f"{device['ip']}\t\t{device['mac']}")
 
 
-if __name__ == "__main__":
+def start_host_discovery():
     try:
         default_gateway_ip = get_default_gateway_ip()
         network_ip_range = get_network_ip_range()
         devices = scan(network_ip_range)
         print_devices(devices)
+        return devices
     except Exception as e:
         print(f"Error: {e}")
+        return []
+
+
+if __name__ == "__main__":
+    devices = start_host_discovery()
