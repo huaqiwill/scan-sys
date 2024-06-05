@@ -111,7 +111,7 @@
             let cols = [
                 {type: "checkbox", width: 50},
                 {field: 'host', width: 200, title: '主机IP', align: 'center', sort: true},
-                {field: 'port', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
+                {field: 'ports', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
                 {title: '操作', width: 150, toolbar: '#currentTableBar', align: "center"}
             ];
 
@@ -136,28 +136,15 @@
         }
         query();
 
-
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            // console.log(data.field);
             const result = JSON.stringify(data.field);
-
-            //执行搜索重载
             table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    Params: result
-                }
+                page: {curr: 1}, where: {Params: result}
             }, 'data');
-
             return false;
         });
 
-        /**
-         * toolbar监听事件
-         */
         table.on('toolbar(currentTableFilter)', function (obj) {
             const add = () => {
                 const index = layer.open({

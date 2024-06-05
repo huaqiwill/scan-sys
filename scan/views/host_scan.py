@@ -58,6 +58,8 @@ def found_query(request: HttpRequest):
         data_list.append({
             "ip": device["ip"],
             "mac": device["mac"],
+            "os": "Windows 10",
+            "supplier": "Unknown"
         })
     return res_josn_data.table_api(count=count, data=data_list)
 
@@ -91,7 +93,10 @@ def server_query(request: HttpRequest):
             "host": service["ip"],
             "port": service["port"],
             "service": service["service"],
-            "version": service["version"]
+            "version": service["version"],
+            "protocol": service["protocol"],
+            "state": service["state"],
+            "product": service["product"]
         })
     return res_josn_data.table_api(count=1, data=data_list)
 
@@ -114,11 +119,10 @@ def port_query(request: HttpRequest):
     data_list = []
     ports = start_port_scan()
     print(ports)
-    for service in ports:
+    for port in ports:
         data_list.append({
-            "port": service["port"],
-            "state": service["state"],
-            "host": service["host"],
+            "ports": port["ports"],
+            "host": port["host"],
         })
     return res_josn_data.table_api(count=1, data=data_list)
 

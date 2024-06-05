@@ -7,6 +7,11 @@ ICMP扫描：使用互联网控制消息协议（ICMP）发送回显请求（pin
 端口扫描：扫描常用端口，识别运行特定服务的设备。
 SNMP扫描：使用简单网络管理协议（SNMP）收集网络设备的状态和配置信息。
 Nmap：一个强大的网络扫描工具，支持多种扫描技术，广泛用于主机发现和网络安全审计。
+
+ip地址
+mac地址
+操作系统信息
+供应商信息
 """
 import scapy.all as scapy
 import netifaces
@@ -44,7 +49,11 @@ def scan(ip_range):
 
     devices = []
     for element in answered_list:
-        devices.append({'ip': element[1].psrc, 'mac': element[1].hwsrc})
+        print(element[0])
+        devices.append({
+            'ip': element[1].psrc,
+            'mac': element[1].hwsrc
+        })
 
     return devices
 

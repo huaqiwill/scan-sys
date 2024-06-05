@@ -68,14 +68,11 @@
                 </form>
             </div>
         </fieldset>
-
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
     </div>
 </div>
 
 <script type="text/html" id="currentTableBar">
-    <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
     {% if "power:delete" in request.session.permissions %}
         <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
     {% endif %}
@@ -125,21 +122,18 @@
             let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
             let cols = [
                 {type: "checkbox", width: 50},
-                {field: 'host', width: 100, title: 'IP地址', align: 'center', sort: true},
-                {field: 'port', width: 100, title: '端口号', align: 'center', sort: true, hide: false},
-                {field: 'service', width: 180, title: '协议', align: 'center', edit: 'text', sort: true},
-                {field: 'name', width: 240, title: '服务名称', align: 'center', edit: 'text', sort: true},
-                {field: 'version', width: 180, title: '版本', align: 'center', sort: true},
-                {field: 'parentId', width: 100, title: '状态', align: 'center', edit: 'text', sort: true},
-                {field: 'icon', width: 200, title: '服务指纹', align: 'center', edit: 'text'},
-                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
-            ];
-
+                {field: 'host', width: 150, title: 'IP地址', align: 'center', sort: true},
+                {field: 'port', width: 100, title: '端口号', align: 'center', sort: true},
+                {field: 'protocol', width: 100, title: '协议', align: 'center', sort: true},
+                {field: 'service', width: 150, title: '服务名称', align: 'center', sort: true},
+                {field: 'version', width: 100, title: '版本', align: 'center'},
+                {field: 'state', width: 100, title: '状态', align: 'center', sort: true},
+                {field: 'product', minWidth: 200, title: '产品名称', align: 'center', sort: true},
+                {title: '操作', width: 100, toolbar: '#currentTableBar', align: "center"}
+            ]
             if (!enable) {
-                // 移除enale列
                 cols = cols.filter(col => col.field !== 'enable');
             }
-
             table.render({
                 elem: '#currentTableId',
                 url: '/host/service/query',
@@ -159,14 +153,8 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             const result = JSON.stringify(data.field);
-            //执行搜索重载
             table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    Params: result
-                }
+                page: {curr: 1}, where: {Params: result}
             }, 'data');
             return false;
         });

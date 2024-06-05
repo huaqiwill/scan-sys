@@ -21,12 +21,12 @@ def scan_ports(host_name: str, range_start=1, range_end=65535):
 def start_port_scan():
     host = "192.168.2.109"
     ports = scan_ports(host)
+    port_list = []
     for port in ports:
         print(f"Port {port}: {ports[port]['state']}")
-        port["port"] = port
-        port["state"] = ports[port]['state']
-        port["host"] = host
-    return ports
+        port_list.append(port)
+    return [{"host": host, "ports": ",".join(port_list)}]
+    # return ports
 
 
 if __name__ == "__main__":
