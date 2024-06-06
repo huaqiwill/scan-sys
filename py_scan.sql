@@ -15,26 +15,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- 导出 py_monitor 的数据库结构
+-- 导出 py_scan 的数据库结构
 DROP DATABASE IF EXISTS `py_scan`;
 CREATE DATABASE IF NOT EXISTS `py_scan` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 USE `py_scan`;
 
--- 导出  表 py_monitor.auth_group 结构
+-- 导出  表 py_scan.auth_group 结构
 DROP TABLE IF EXISTS `auth_group`;
 CREATE TABLE IF NOT EXISTS `auth_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_group 的数据：0 rows
+-- 正在导出表  py_scan.auth_group 的数据：0 rows
 DELETE FROM `auth_group`;
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 
--- 导出  表 py_monitor.auth_group_permissions 结构
+-- 导出  表 py_scan.auth_group_permissions 结构
 DROP TABLE IF EXISTS `auth_group_permissions`;
 CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -46,24 +46,24 @@ CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
   KEY `auth_group_permissions_permission_id_84c5c92e` (`permission_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_group_permissions 的数据：0 rows
+-- 正在导出表  py_scan.auth_group_permissions 的数据：0 rows
 DELETE FROM `auth_group_permissions`;
 /*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
 
--- 导出  表 py_monitor.auth_permission 结构
+-- 导出  表 py_scan.auth_permission 结构
 DROP TABLE IF EXISTS `auth_permission`;
 CREATE TABLE IF NOT EXISTS `auth_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `content_type_id` int(11) NOT NULL,
-  `codename` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `codename` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   KEY `auth_permission_content_type_id_2f476e4b` (`content_type_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_permission 的数据：64 rows
+-- 正在导出表  py_scan.auth_permission 的数据：64 rows
 DELETE FROM `auth_permission`;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
 INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
@@ -133,17 +133,17 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 	(64, 'Can view user', 16, 'view_user');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 
--- 导出  表 py_monitor.auth_user 结构
+-- 导出  表 py_scan.auth_user 结构
 DROP TABLE IF EXISTS `auth_user`;
 CREATE TABLE IF NOT EXISTS `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `last_login` datetime(6) DEFAULT NULL,
   `is_superuser` tinyint(1) NOT NULL,
-  `username` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `first_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(254) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `first_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `last_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL,
@@ -151,12 +151,12 @@ CREATE TABLE IF NOT EXISTS `auth_user` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_user 的数据：0 rows
+-- 正在导出表  py_scan.auth_user 的数据：0 rows
 DELETE FROM `auth_user`;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 
--- 导出  表 py_monitor.auth_user_groups 结构
+-- 导出  表 py_scan.auth_user_groups 结构
 DROP TABLE IF EXISTS `auth_user_groups`;
 CREATE TABLE IF NOT EXISTS `auth_user_groups` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -168,12 +168,12 @@ CREATE TABLE IF NOT EXISTS `auth_user_groups` (
   KEY `auth_user_groups_group_id_97559544` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_user_groups 的数据：0 rows
+-- 正在导出表  py_scan.auth_user_groups 的数据：0 rows
 DELETE FROM `auth_user_groups`;
 /*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
 
--- 导出  表 py_monitor.auth_user_user_permissions 结构
+-- 导出  表 py_scan.auth_user_user_permissions 结构
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
 CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -185,20 +185,20 @@ CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
   KEY `auth_user_user_permissions_permission_id_1fbb5f2c` (`permission_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.auth_user_user_permissions 的数据：0 rows
+-- 正在导出表  py_scan.auth_user_user_permissions 的数据：0 rows
 DELETE FROM `auth_user_user_permissions`;
 /*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
 
--- 导出  表 py_monitor.django_admin_log 结构
+-- 导出  表 py_scan.django_admin_log 结构
 DROP TABLE IF EXISTS `django_admin_log`;
 CREATE TABLE IF NOT EXISTS `django_admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action_time` datetime(6) NOT NULL,
-  `object_id` longtext COLLATE utf8mb4_general_ci,
-  `object_repr` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `object_id` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `object_repr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `action_flag` smallint(5) unsigned NOT NULL,
-  `change_message` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `change_message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `content_type_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -206,22 +206,22 @@ CREATE TABLE IF NOT EXISTS `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.django_admin_log 的数据：0 rows
+-- 正在导出表  py_scan.django_admin_log 的数据：0 rows
 DELETE FROM `django_admin_log`;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 
--- 导出  表 py_monitor.django_content_type 结构
+-- 导出  表 py_scan.django_content_type 结构
 DROP TABLE IF EXISTS `django_content_type`;
 CREATE TABLE IF NOT EXISTS `django_content_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app_label` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `app_label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.django_content_type 的数据：16 rows
+-- 正在导出表  py_scan.django_content_type 的数据：16 rows
 DELETE FROM `django_content_type`;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
 INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
@@ -243,17 +243,17 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 	(16, 'manage', 'user');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 
--- 导出  表 py_monitor.django_migrations 结构
+-- 导出  表 py_scan.django_migrations 结构
 DROP TABLE IF EXISTS `django_migrations`;
 CREATE TABLE IF NOT EXISTS `django_migrations` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `app` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `app` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.django_migrations 的数据：21 rows
+-- 正在导出表  py_scan.django_migrations 的数据：21 rows
 DELETE FROM `django_migrations`;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
@@ -280,17 +280,17 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 	(21, 'sessions', '0001_initial', '2024-05-26 01:30:20.102564');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 
--- 导出  表 py_monitor.django_session 结构
+-- 导出  表 py_scan.django_session 结构
 DROP TABLE IF EXISTS `django_session`;
 CREATE TABLE IF NOT EXISTS `django_session` (
-  `session_key` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `session_data` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `session_key` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `session_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `expire_date` datetime(6) NOT NULL,
   PRIMARY KEY (`session_key`),
   KEY `django_session_expire_date_a5c62663` (`expire_date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.django_session 的数据：7 rows
+-- 正在导出表  py_scan.django_session 的数据：26 rows
 DELETE FROM `django_session`;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
@@ -302,28 +302,48 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 	('wd9uyemx5023zdoc7mbkg4hdpd0cszbw', '.eJx1UclOwzAQ_RefQwldKMqp_0FRNOkMxZI9dryIVoh_Z-JsvXCJ3pp5Sn7UxSGphrMxlWojxagdt3TzOtxVc9zWdaVypNBqVI0CtJrVpDBYetCCM1RS2wkjRbHP-djBizz39es5H_aHN8kOsV2lkDyEZInTf0Hvok6ySHxhZEGb-eSp7zcXZ4cQBavLcDn4XsY9WWC40jRrZd59P5rGXVcy9BpAnCGSobQY5T3ZI6wSMXRmvjE1C1yahZWbM1k6RZ1KI15aI12SMnL12CX9eRdgHevkwrNmpJvwL2Acx1AUfUAxd-MXW9N9JvmvH79_fb2oqA:1sBVeY:TdpvHPJI4j6EozFcfHA_P1dXbbhpuoEs05WLT9HZbuI', '2024-05-27 18:24:22.058554'),
 	('krtpmxr2vxydkibj2c0btsa30de35s6c', '.eJx1UclOwzAQ_RefQwldKMqp_0FRNOkMxZI9dryIVoh_Z-JsvXCJ3pp5Sn7UxSGphrMxlWojxagdt3TzOtxVc9zWdaVypNBqVI0CtJrVpDBYetCCM1RS2wkjRbHP-djBizz39es5H_aHN8kOsV2lkDyEZInTf0Hvok6ySHxhZEGb-eSp7zcXZ4cQBavLcDn4XsY9WWC40jRrZd59P5rGXVcy9BpAnCGSobQY5T3ZI6wSMXRmvjE1C1yahZWbM1k6RZ1KI15aI12SMnL12CX9eRdgHevkwrNmpJvwL2Acx1AUfUAxd-MXW9N9JvmvH79_fb2oqA:1sBb9N:GTo_PCSJ6swxP7g5KmJucVGqUjdUjrERkPuf0lWHRts', '2024-05-28 00:16:33.403420'),
 	('do24xuk1ocg22uzq4errhyrmieewe6zg', '.eJx1UclOwzAQ_RefQwldKMqp_0FRNOkMxZI9dryIVoh_Z-JsvXCJ3pp5Sn7UxSGphrMxlWojxagdt3TzOtxVc9zWdaVypNBqVI0CtJrVpDBYetCCM1RS2wkjRbHP-djBizz39es5H_aHN8kOsV2lkDyEZInTf0Hvok6ySHxhZEGb-eSp7zcXZ4cQBavLcDn4XsY9WWC40jRrZd59P5rGXVcy9BpAnCGSobQY5T3ZI6wSMXRmvjE1C1yahZWbM1k6RZ1KI15aI12SMnL12CX9eRdgHevkwrNmpJvwL2Acx1AUfUAxd-MXW9N9JvmvH79_fb2oqA:1sBed5:hlBO8hw_pcIGOq0iQGrB7khfIZwFAIMInTLies58IDU', '2024-05-28 03:59:27.875225'),
-	('wq2hb8u6u5onbm0xihdr81ur2as1rp3v', '.eJx1UclOwzAQ_RefQwldKMqp_0FRNOkMxZI9dryIVoh_Z-JsvXCJ3pp5Sn7UxSGphrMxlWojxagdt3TzOtxVc9zWdaVypNBqVI0CtJrVpDBYetCCM1RS2wkjRbHP-djBizz39es5H_aHN8kOsV2lkDyEZInTf0Hvok6ySHxhZEGb-eSp7zcXZ4cQBavLcDn4XsY9WWC40jRrZd59P5rGXVcy9BpAnCGSobQY5T3ZI6wSMXRmvjE1C1yahZWbM1k6RZ1KI15aI12SMnL12CX9eRdgHevkwrNmpJvwL2Acx1AUfUAxd-MXW9N9JvmvH79_fb2oqA:1sBuHG:KAgUVZzWUUDHWOGTVNsZL4oPUc3SX0Iwlgb6zfkicvA', '2024-05-28 20:41:58.010447');
+	('wq2hb8u6u5onbm0xihdr81ur2as1rp3v', '.eJx1UclOwzAQ_RefQwldKMqp_0FRNOkMxZI9dryIVoh_Z-JsvXCJ3pp5Sn7UxSGphrMxlWojxagdt3TzOtxVc9zWdaVypNBqVI0CtJrVpDBYetCCM1RS2wkjRbHP-djBizz39es5H_aHN8kOsV2lkDyEZInTf0Hvok6ySHxhZEGb-eSp7zcXZ4cQBavLcDn4XsY9WWC40jRrZd59P5rGXVcy9BpAnCGSobQY5T3ZI6wSMXRmvjE1C1yahZWbM1k6RZ1KI15aI12SMnL12CX9eRdgHevkwrNmpJvwL2Acx1AUfUAxd-MXW9N9JvmvH79_fb2oqA:1sBuHG:KAgUVZzWUUDHWOGTVNsZL4oPUc3SX0Iwlgb6zfkicvA', '2024-05-28 20:41:58.010447'),
+	('kpuf1c4yclf98z329yuua24stv2vs70d', '.eJx1UMtOwzAQ_BefAwmlpSin_gdFkePdpha21_WDghD_juPaSS9crJmdGe9of5ggQNabqFTDBo_eSzIDflnpvlm_33Rdw6JHN0hgPeOgpWFlYrjGu5kjhdm1KRjQJ_kY9yN_Su-2eznG3Xb3mryz7blhgJa7oNGE_4yWvAypUdITQ82lqisPl8ujID2b0GmZi6eFb7ncg-aGT1hqrczS9V5UNK1kzvUcoEJAhWER8j_RAl9HaPio6o6SzHBJZpZ3VrJk8rSEbnhJ3ejiTCVX7Ypj6wWfD34mH1pxRvFRiSUXKj5RNFBJavuZO8DYCjInOc19sPh9nCb0-czvv3_ifLD8:1sBwNl:Bi7m0o8-x7f-nq5LaVoDZwtzU_8He0bzREU1KXAD6R4', '2024-05-28 22:56:49.387010'),
+	('fdv2x6ozx7230s01x2otv5uknlwojejl', '.eJx1UMtOwzAQ_BefAwmlpSin_gdFkePdpha21_WDghD_juPaSS9crJmdGe9of5ggQNabqFTDBo_eSzIDflnpvlm_33Rdw6JHN0hgPeOgpWFlYrjGu5kjhdm1KRjQJ_kY9yN_Su-2eznG3Xb3mryz7blhgJa7oNGE_4yWvAypUdITQ82lqisPl8ujID2b0GmZi6eFb7ncg-aGT1hqrczS9V5UNK1kzvUcoEJAhWER8j_RAl9HaPio6o6SzHBJZpZ3VrJk8rSEbnhJ3ejiTCVX7Ypj6wWfD34mH1pxRvFRiSUXKj5RNFBJavuZO8DYCjInOc19sPh9nCb0-czvv3_ifLD8:1sCdBr:OGmFuABh5OFn4yaCVwk5hKzX5U3dHnqRawJacxHtKZg', '2024-05-30 20:39:23.200551'),
+	('ea6wozdpj9zm86hk3gx1yjhsj896vxyk', 'eyJjb2RlIjoiMjM0NiJ9:1sCf57:dYxUSsZa5RH4xemAM5uFUau5du_Jd1cFfpV0yE4x778', '2024-06-13 20:40:33.995343'),
+	('kntyh5wl5ppy82dip3pxypbaxbwy69a3', '.eJx1UMtOwzAQ_BefAwmlpSin_gdFkePdpha21_WDghD_juPaSS9crJmdGe9of5ggQNabqFTDBo_eSzIDflnpvlm_33Rdw6JHN0hgPeOgpWFlYrjGu5kjhdm1KRjQJ_kY9yN_Su-2eznG3Xb3mryz7blhgJa7oNGE_4yWvAypUdITQ82lqisPl8ujID2b0GmZi6eFb7ncg-aGT1hqrczS9V5UNK1kzvUcoEJAhWER8j_RAl9HaPio6o6SzHBJZpZ3VrJk8rSEbnhJ3ejiTCVX7Ypj6wWfD34mH1pxRvFRiSUXKj5RNFBJavuZO8DYCjInOc19sPh9nCb0-czvv3_ifLD8:1sCf5a:cqAG1T_-jip-4unSNq087_C3fuuJKTAR-RUinrLwSOY', '2024-05-30 22:41:02.245645'),
+	('diy9lfq5c1g2gtbdrvwbjuxn0vtst6ea', '.eJx1UMtOwzAQ_BefAwmlpSin_gdFkePdpha21_WDghD_juPaSS9crJmdGe9of5ggQNabqFTDBo_eSzIDflnpvlm_33Rdw6JHN0hgPeOgpWFlYrjGu5kjhdm1KRjQJ_kY9yN_Su-2eznG3Xb3mryz7blhgJa7oNGE_4yWvAypUdITQ82lqisPl8ujID2b0GmZi6eFb7ncg-aGT1hqrczS9V5UNK1kzvUcoEJAhWER8j_RAl9HaPio6o6SzHBJZpZ3VrJk8rSEbnhJ3ejiTCVX7Ypj6wWfD34mH1pxRvFRiSUXKj5RNFBJavuZO8DYCjInOc19sPh9nCb0-czvv3_ifLD8:1sCh5m:rvaByox1fmI42cwUVccybhdyrq-PqEkMF4xO9gGu1hM', '2024-05-31 00:49:22.028465'),
+	('n3po6w3i5263ftpd3hqj656pq42t86mm', '.eJx1UMtOwzAQ_BefAwmlpSin_gdFkePdpha21_WDghD_juPaSS9crJmdGe9of5ggQNabqFTDBo_eSzIDflnpvlm_33Rdw6JHN0hgPeOgpWFlYrjGu5kjhdm1KRjQJ_kY9yN_Su-2eznG3Xb3mryz7blhgJa7oNGE_4yWvAypUdITQ82lqisPl8ujID2b0GmZi6eFb7ncg-aGT1hqrczS9V5UNK1kzvUcoEJAhWER8j_RAl9HaPio6o6SzHBJZpZ3VrJk8rSEbnhJ3ejiTCVX7Ypj6wWfD34mH1pxRvFRiSUXKj5RNFBJavuZO8DYCjInOc19sPh9nCb0-czvv3_ifLD8:1sDmrX:I315_Da-0gdC963XuEXH4DedDy_OrYJlspJrFVZrTvY', '2024-06-03 01:11:11.883724'),
+	('058f1vxzs9t4f751mdult7sllp0wl4fi', '.eJx1UMtOwzAQ_BefQxtKS1FO_AdF0SZeUgu_6kcLQvw7G8d2euFizezMeEf7w0bDkXU6Stmw3qP3wugev6xw36w77tq2YdGj6wVnHQOuhGZ5okHh3cwZicm1y5ijJ_kUjwM80rtvn0_xsD-8kHe2PTWMowUXFOrwn9EaLwI1Ip0YKhCyrHy9XDajUbMJnRKpOC18S-UeFGiYMNdamTW3e1GaaSVzrgPOC-QoMVQh_RMth3WEGgZZduRkgjWZWNpZSM2kaQ4tuKYWWp1UctVuOGz9CPPBz8aH7XjG8ZNI4da4UPCHiZoXQoWvSw3MHh-nCX26LuXff_8AoUmuAQ:1sDv7s:GwtDlrtpP43bnV68Pc4zPC3wCLGpNuD-6SDqIyuBeTc', '2024-06-03 10:00:36.324603'),
+	('4j6fofgrgm56p0ay0cpnksz2oks4xvs2', '.eJx1UMtOwzAQ_BefQxtKS1FO_AdF0SZeUgu_6kcLQvw7G8d2euFizezMeEf7w0bDkXU6Stmw3qP3wugev6xw36w77tq2YdGj6wVnHQOuhGZ5okHh3cwZicm1y5ijJ_kUjwM80rtvn0_xsD-8kHe2PTWMowUXFOrwn9EaLwI1Ip0YKhCyrHy9XDajUbMJnRKpOC18S-UeFGiYMNdamTW3e1GaaSVzrgPOC-QoMVQh_RMth3WEGgZZduRkgjWZWNpZSM2kaQ4tuKYWWp1UctVuOGz9CPPBz8aH7XjG8ZNI4da4UPCHiZoXQoWvSw3MHh-nCX26LuXff_8AoUmuAQ:1sDzyd:4-821TJO_rMGl--KOkSoVwitmJSq__LM8RdLjC3c8l0', '2024-06-03 15:11:23.446615'),
+	('qa0wxhxip8cc3b1fn0jvekbr1w1qgrxk', '.eJx1UMtOwzAQ_BefQxtKS1FO_AdF0SZeUgu_6kcLQvw7G8d2euFizezMeEf7w0bDkXU6Stmw3qP3wugev6xw36w77tq2YdGj6wVnHQOuhGZ5okHh3cwZicm1y5ijJ_kUjwM80rtvn0_xsD-8kHe2PTWMowUXFOrwn9EaLwI1Ip0YKhCyrHy9XDajUbMJnRKpOC18S-UeFGiYMNdamTW3e1GaaSVzrgPOC-QoMVQh_RMth3WEGgZZduRkgjWZWNpZSM2kaQ4tuKYWWp1UctVuOGz9CPPBz8aH7XjG8ZNI4da4UPCHiZoXQoWvSw3MHh-nCX26LuXff_8AoUmuAQ:1sE3ni:PCJB5Y5gatY1TWQJRpjih1lm8d4W9j0kpgWyKbsD7Z8', '2024-06-03 19:16:22.341968'),
+	('fhea2mu9m6vvotlh13hf89y2jkkah3eo', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sE6NE:hNCVYOOOXoD29veUfy1KBM0VM9-6Q8VAhneigyqRfH8', '2024-06-03 22:01:12.116641'),
+	('lg05uuwal94dnr5dyj6bzp2ow771kteo', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sE9HC:9PqLxxj3F3fp2xQ7pv5Sl7k-HpB7AwboXbUD2E-dGi8', '2024-06-04 01:07:10.427837'),
+	('487dthfwgyjwab1gbn9faejbl6po9t0o', 'eyJjb2RlIjoiMzEyNCJ9:1sEAuA:VmGlIZQNJMLOmuIeweJVzWfkwVFedOAlZp7nBl6xwSU', '2024-06-18 00:51:30.556145'),
+	('5bl9tdw7jsdkmo2s6v62o1iajfu6qo6g', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sEVMx:dojz9GWQkJlYNL-d7lW9j6-SyNWjmIuFyDzeNBnm8W0', '2024-06-05 00:42:35.408507'),
+	('h7371jj8qeomw33gc302xgmn45h2xxsw', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sEr9Q:H4j09ySx0oGzw-FCfb8lMy_k1QpEFQsjdCIDcMENHU8', '2024-06-05 23:58:04.018596'),
+	('eylujsasucg2p9nn4hfcnmdr3ubmmufm', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sF5lU:fRGpGEIOhtGUeDsv_A_UjcotbzLfxPS-GcG8Vm-Vc3M', '2024-06-06 15:34:20.474736'),
+	('zlz3vu5boei71lenyz3b1ivdpbozgifv', 'eyJjb2RlIjoiNTAwOSJ9:1sF60J:9IjkL7PBZJj9goHkDWFcTaq0VR1UTJd9qSTuTPjBnCU', '2024-06-20 13:49:39.546830'),
+	('yroi9koe4hewqfmq7tw5gg87kgqxbece', '.eJx1UMlOwzAQ_RefQxNKS1FO_AdF0cQeUgtv9dKCEP-O49hOLlysedvMk38I1QxJr4IQDRkcOse1GvDLcPtN-tO-6xoSHNqBM9ITYJIrkhkFEjec1QKTa59nhi7K53Aa4TG-h-75HI6H40v0zranhjA0YL1E5f8zGu24j42iHhFK4KKcfL1ed1TL2YRW8lQ8HnxL5R4kKJgw11qR0fetKPS0gjnXA2NlZCjQVyHtCYbBSqGCUZQbOZnGmkwo3SygZhKbQ8tcUwuszlhy1e44to6CapfkRTvf0gvSz41WeKOtL_OHDqoGYvkbp2WdxdmYF6YdYZrQpW_fOsj77x9vGbsA:1sF60R:VjrrqnX36eRfBMO8jpeo2_bmGTnUE5JGjniSElqkhdY', '2024-06-06 15:49:47.742500'),
+	('70ssz5v81ermupa0rs2sadxklnoma3at', '.eJx1UMtOwzAQ_BefAw19UJRT_4NW0SZeBUt-1Q8KQvw7zsZ2cuFizezM7I78w0bDkXU6Stmw3qP3wugev6xw36w779u2YdGj6wVnHQOuhGZ5okHhZuaMRHLtM-bok3yN5wFe0ntsX6_xdDy9Je9sOzSMowUXFOrwn9EaL0JqlPTEUIGQ5eTlfn8ejZpN6JSg4ungO5V7UqBhwlxrZdY8tqI000rmXAecF8hRYqgC7YmWwzpCDYMsN3KSYE0So5uF1AxNc2jBNbXQ6kwlV-2Bw86PoHdLkuAQp41Spta4UPCH8RWn5p9iLLsczr68jVbEaUJPf751sNvvHxjeuX4:1sF7uE:UTZs_F4JcYr_cGmEjoPfbCDDXy4k6R4aNb_7M2m2APU', '2024-06-06 17:51:30.207302'),
+	('t6fxvuvm95mhx5k82mx7nujdi8uszz8t', '.eJx1UMtOwzAQ_BefAw19UJRT_4NW0SZeBUt-1Q8KQvw7zsZ2cuFizezM7I78w0bDkXU6Stmw3qP3wugev6xw36w779u2YdGj6wVnHQOuhGZ5okHhZuaMRHLtM-bok3yN5wFe0ntsX6_xdDy9Je9sOzSMowUXFOrwn9EaL0JqlPTEUIGQ5eTlfn8ejZpN6JSg4ungO5V7UqBhwlxrZdY8tqI000rmXAecF8hRYqgC7YmWwzpCDYMsN3KSYE0So5uF1AxNc2jBNbXQ6kwlV-2Bw86PoHdLkuAQp41Spta4UPCH8RWn5p9iLLsczr68jVbEaUJPf751sNvvHxjeuX4:1sFBo5:Mzyn_brSiOJE5YheTkbdUCDkTL8VqqX1vBKZayStCzw', '2024-06-06 22:01:25.634099'),
+	('uzdv7q0cv272l2qn3eei066717hy9rrz', '.eJx1UMtOwzAQ_BefAw19UJRT_4NW0SZeBUt-1Q8KQvw7zsZ2cuFizezM7I78w0bDkXU6Stmw3qP3wugev6xw36w779u2YdGj6wVnHQOuhGZ5okHhZuaMRHLtM-bok3yN5wFe0ntsX6_xdDy9Je9sOzSMowUXFOrwn9EaL0JqlPTEUIGQ5eTlfn8ejZpN6JSg4ungO5V7UqBhwlxrZdY8tqI000rmXAecF8hRYqgC7YmWwzpCDYMsN3KSYE0So5uF1AxNc2jBNbXQ6kwlV-2Bw86PoHdLkuAQp41Spta4UPCH8RWn5p9iLLsczr68jVbEaUJPf751sNvvHxjeuX4:1sFEpR:rqVg199nHXa2dzMZrMf913-Fc-3-W15q1WkazbXoxWw', '2024-06-07 01:15:01.048337');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 
--- 导出  表 py_monitor.monitor_handle 结构
+-- 导出  表 py_scan.monitor_handle 结构
 DROP TABLE IF EXISTS `monitor_handle`;
 CREATE TABLE IF NOT EXISTS `monitor_handle` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `handle_event` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `handle_attack_type` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `handle_auto` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `handle_action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `handle_ip` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `handle_file` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `handle_detail` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `handle_status` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `handle_restore` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_event` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `handle_attack_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `handle_auto` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `handle_action` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_file` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_detail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `handle_restore` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
   `handle_backup_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `handle_restore_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.monitor_handle 的数据：2 rows
+-- 正在导出表  py_scan.monitor_handle 的数据：2 rows
 DELETE FROM `monitor_handle`;
 /*!40000 ALTER TABLE `monitor_handle` DISABLE KEYS */;
 INSERT INTO `monitor_handle` (`id`, `handle_event`, `handle_attack_type`, `handle_auto`, `handle_action`, `handle_ip`, `handle_file`, `handle_detail`, `handle_status`, `handle_restore`, `handle_backup_time`, `handle_restore_time`) VALUES
@@ -331,22 +351,22 @@ INSERT INTO `monitor_handle` (`id`, `handle_event`, `handle_attack_type`, `handl
 	(13, 'SQL攻击', 'SQL', '0', 'ss', '0', 'v1.sql', '0', '0', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `monitor_handle` ENABLE KEYS */;
 
--- 导出  表 py_monitor.monitor_monitor 结构
+-- 导出  表 py_scan.monitor_monitor 结构
 DROP TABLE IF EXISTS `monitor_monitor`;
 CREATE TABLE IF NOT EXISTS `monitor_monitor` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `request_url` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `request_method` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `request_data` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `request_ip` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `attack_type` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `request_url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `request_method` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `request_data` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `request_ip` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `attack_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `attack_time` datetime(6) NOT NULL,
-  `description` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=886 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=922 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.monitor_monitor 的数据：318 rows
+-- 正在导出表  py_scan.monitor_monitor 的数据：591 rows
 DELETE FROM `monitor_monitor`;
 /*!40000 ALTER TABLE `monitor_monitor` DISABLE KEYS */;
 INSERT INTO `monitor_monitor` (`id`, `user_id`, `request_url`, `request_method`, `request_data`, `request_ip`, `attack_type`, `attack_time`, `description`) VALUES
@@ -873,7 +893,7 @@ INSERT INTO `monitor_monitor` (`id`, `user_id`, `request_url`, `request_method`,
 	(851, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:11:45.719100', '可疑的SQL注入尝试'),
 	(852, 'admin', '/power-cell-edit', 'POST', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/port\'], \'powerId\': [\'65\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:11:55.121389', '可疑的SQL注入攻击'),
 	(853, 'admin', '/power-cell-edit', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:11:55.124486', '可疑的SQL注入尝试'),
-	(854, 'admin', '/power-cell-edit', 'POST', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/index\'], \'powerId\': [\'66\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:12:01.463373', '可疑的SQL注入攻击'),
+	(854, 'admin', '/power-cell-edit', 'POST', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/found\'], \'powerId\': [\'66\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:12:01.463373', '可疑的SQL注入攻击'),
 	(855, 'admin', '/power-cell-edit', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:12:01.471347', '可疑的SQL注入尝试'),
 	(856, 'admin', '/power-cell-edit', 'POST', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'"host/server\'], \'powerId\': [\'67\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:12:07.808604', '可疑的SQL注入攻击'),
 	(857, 'admin', '/power-cell-edit', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:12:07.813579', '可疑的SQL注入尝试'),
@@ -904,23 +924,59 @@ INSERT INTO `monitor_monitor` (`id`, `user_id`, `request_url`, `request_method`,
 	(882, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:45:11.543704', '可疑的SQL注入攻击'),
 	(883, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:45:11.551678', '可疑的SQL注入尝试'),
 	(884, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:46:03.551786', '可疑的SQL注入攻击'),
-	(885, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:46:03.556770', '可疑的SQL注入尝试');
+	(885, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:46:03.556770', '可疑的SQL注入尝试'),
+	(886, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:49:40.690119', '可疑的SQL注入攻击'),
+	(887, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:49:40.697096', '可疑的SQL注入尝试'),
+	(888, 'admin', '/user-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:49:43.545553', '可疑的SQL注入攻击'),
+	(889, 'admin', '/user-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:49:43.563494', '可疑的SQL注入尝试'),
+	(890, 'admin', '/role-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:49:44.246577', '可疑的SQL注入攻击'),
+	(891, 'admin', '/role-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:49:44.254551', '可疑的SQL注入尝试'),
+	(892, 'admin', '/log-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:49:44.784211', '可疑的SQL注入攻击'),
+	(893, 'admin', '/log-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:49:44.795174', '可疑的SQL注入尝试'),
+	(894, 'admin', '/user-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:50:03.666532', '可疑的SQL注入攻击'),
+	(895, 'admin', '/user-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:50:03.675501', '可疑的SQL注入尝试'),
+	(896, 'admin', '/role-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:50:04.158788', '可疑的SQL注入攻击'),
+	(897, 'admin', '/role-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:50:04.163772', '可疑的SQL注入尝试'),
+	(898, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 19:50:04.711159', '可疑的SQL注入攻击'),
+	(899, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 19:50:04.716142', '可疑的SQL注入尝试'),
+	(900, 'admin', '/login', 'POST', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:49.237066', '可疑的SQL注入攻击'),
+	(901, '0', '/login', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:56:49.242048', '可疑的SQL注入尝试'),
+	(902, '', '/login', 'POST', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:49.376243', '登录成功'),
+	(903, 'admin', '/user-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:52.365726', '可疑的SQL注入攻击'),
+	(904, 'admin', '/user-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:56:52.375693', '可疑的SQL注入尝试'),
+	(905, 'admin', '/role-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:55.631086', '可疑的SQL注入攻击'),
+	(906, 'admin', '/role-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:56:55.638062', '可疑的SQL注入尝试'),
+	(907, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:57.038275', '可疑的SQL注入攻击'),
+	(908, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:56:57.047246', '可疑的SQL注入尝试'),
+	(909, 'admin', '/log-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:56:58.028126', '可疑的SQL注入攻击'),
+	(910, 'admin', '/log-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:56:58.037992', '可疑的SQL注入尝试'),
+	(911, 'admin', '/log-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\'], \'Params\': [\'{"UID":"","method":"","URL":"","desc":"","time":"","status":""}\']}>', '127.0.0.1', 'XSS', '2024-05-28 20:57:00.062468', '可疑的SQL注入攻击'),
+	(912, 'admin', '/log-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-28 20:57:00.069444', '可疑的SQL注入尝试'),
+	(913, 'admin', '/login', 'POST', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}>', '127.0.0.1', 'XSS', '2024-05-30 18:39:23.043697', '可疑的SQL注入攻击'),
+	(914, '0', '/login', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-30 18:39:23.050675', '可疑的SQL注入尝试'),
+	(915, '', '/login', 'POST', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}>', '127.0.0.1', 'XSS', '2024-05-30 18:39:23.185232', '登录成功'),
+	(916, 'admin', '/user-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-30 18:39:34.450255', '可疑的SQL注入攻击'),
+	(917, 'admin', '/user-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-30 18:39:34.456234', '可疑的SQL注入尝试'),
+	(918, 'admin', '/power-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-30 18:39:35.796906', '可疑的SQL注入攻击'),
+	(919, 'admin', '/power-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-30 18:39:35.817833', '可疑的SQL注入尝试'),
+	(920, 'admin', '/role-query', 'POST', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}>', '127.0.0.1', 'XSS', '2024-05-30 18:39:36.164461', '可疑的SQL注入攻击'),
+	(921, 'admin', '/role-query', 'POST', '可疑的SQL注入尝试', '127.0.0.1', 'XSS', '2024-05-30 18:39:36.170440', '可疑的SQL注入尝试');
 /*!40000 ALTER TABLE `monitor_monitor` ENABLE KEYS */;
 
--- 导出  表 py_monitor.monitor_notify 结构
+-- 导出  表 py_scan.monitor_notify 结构
 DROP TABLE IF EXISTS `monitor_notify`;
 CREATE TABLE IF NOT EXISTS `monitor_notify` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `notify_type` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `notify_mail` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `notify_subject` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `notify_content` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_mail` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_subject` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_content` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `notify_time` datetime(6) NOT NULL,
-  `notify_status` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=732 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=789 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.monitor_notify 的数据：1 rows
+-- 正在导出表  py_scan.monitor_notify 的数据：777 rows
 DELETE FROM `monitor_notify`;
 /*!40000 ALTER TABLE `monitor_notify` DISABLE KEYS */;
 INSERT INTO `monitor_notify` (`id`, `notify_type`, `notify_mail`, `notify_subject`, `notify_content`, `notify_time`, `notify_status`) VALUES
@@ -1596,9 +1652,9 @@ INSERT INTO `monitor_notify` (`id`, `notify_type`, `notify_mail`, `notify_subjec
 	(681, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/port\'], \'powerId\': [\'65\']}', '2024-05-28 19:11:55.817548', 'success'),
 	(682, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/port\'], \'powerId\': [\'65\']}', '2024-05-28 19:11:55.959306', 'success'),
 	(683, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/port\'], \'powerId\': [\'65\']}', '2024-05-28 19:11:55.979239', 'success'),
-	(684, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/index\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.707694', 'failed'),
-	(685, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/index\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.709689', 'failed'),
-	(686, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/index\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.711696', 'failed'),
+	(684, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/found\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.707694', 'failed'),
+	(685, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/found\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.709689', 'failed'),
+	(686, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'host/found\'], \'powerId\': [\'66\']}', '2024-05-28 19:12:01.711696', 'failed'),
 	(687, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'"host/server\'], \'powerId\': [\'67\']}', '2024-05-28 19:12:07.999091', 'failed'),
 	(688, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'"host/server\'], \'powerId\': [\'67\']}', '2024-05-28 19:12:08.022058', 'failed'),
 	(689, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'field\': [\'powerCode\'], \'value\': [\'"host/server\'], \'powerId\': [\'67\']}', '2024-05-28 19:12:08.023065', 'failed'),
@@ -1643,22 +1699,79 @@ INSERT INTO `monitor_notify` (`id`, `notify_type`, `notify_mail`, `notify_subjec
 	(728, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:45:12.435251', 'success'),
 	(729, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:46:04.264842', 'success'),
 	(730, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:46:04.340582', 'success'),
-	(731, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:46:04.360521', 'success');
+	(731, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:46:04.360521', 'success'),
+	(732, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:41.377397', 'success'),
+	(733, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:41.378384', 'success'),
+	(734, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:41.403304', 'success'),
+	(735, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:44.397073', 'success'),
+	(736, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:44.402059', 'success'),
+	(737, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:44.407040', 'success'),
+	(738, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:44.965603', 'failed'),
+	(739, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:44.992513', 'failed'),
+	(740, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:45.005477', 'failed'),
+	(741, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:45.033377', 'failed'),
+	(742, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:45.038376', 'failed'),
+	(743, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:49:45.093188', 'failed'),
+	(744, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:03.909992', 'failed'),
+	(745, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:03.913979', 'failed'),
+	(746, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:03.980385', 'failed'),
+	(747, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.392039', 'failed'),
+	(748, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.394145', 'failed'),
+	(749, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.421131', 'failed'),
+	(750, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.901531', 'failed'),
+	(751, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.938400', 'failed'),
+	(752, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 19:50:04.968347', 'failed'),
+	(753, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.050643', 'success'),
+	(754, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.051640', 'success'),
+	(755, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.074562', 'success'),
+	(756, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.081541', 'success'),
+	(757, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.138354', 'success'),
+	(758, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'5291\']}', '2024-05-28 20:56:50.141341', 'success'),
+	(759, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:53.123296', 'success'),
+	(760, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:53.138885', 'success'),
+	(761, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:53.153735', 'success'),
+	(762, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:56.316267', 'success'),
+	(763, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:56.382031', 'success'),
+	(764, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:56.513264', 'success'),
+	(765, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:57.274296', 'failed'),
+	(766, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:57.287583', 'failed'),
+	(767, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:57.334423', 'failed'),
+	(768, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:58.269061', 'failed'),
+	(769, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:58.278990', 'failed'),
+	(770, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-28 20:56:58.284968', 'failed'),
+	(771, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\'], \'Params\': [\'{"UID":"","method":"","URL":"","desc":"","time":"","status":""}\']}', '2024-05-28 20:57:00.271872', 'failed'),
+	(772, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\'], \'Params\': [\'{"UID":"","method":"","URL":"","desc":"","time":"","status":""}\']}', '2024-05-28 20:57:00.291803', 'failed'),
+	(773, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\'], \'Params\': [\'{"UID":"","method":"","URL":"","desc":"","time":"","status":""}\']}', '2024-05-28 20:57:00.322699', 'failed'),
+	(774, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.830854', 'success'),
+	(775, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.848250', 'success'),
+	(776, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.878593', 'success'),
+	(777, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.893882', 'success'),
+	(778, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.912569', 'success'),
+	(779, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'username\': [\'admin\'], \'password\': [\'admin\'], \'captcha\': [\'6026\']}', '2024-05-30 18:39:23.942223', 'success'),
+	(780, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:35.136218', 'success'),
+	(781, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:35.143187', 'success'),
+	(782, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:35.258804', 'success'),
+	(783, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.493149', 'success'),
+	(784, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.574891', 'success'),
+	(785, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.664487', 'success'),
+	(786, '可疑的CRFS注入攻击', '3173484026@qq.com', '可疑的CRFS注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.809755', 'success'),
+	(787, '可疑的SQL注入攻击', '3173484026@qq.com', '可疑的SQL注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.840653', 'success'),
+	(788, '可疑的XSS脚本注入攻击', '3173484026@qq.com', '可疑的XSS脚本注入工具', '<QueryDict: {\'page\': [\'1\'], \'limit\': [\'10\']}', '2024-05-30 18:39:36.853696', 'success');
 /*!40000 ALTER TABLE `monitor_notify` ENABLE KEYS */;
 
--- 导出  表 py_monitor.monitor_subemail 结构
+-- 导出  表 py_scan.monitor_subemail 结构
 DROP TABLE IF EXISTS `monitor_subemail`;
 CREATE TABLE IF NOT EXISTS `monitor_subemail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sub_email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `sub_status` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `sub_email` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `sub_status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `sub_date` date NOT NULL,
-  `sub_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `user_id` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `sub_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.monitor_subemail 的数据：5 rows
+-- 正在导出表  py_scan.monitor_subemail 的数据：5 rows
 DELETE FROM `monitor_subemail`;
 /*!40000 ALTER TABLE `monitor_subemail` DISABLE KEYS */;
 INSERT INTO `monitor_subemail` (`id`, `sub_email`, `sub_status`, `sub_date`, `sub_name`, `user_id`) VALUES
@@ -1669,7 +1782,7 @@ INSERT INTO `monitor_subemail` (`id`, `sub_email`, `sub_status`, `sub_date`, `su
 	(6, '3173484027@qq.com', 'disable', '2024-05-25', 'user4', '1');
 /*!40000 ALTER TABLE `monitor_subemail` ENABLE KEYS */;
 
--- 导出  表 py_monitor.role_power 结构
+-- 导出  表 py_scan.role_power 结构
 DROP TABLE IF EXISTS `role_power`;
 CREATE TABLE IF NOT EXISTS `role_power` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1677,9 +1790,9 @@ CREATE TABLE IF NOT EXISTS `role_power` (
   `power_id` int(11) NOT NULL,
   `power_type` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=237 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.role_power 的数据：34 rows
+-- 正在导出表  py_scan.role_power 的数据：37 rows
 DELETE FROM `role_power`;
 /*!40000 ALTER TABLE `role_power` DISABLE KEYS */;
 INSERT INTO `role_power` (`id`, `role_id`, `power_id`, `power_type`) VALUES
@@ -1707,37 +1820,200 @@ INSERT INTO `role_power` (`id`, `role_id`, `power_id`, `power_type`) VALUES
 	(66, 1, 17, 2),
 	(67, 1, 18, 2),
 	(68, 1, 21, 2),
-	(226, 2, 62, 0),
+	(238, 2, 74, 1),
 	(225, 2, 61, 0),
 	(224, 2, 60, 0),
-	(233, 2, 69, 1),
 	(232, 2, 68, 1),
 	(231, 2, 67, 1),
 	(230, 2, 66, 1),
 	(229, 2, 65, 1),
 	(228, 2, 64, 0),
 	(227, 2, 63, 0),
-	(234, 2, 70, 1),
-	(235, 2, 71, 1),
-	(236, 2, 72, 1);
+	(236, 2, 72, 1),
+	(237, 2, 73, 1);
 /*!40000 ALTER TABLE `role_power` ENABLE KEYS */;
 
--- 导出  表 py_monitor.sys_log 结构
+-- 导出  表 py_scan.scan_bug_log 结构
+DROP TABLE IF EXISTS `scan_bug_log`;
+CREATE TABLE IF NOT EXISTS `scan_bug_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_bug_log 的数据：0 rows
+DELETE FROM `scan_bug_log`;
+/*!40000 ALTER TABLE `scan_bug_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scan_bug_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_host_log 结构
+DROP TABLE IF EXISTS `scan_host_log`;
+CREATE TABLE IF NOT EXISTS `scan_host_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `mac` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `supplier` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_host_log 的数据：26 rows
+DELETE FROM `scan_host_log`;
+/*!40000 ALTER TABLE `scan_host_log` DISABLE KEYS */;
+INSERT INTO `scan_host_log` (`id`, `ip`, `mac`, `os`, `supplier`, `start_time`, `end_time`, `notes`) VALUES
+	(1, '192.168.0.12', 'fe80::58c0:c985:de07:70c1%46', 'Windows10', 'Micro Soft', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+	(2, '1212', '1212', '12', '1212', '2024-06-06 16:36:23', '0000-00-00 00:00:00', NULL),
+	(3, '192.168.46.1', 'd4:da:21:0e:ef:c5', 'unknown os', 'unknown vendor', '2024-06-06 21:00:46', '2024-06-06 21:01:01', ''),
+	(4, '192.168.46.2', 'f4:6b:8c:98:61:d6', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:03', ''),
+	(5, '192.168.46.3', '52:54:00:02:d2:e7', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:06', ''),
+	(6, '192.168.46.4', '52:54:00:e5:37:29', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:08', ''),
+	(7, '192.168.46.5', '52:54:00:7e:a2:f1', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:11', ''),
+	(8, '192.168.46.53', '3a:d1:00:d9:08:ec', 'Apple macOS 11 (Big Sur) - 13 (Ventura) or iOS 16 (Darwin 20.6.0 - 22.4.0)', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:14', ''),
+	(9, '192.168.46.61', '1a:2f:0c:30:6b:9f', 'Apple macOS 11 (Big Sur) - 13 (Ventura) or iOS 16 (Darwin 20.6.0 - 22.4.0)', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:17', ''),
+	(10, '192.168.46.57', 'b0:dc:ef:24:8f:f1', 'unknown os', 'unknown vendor', '2024-06-06 21:00:46', '2024-06-06 21:02:09', ''),
+	(11, '192.168.46.93', '08:bf:b8:bb:68:b6', 'Microsoft Windows 10 1909', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:02:14', ''),
+	(12, '192.168.46.154', '4c:79:6e:e7:5b:8f', 'Microsoft Windows 10 1809 - 21H2', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:02:16', ''),
+	(13, '192.168.46.80', '76:c3:30:88:0e:08', 'Apple macOS 11 (Big Sur) - 13 (Ventura) or iOS 16 (Darwin 20.6.0 - 22.4.0)', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:02:19', ''),
+	(14, '192.168.46.82', 'e8:9a:4e:fc:7c:51', 'unknown os', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:02:31', ''),
+	(15, '192.168.46.107', '22:43:78:49:17:7c', 'unknown os', 'unknown vendor', '2024-06-06 21:00:46', '2024-06-06 21:02:34', ''),
+	(16, '192.168.46.168', '62:b6:3f:ad:a5:22', 'unknown os', 'unknown vendor', '2024-06-06 21:00:46', '2024-06-06 21:02:39', ''),
+	(17, '192.168.46.1', 'd4:da:21:0e:ef:c5', 'unknown os', 'unknown vendor', '2024-06-06 21:12:06', '2024-06-06 21:12:21', ''),
+	(18, '192.168.46.2', 'f4:6b:8c:98:61:d6', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:23', ''),
+	(19, '192.168.46.3', '52:54:00:02:d2:e7', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:25', ''),
+	(20, '192.168.46.4', '52:54:00:e5:37:29', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:28', ''),
+	(21, '192.168.46.5', '52:54:00:7e:a2:f1', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:30', ''),
+	(22, '192.168.46.93', '08:bf:b8:bb:68:b6', 'Microsoft Windows 10 1909', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:40', ''),
+	(23, '192.168.46.61', '1a:2f:0c:30:6b:9f', 'Apple macOS 11 (Big Sur) - 13 (Ventura) or iOS 16 (Darwin 20.6.0 - 22.4.0)', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:12:42', ''),
+	(24, '192.168.46.57', 'b0:dc:ef:24:8f:f1', 'unknown os', 'unknown vendor', '2024-06-06 21:12:06', '2024-06-06 21:13:54', ''),
+	(25, '192.168.46.82', 'e8:9a:4e:fc:7c:51', 'unknown os', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:14:05', ''),
+	(26, '172.20.10.1', 'ea:78:65:c1:8e:64', 'Apple iOS 15.0 - 16.1 (Darwin 21.1.0 - 22.1.0)', 'phone', '2024-06-06 22:35:06', '2024-06-06 22:35:18', '');
+/*!40000 ALTER TABLE `scan_host_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_port_log 结构
+DROP TABLE IF EXISTS `scan_port_log`;
+CREATE TABLE IF NOT EXISTS `scan_port_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ports` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `notes` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_port_log 的数据：5 rows
+DELETE FROM `scan_port_log`;
+/*!40000 ALTER TABLE `scan_port_log` DISABLE KEYS */;
+INSERT INTO `scan_port_log` (`id`, `host`, `ports`, `start_time`, `end_time`, `notes`) VALUES
+	(1, '12', '12,12,12', '2024-06-06 17:26:03', '2024-06-06 17:26:04', NULL),
+	(2, '192.168.46.154', '25,110,135,137,139,329,445,548,2179,3306,5040,5788', NULL, NULL, ''),
+	(3, '192.168.46.154', '25,110,135,137,139,329,445,548,2179,3306,5040,5788', NULL, NULL, ''),
+	(4, '192.168.46.154', '25,110,135,137,139,329,445,548,2179,3306,5040,5788', NULL, NULL, ''),
+	(5, '172.20.10.7', '25,110,135,137,139,329,445,548,2179,3306,5040,1573', NULL, NULL, '');
+/*!40000 ALTER TABLE `scan_port_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_report_log 结构
+DROP TABLE IF EXISTS `scan_report_log`;
+CREATE TABLE IF NOT EXISTS `scan_report_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_report_log 的数据：0 rows
+DELETE FROM `scan_report_log`;
+/*!40000 ALTER TABLE `scan_report_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scan_report_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_service_log 结构
+DROP TABLE IF EXISTS `scan_service_log`;
+CREATE TABLE IF NOT EXISTS `scan_service_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `port` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `protocol` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `service` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `version` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `state` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `product` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `notes` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_service_log 的数据：27 rows
+DELETE FROM `scan_service_log`;
+/*!40000 ALTER TABLE `scan_service_log` DISABLE KEYS */;
+INSERT INTO `scan_service_log` (`id`, `ip`, `port`, `protocol`, `service`, `version`, `state`, `product`, `notes`) VALUES
+	(1, '12', '12', '12', '12', '12', '12', '12', '12'),
+	(2, '192.168.46.154', '25', 'tcp', 'smtp', '', 'filtered', '', ''),
+	(3, '192.168.46.154', '110', 'tcp', 'pop3', '', 'filtered', '', ''),
+	(4, '192.168.46.154', '135', 'tcp', 'msrpc', '', 'open', 'Microsoft Windows RPC', ''),
+	(5, '192.168.46.154', '139', 'tcp', 'netbios-ssn', '', 'open', 'Microsoft Windows netbios-ssn', ''),
+	(6, '192.168.46.154', '445', 'tcp', 'microsoft-ds', '', 'open', '', ''),
+	(7, '192.168.46.154', '548', 'tcp', 'afp', '', 'filtered', '', ''),
+	(8, '192.168.46.154', '2179', 'tcp', 'vmrdp', '', 'open', '', ''),
+	(9, '192.168.46.154', '3306', 'tcp', 'mysql', '8.0.12', 'open', 'MySQL', ''),
+	(10, '150.158.199.226', '22', 'tcp', 'ssh', '8.0', 'open', 'OpenSSH', ''),
+	(11, '150.158.199.226', '80', 'tcp', 'http', '1.21.5', 'open', 'nginx', ''),
+	(12, '150.158.199.226', '111', 'tcp', 'rpcbind', '2-4', 'open', '', ''),
+	(13, '150.158.199.226', '135', 'tcp', 'msrpc', '', 'filtered', '', ''),
+	(14, '150.158.199.226', '139', 'tcp', 'netbios-ssn', '', 'filtered', '', ''),
+	(15, '150.158.199.226', '445', 'tcp', 'microsoft-ds', '', 'filtered', '', ''),
+	(16, '150.158.199.226', '9000', 'tcp', 'http', '', 'open', 'MinIO S3-compatible object store', ''),
+	(17, '150.158.199.226', '9001', 'tcp', 'http', '', 'open', 'MinIO Console', ''),
+	(18, '150.158.199.226', '9090', 'tcp', 'http', '', 'open', 'Apache Tomcat', ''),
+	(19, '150.158.199.226', '9200', 'tcp', 'http', '7.9.2', 'open', 'Elasticsearch REST API', ''),
+	(20, '172.20.10.7', '25', 'tcp', 'smtp', '', 'filtered', '', ''),
+	(21, '172.20.10.7', '110', 'tcp', 'pop3', '', 'filtered', '', ''),
+	(22, '172.20.10.7', '135', 'tcp', 'msrpc', '', 'open', 'Microsoft Windows RPC', ''),
+	(23, '172.20.10.7', '139', 'tcp', 'netbios-ssn', '', 'open', 'Microsoft Windows netbios-ssn', ''),
+	(24, '172.20.10.7', '445', 'tcp', 'microsoft-ds', '', 'open', '', ''),
+	(25, '172.20.10.7', '548', 'tcp', 'afp', '', 'filtered', '', ''),
+	(26, '172.20.10.7', '2179', 'tcp', 'vmrdp', '', 'open', '', ''),
+	(27, '172.20.10.7', '3306', 'tcp', 'mysql', '8.0.12', 'open', 'MySQL', '');
+/*!40000 ALTER TABLE `scan_service_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_suggest_log 结构
+DROP TABLE IF EXISTS `scan_suggest_log`;
+CREATE TABLE IF NOT EXISTS `scan_suggest_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_suggest_log 的数据：0 rows
+DELETE FROM `scan_suggest_log`;
+/*!40000 ALTER TABLE `scan_suggest_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scan_suggest_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.scan_web_bug_log 结构
+DROP TABLE IF EXISTS `scan_web_bug_log`;
+CREATE TABLE IF NOT EXISTS `scan_web_bug_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  py_scan.scan_web_bug_log 的数据：0 rows
+DELETE FROM `scan_web_bug_log`;
+/*!40000 ALTER TABLE `scan_web_bug_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scan_web_bug_log` ENABLE KEYS */;
+
+-- 导出  表 py_scan.sys_log 结构
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE IF NOT EXISTS `sys_log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `method` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `uid` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `url` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `desc` longtext COLLATE utf8mb4_general_ci,
-  `ip` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `uid` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `url` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `desc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `success` int(11) DEFAULT NULL,
-  `user_agent` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `create_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=261 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=307 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.sys_log 的数据：9 rows
+-- 正在导出表  py_scan.sys_log 的数据：301 rows
 DELETE FROM `sys_log`;
 /*!40000 ALTER TABLE `sys_log` DISABLE KEYS */;
 INSERT INTO `sys_log` (`id`, `method`, `uid`, `url`, `desc`, `ip`, `success`, `user_agent`, `create_time`) VALUES
@@ -2000,28 +2276,74 @@ INSERT INTO `sys_log` (`id`, `method`, `uid`, `url`, `desc`, `ip`, `success`, `u
 	(257, 'POST', 'admin', '/role-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:45:09.839579'),
 	(258, 'POST', 'admin', '/user-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:45:11.059122'),
 	(259, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:45:11.540714'),
-	(260, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:46:03.550788');
+	(260, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:46:03.550788'),
+	(261, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:49:40.687130'),
+	(262, 'POST', 'admin', '/user-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:49:43.543560'),
+	(263, 'POST', 'admin', '/role-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:49:44.244583'),
+	(264, 'POST', 'admin', '/log-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:49:44.782218'),
+	(265, 'POST', 'admin', '/user-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:50:03.664537'),
+	(266, 'POST', 'admin', '/role-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:50:04.156795'),
+	(267, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 19:50:04.708169'),
+	(268, 'POST', 'admin', '/login', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:49.236070'),
+	(269, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:49.376243'),
+	(270, 'POST', 'admin', '/user-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:52.362735'),
+	(271, 'POST', 'admin', '/role-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:55.630088'),
+	(272, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:57.035287'),
+	(273, 'POST', 'admin', '/log-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:56:58.024145'),
+	(274, 'POST', 'admin', '/log-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-28 20:57:00.061472'),
+	(275, 'POST', 'admin', '/login', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '2024-05-30 18:39:23.037717'),
+	(276, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '2024-05-30 18:39:23.185232'),
+	(277, 'POST', 'admin', '/user-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '2024-05-30 18:39:34.449257'),
+	(278, 'POST', 'admin', '/power-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '2024-05-30 18:39:35.793914'),
+	(279, 'POST', 'admin', '/role-query', '可疑的SQL注入攻击', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '2024-05-30 18:39:36.162467'),
+	(280, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-30 20:41:02.231370'),
+	(281, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-05-30 22:49:22.024489'),
+	(282, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-02 23:11:11.876821'),
+	(283, 'POST', 'admin', '/power-add', '{\'powerName\': [\'报告生成记录\'], \'powerCode\': [\'\'], \'type\': [\'1\'], \'parentName\': [\'漏洞报告\'], \'icon\': [\'\'], \'sort\': [\'0\'], \'enable\': [\'1\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:11:26.361838'),
+	(284, 'POST', 'admin', '/power-multi-delete', '{\'Params\': [\'[{"id":28,"powerId":70,"powerName":"数据库配置","powerCode":"db/config","powerType":"菜单","parentId":62,"icon":"fa fa-key","sort":0,"enable":1}]\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:13:21.120253'),
+	(285, 'POST', 'admin', '/power-multi-delete', '{\'Params\': [\'[{"id":20,"powerId":62,"powerName":"数据库管理","powerCode":"","powerType":"目录","parentId":0,"icon":"fa fa-gears","sort":3,"enable":1}]\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:13:28.767167'),
+	(286, 'POST', 'admin', '/power-add', '{\'powerName\': [\'漏洞扫描记录\'], \'powerCode\': [\'\'], \'type\': [\'1\'], \'parentName\': [\'网页漏洞扫描\'], \'icon\': [\'\'], \'sort\': [\'2\'], \'enable\': [\'1\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:15:33.448010'),
+	(287, 'POST', 'admin', '/user-add', '{\'userID\': [\'test\'], \'password\': [\'123456\'], \'userName\': [\'test\'], \'role\': [\'2\'], \'department\': [\'\'], \'position\': [\'\'], \'email\': [\'\'], \'enable\': [\'1\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:33:45.258080'),
+	(288, 'POST', 'admin', '/user-add', '{\'userID\': [\'test\'], \'password\': [\'123456\'], \'userName\': [\'test\'], \'role\': [\'2\'], \'department\': [\'\'], \'position\': [\'\'], \'email\': [\'\'], \'enable\': [\'1\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:33:45.613898'),
+	(289, 'POST', 'admin', '/role-add', '{\'roleCode\': [\'user\'], \'roleName\': [\'普通角色3\'], \'remark\': [\'\'], \'enable\': [\'1\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 00:34:11.832407'),
+	(290, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 08:00:36.310314'),
+	(291, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 13:11:23.432111'),
+	(292, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 17:16:22.336994'),
+	(293, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 20:01:12.111648'),
+	(294, 'POST', 'admin', '/login', '验证码错误', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 23:06:58.830253'),
+	(295, 'POST', 'admin', '/login', '验证码错误', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 23:07:00.600880'),
+	(296, 'POST', 'admin', '/login', '验证码错误', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 23:07:04.485874'),
+	(297, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-03 23:07:10.413305'),
+	(298, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-04 22:42:35.394024'),
+	(299, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-05 21:58:04.003830'),
+	(300, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 13:34:20.468732'),
+	(301, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 13:49:47.725956'),
+	(302, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 15:51:30.195707'),
+	(303, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 20:01:25.621987'),
+	(304, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 23:15:01.038404'),
+	(305, 'POST', 'admin', '/power-multi-delete', '{\'Params\': [\'[{"id":26,"powerId":69,"powerName":"网页漏洞扫描","powerCode":"web/scan/add","powerType":"菜单","parentId":61,"icon":"fa fa-key","sort":0,"enable":1}]\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 23:15:50.824859'),
+	(306, 'POST', 'admin', '/power-multi-delete', '{\'Params\': [\'[{"id":26,"powerId":71,"powerName":"漏洞报告生成","powerCode":"web/report/add","powerType":"菜单","parentId":63,"icon":"fa fa-key","sort":0,"enable":1}]\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-06 23:16:19.375580');
 /*!40000 ALTER TABLE `sys_log` ENABLE KEYS */;
 
--- 导出  表 py_monitor.sys_power 结构
+-- 导出  表 py_scan.sys_power 结构
 DROP TABLE IF EXISTS `sys_power`;
 CREATE TABLE IF NOT EXISTS `sys_power` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `type` int(11) NOT NULL,
-  `code` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `url` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `open_type` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `url` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `open_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
-  `icon` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `sort` int(11) DEFAULT NULL,
   `enable` int(11) NOT NULL,
   `create_time` datetime(6) NOT NULL,
   `update_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.sys_power 的数据：27 rows
+-- 正在导出表  py_scan.sys_power 的数据：30 rows
 DELETE FROM `sys_power`;
 /*!40000 ALTER TABLE `sys_power` DISABLE KEYS */;
 INSERT INTO `sys_power` (`id`, `name`, `type`, `code`, `url`, `open_type`, `parent_id`, `icon`, `sort`, `enable`, `create_time`, `update_time`) VALUES
@@ -2042,90 +2364,91 @@ INSERT INTO `sys_power` (`id`, `name`, `type`, `code`, `url`, `open_type`, `pare
 	(23, '权限删除', 2, 'power:delete', NULL, '按钮', 10, '', 2, 1, '2022-08-22 00:26:37.276269', '2022-08-22 00:26:37.276269'),
 	(24, '禁用启用', 3, 'power:enable', NULL, '其他', 10, '', 3, 1, '2022-08-22 00:27:07.237696', '2022-08-22 00:27:07.237696'),
 	(25, '日志删除', 2, 'log:delete', NULL, '按钮', 12, '', 1, 1, '2022-08-24 11:33:45.484369', '2022-08-24 11:33:45.484369'),
-	(69, '漏洞扫描', 1, 'web/scan', NULL, '菜单', 61, 'fa fa-key', 0, 1, '2024-05-28 18:52:57.865204', '2024-05-28 18:52:57.865204'),
-	(68, '漏洞检测', 1, 'host/check', NULL, '菜单', 60, 'fa fa-key', 0, 1, '2024-05-28 18:50:25.962437', '2024-05-28 18:50:25.962437'),
+	(68, '漏洞检测', 1, 'scan/bug', NULL, '菜单', 60, 'fa fa-key', 4, 1, '2024-05-28 18:50:25.962437', '2024-05-28 18:50:25.962437'),
 	(60, '主机漏洞扫描', 0, '', NULL, '目录', 0, 'fa fa-gears', 1, 1, '2024-05-28 18:44:08.429891', '2024-05-28 18:44:08.429891'),
-	(61, 'WEB网页漏洞扫描', 0, '', NULL, '目录', 0, 'fa fa-gears', 2, 1, '2024-05-28 18:45:19.035484', '2024-05-28 18:45:19.035484'),
-	(62, '数据库管理', 0, '', NULL, '目录', 0, 'fa fa-gears', 3, 1, '2024-05-28 18:45:39.167653', '2024-05-28 18:45:39.167653'),
+	(61, '网页漏洞扫描', 0, '', NULL, '目录', 0, 'fa fa-gears', 2, 1, '2024-05-28 18:45:19.035484', '2024-05-28 18:45:19.035484'),
+	(74, '漏洞扫描', 1, 'web/scan', NULL, '菜单', 61, 'fa fa-key', 2, 1, '2024-06-03 00:15:33.450014', '2024-06-03 00:15:33.450014'),
 	(63, '漏洞报告', 0, '', NULL, '目录', 0, 'fa fa-gears', 4, 1, '2024-05-28 18:46:03.289182', '2024-05-28 18:46:03.289182'),
 	(64, '修复评估', 0, '', NULL, '目录', 0, 'fa fa-gears', 5, 1, '2024-05-28 18:46:18.834771', '2024-05-28 18:46:18.834771'),
-	(65, '端口扫描', 1, 'host/port', NULL, '菜单', 60, 'fa fa-key', 1, 1, '2024-05-28 18:49:21.545480', '2024-05-28 18:49:21.545480'),
-	(66, '主机发现', 1, 'host/index', NULL, '菜单', 60, 'fa fa-key', 0, 1, '2024-05-28 18:49:46.970190', '2024-05-28 18:49:46.970190'),
-	(67, '服务识别', 1, 'host/server', NULL, '菜单', 60, 'fa fa-key', 0, 1, '2024-05-28 18:50:04.268959', '2024-05-28 18:50:04.268959'),
-	(70, '数据库配置', 1, 'db/config', NULL, '菜单', 62, 'fa fa-key', 0, 1, '2024-05-28 18:53:34.207468', '2024-05-28 18:53:34.207468'),
-	(71, '漏洞报告生成', 1, 'report', NULL, '菜单', 63, 'fa fa-key', 0, 1, '2024-05-28 18:54:22.749298', '2024-05-28 18:54:22.749298'),
-	(72, '修复评估建议', 1, 'suggestion', NULL, '菜单', 64, 'fa fa-key', 0, 1, '2024-05-28 18:55:02.052042', '2024-05-28 18:55:02.052042');
+	(65, '端口扫描', 1, 'scan/port', NULL, '菜单', 60, 'fa fa-key', 3, 1, '2024-05-28 18:49:21.545480', '2024-05-28 18:49:21.545480'),
+	(66, '主机发现', 1, 'scan/host', NULL, '菜单', 60, 'fa fa-key', 1, 1, '2024-05-28 18:49:46.970190', '2024-05-28 18:49:46.970190'),
+	(67, '服务识别', 1, 'scan/service', NULL, '菜单', 60, 'fa fa-key', 2, 1, '2024-05-28 18:50:04.268959', '2024-05-28 18:50:04.268959'),
+	(72, '修复评估', 1, 'web/suggestion', NULL, '菜单', 64, 'fa fa-key', 0, 1, '2024-05-28 18:55:02.052042', '2024-05-28 18:55:02.052042'),
+	(73, '报告生成', 1, 'web/report', NULL, '菜单', 63, 'fa fa-key', 1, 1, '2024-06-03 00:11:26.371851', '2024-06-03 00:11:26.371851');
 /*!40000 ALTER TABLE `sys_power` ENABLE KEYS */;
 
--- 导出  表 py_monitor.sys_role 结构
+-- 导出  表 py_scan.sys_role 结构
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE IF NOT EXISTS `sys_role` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_value` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `enable` int(11) NOT NULL,
-  `remark` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `details` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `details` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `sort` int(11) DEFAULT NULL,
   `create_time` datetime(6) NOT NULL,
   `update_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.sys_role 的数据：2 rows
+-- 正在导出表  py_scan.sys_role 的数据：3 rows
 DELETE FROM `sys_role`;
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`id`, `role_value`, `name`, `code`, `enable`, `remark`, `details`, `sort`, `create_time`, `update_time`) VALUES
 	(1, 1, '普通用户', 'user', 1, '普通用户权限', NULL, NULL, '2022-08-16 23:14:27.974460', '2022-08-16 23:14:27.974460'),
-	(2, 2, '管理员', 'admin', 1, '系统所有权限', NULL, NULL, '2022-08-16 23:15:44.201017', '2022-08-16 23:15:44.201017');
+	(2, 2, '管理员', 'admin', 1, '系统所有权限', NULL, NULL, '2022-08-16 23:15:44.201017', '2022-08-16 23:15:44.201017'),
+	(3, 3, '普通角色3', 'user3', 1, '普通权限2', NULL, NULL, '2024-06-03 00:34:11.834401', '2024-06-03 00:34:11.834401');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
--- 导出  表 py_monitor.sys_user 结构
+-- 导出  表 py_scan.sys_user 结构
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE IF NOT EXISTS `sys_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id_number` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `user_name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
-  `department` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `position` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_number` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `department` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
-  `role_des` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `role_des` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `user_status` int(11) NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `create_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.sys_user 的数据：1 rows
+-- 正在导出表  py_scan.sys_user 的数据：3 rows
 DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`id`, `id_number`, `id_password`, `user_name`, `department`, `position`, `role_id`, `role_des`, `user_status`, `email`, `create_time`) VALUES
-	(3, 'admin', 'pbkdf2_sha256$390000$GJVtb3oqScLoOCEk0UQq3v$QECN33IghfBLwPuCZiv7AidqRIaFa6NsQCXRN9nthi0=', 'admin', '管理员', '', 2, '管理员', 1, 'admin@qq.com', '2022-08-21 06:07:55.145119');
+	(3, 'admin', 'pbkdf2_sha256$390000$GJVtb3oqScLoOCEk0UQq3v$QECN33IghfBLwPuCZiv7AidqRIaFa6NsQCXRN9nthi0=', 'admin', '管理员', '', 2, '管理员', 1, 'admin@qq.com', '2022-08-21 06:07:55.145119'),
+	(4, 'test1', 'pbkdf2_sha256$390000$QNzKzeRA2bjabavKIAJ5W8$hZD9scx0MIMKlcmJh/MBIOUTwXC6V2N/icc6dkoNYhY=', 'test1', '', '', 2, '管理员', 1, '', '2024-06-03 00:33:45.379680'),
+	(5, 'test2', 'pbkdf2_sha256$390000$RmlZkV1HN7p5pJ8WxWztrL$t80zlk360gmEp29pNe+SyF8QOqmGtsMvy2P7CdMR794=', 'test2', '', '', 2, '管理员', 1, '', '2024-06-03 00:33:45.737487');
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
--- 导出  表 py_monitor.web_logo 结构
+-- 导出  表 py_scan.web_logo 结构
 DROP TABLE IF EXISTS `web_logo`;
 CREATE TABLE IF NOT EXISTS `web_logo` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `desc` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `desc` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  `url` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `url` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
-  `icon` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `sort` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  py_monitor.web_logo 的数据：3 rows
+-- 正在导出表  py_scan.web_logo 的数据：3 rows
 DELETE FROM `web_logo`;
 /*!40000 ALTER TABLE `web_logo` DISABLE KEYS */;
 INSERT INTO `web_logo` (`id`, `name`, `desc`, `type`, `url`, `parent_id`, `icon`, `sort`) VALUES
 	(1, '首页', 'homeInfo-title', 0, '/home', 1, NULL, 1),
-	(2, '网络安全事件应急响应与处置系统', 'logoInfo-title', 1, '', 2, 'static/images/logo1.png', 1),
-	(3, '网络安全事件应急响应与处置系统', 'menuInfo-title', 2, '', 3, 'fa fa-address-book', 1);
+	(2, '', 'logoInfo-title', 1, '', 2, 'static/images/logo1.png', 1),
+	(3, '漏洞扫描系统', 'menuInfo-title', 2, '', 3, 'fa fa-address-book', 1);
 /*!40000 ALTER TABLE `web_logo` ENABLE KEYS */;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
