@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from common.API import res_josn_data
-from scan.models import BugLog
+from scan.models import SuggestLog
 from scan.utils import get_filters
 
 
@@ -14,7 +14,7 @@ def index(request: HttpRequest):
 
 
 @require_http_methods(["GET", "POST"])
-def start(request: HttpRequest):
+def add(request: HttpRequest):
     if request.method == "GET":
         return render(request, "scan/scanning/bug-start.html")
 
@@ -28,7 +28,7 @@ def query(request: HttpRequest):
     limit = request.POST.get("limit")
     filters = get_filters(request.POST.get("Param"), [])
 
-    bugs = BugLog.objects.filter(**filters).all()
+    bugs = SuggestLog.objects.filter(**filters).all()
     page_data = Paginator(bugs, limit).page(page)
 
     count = len(bugs)
@@ -38,8 +38,3 @@ def query(request: HttpRequest):
             "id": bug.id
         })
     return res_josn_data.table_api(count=count, data=data_list)
-
-
-def stop(request: HttpRequest):
-    print("请求参数", request.POST)
-    return res_josn_data.success_api()

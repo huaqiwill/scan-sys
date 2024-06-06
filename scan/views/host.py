@@ -1,11 +1,13 @@
 import json
 
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.views.decorators.http import require_http_methods
 from common.API import res_josn_data
 from scan.utils.scanning import start_host_scan, stop_host_scan
 from scan.models import HostLog
+from scan.utils import get_filters
 
 
 @require_http_methods(["GET"])
@@ -16,22 +18,23 @@ def index(request: HttpRequest):
 @require_http_methods(["POST"])
 def query(request: HttpRequest):
     print("查询参数", request.POST)
-    params = request.POST.get("Params", None)
-    if params:
-        req = json.loads(params)
-        print("查询参数", req)
+    page = request.POST.get("page", 1)
+    limit = request.POST.get("limit", 10)
+    filters = get_filters(request.POST.get("Params"), ["ip"])
 
-    host_log_list = HostLog.objects.all()
+    host_log_list = HostLog.objects.filter(**filters).all()
+    page_data = Paginator(host_log_list, limit).page(page)
+
     count = len(host_log_list)
     data_list = []
-    for host_log in host_log_list:
+    for host_log in page_data:
         data = {
-            "ip": host_log["ip"],
-            "mac": host_log["mac"],
-            "os": host_log["os"],
-            "supplier": host_log["vendor"],
-            "start_time": host_log["start_time"],
-            "end_time": host_log["end_time"]
+            "ip": host_log.ip,
+            "mac": host_log.mac,
+            "os": host_log.os,
+            "supplier": host_log.supplier,
+            "start_time": host_log.start_time,
+            "end_time": host_log.end_time
         }
         data_list.append(data)
     return res_josn_data.table_api(count=count, data=data_list)
@@ -41,9 +44,10 @@ def query(request: HttpRequest):
 def start(request: HttpRequest):
     if request.method == "GET":
         return render(request, "scan/scanning/host-start.html")
-    print("查询参数", request.POST)
+
+    print("请求参数", request.POST)
     start_host_scan()
-    return res_josn_data.success_api()
+    return res_josn_data.success_api("主机发现任务开始")
 
 
 @require_http_methods(["POST"])

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from common.API import res_josn_data
-from scan.models import BugLog
+from scan.models import WebBugLog
 from scan.utils import get_filters
 
 
@@ -28,7 +28,7 @@ def query(request: HttpRequest):
     limit = request.POST.get("limit")
     filters = get_filters(request.POST.get("Param"), [])
 
-    bugs = BugLog.objects.filter(**filters).all()
+    bugs = WebBugLog.objects.filter(**filters).all()
     page_data = Paginator(bugs, limit).page(page)
 
     count = len(bugs)
