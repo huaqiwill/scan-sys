@@ -28,7 +28,6 @@ class Vulnerability(models.Model):
 
 
 class HostLog(models.Model):
-    """主机发现记录"""
     ip = models.CharField("主机名称", max_length=255)
     mac = models.CharField("主机类型", max_length=255)
     os = models.CharField("操作系统", max_length=255)
@@ -41,7 +40,7 @@ class HostLog(models.Model):
         db_table = 'host_log'
 
 
-class Service(models.Model):
+class ServiceLog(models.Model):
     """服务识别记录"""
     service_name = models.CharField("服务名称", max_length=255)
     service_type = models.CharField("服务类型", max_length=255)
@@ -50,18 +49,20 @@ class Service(models.Model):
     status = models.CharField("运行状态", max_length=255)
     notes = models.TextField("备注", blank=True)
 
-    def __str__(self):
-        return self.service_name
+    class Meta:
+        db_table = 'service_log'
 
 
-class PortScan(models.Model):
-    """端口扫描记录"""
+class PortLog(models.Model):
     target_ip = models.CharField("目标IP", max_length=255)
     result = models.TextField("扫描结果")
     start_time = models.DateTimeField("开始时间")
     end_time = models.DateTimeField("结束时间")
     status = models.CharField("扫描状态", max_length=255)
     notes = models.TextField("备注", blank=True)
+
+    class Meta:
+        db_table = 'port_log'
 
     def __str__(self):
         return self.target_ip

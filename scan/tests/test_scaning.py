@@ -1,4 +1,4 @@
-from scan.utils.scanning import port_scanning
+from scan.utils.scanning import port
 from django.test import TestCase
 
 
