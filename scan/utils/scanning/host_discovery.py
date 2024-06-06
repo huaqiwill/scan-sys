@@ -15,18 +15,21 @@ mac地址
 """
 import scapy.all as scapy
 import netifaces
+import subprocess
 
 
 def get_default_gateway_ip():
+    """获取当前网关的IP"""
     gateways = netifaces.gateways()
     default_gateway = gateways.get('default')
     if default_gateway is not None:
         return default_gateway[netifaces.AF_INET][0]
     else:
-        raise RuntimeError("Default gateway not found")
+        raise RuntimeError("Default gateway not index")
 
 
 def get_network_ip_range():
+    """获取网络ip范围"""
     interface = netifaces.gateways()['default'][netifaces.AF_INET][1]
     addresses = netifaces.ifaddresses(interface)
     netmask = addresses[netifaces.AF_INET][0]['netmask']
@@ -41,36 +44,51 @@ def get_network_ip_range():
     return f"{network_ip}/24"
 
 
-def scan(ip_range):
+def scan_host(ip_range):
+    """主机发现扫描"""
     arp_request = scapy.ARP(pdst=ip_range)
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
     arp_request_broadcast = broadcast / arp_request
     answered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0]
 
-    devices = []
+    device_list = []
     for element in answered_list:
         print(element[0])
-        devices.append({
-            'ip': element[1].psrc,
-            'mac': element[1].hwsrc
+        ip = element[1].psrc
+        mac = element[1].hwsrc
+        os_info, vendor_info = get_os_and_vendor(ip)
+
+        device_list.append({
+            'ip': ip,
+            'mac': mac,
+            'os': os_info,
+            'vendor': vendor_info
         })
 
-    return devices
+    return device_list
 
 
-def print_devices(devices):
-    print("IP\t\t\tMAC Address\n-----------------------------------------")
-    for device in devices:
-        print(f"{device['ip']}\t\t{device['mac']}")
+def get_os_and_vendor(ip):
+    cmd = f"nmap -sS -O {ip}"
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+    output = result.stdout
+    lines = output.split("\n")
+    os_info = "unknown os"
+    vendor_info = "unknown vendor"
+    for line in lines:
+        if "OS details:" in line:
+            os_info = line.split(":")[1].strip()
+        if "Device type:" in line:
+            vendor_info = line.split(":")[1].strip()
+    return os_info, vendor_info
 
 
 def start_host_discovery():
     try:
-        default_gateway_ip = get_default_gateway_ip()
         network_ip_range = get_network_ip_range()
-        devices = scan(network_ip_range)
-        print_devices(devices)
-        return devices
+        devices_list = scan_host(network_ip_range)
+        print(devices_list)
+        return devices_list
     except Exception as e:
         print(f"Error: {e}")
         return []

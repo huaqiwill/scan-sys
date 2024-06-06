@@ -1,21 +1,27 @@
 from django.urls import path
-from .views import db_manage, host_scan, report, suggestion, web_scan
+from .views import host, report, suggestion, web_scan, bug, service, port
 
 urlpatterns = [
-    path("host", host_scan.index, name="监控预警"),
-    path("host/check", host_scan.check, name="漏洞检测"),
-    path("host/check/add", host_scan.check_add, name="漏洞检测（add）"),
-    path("host/found", host_scan.found, name="主机发现"),
-    path("host/found/add", host_scan.found_add, name="主机发现（add）"),
-    path("host/found/query", host_scan.found_query, name="主机发现（add）"),
-    path("host/service", host_scan.server, name="服务识别"),
-    path("host/service/add", host_scan.server_add, name="服务识别_add"),
-    path("host/service/query", host_scan.server_query, name="服务识别_query"),
-    path("host/port", host_scan.port, name="端口识别"),
-    path("host/port/add", host_scan.port_add, name="端口识别（add）"),
-    path("host/port/query", host_scan.port_query, name="端口识别"),
-
-    path("web", web_scan.index, name="漏洞扫描"),
+    # 主机发现
+    path("scan/host", host.index, name="主机发现"),
+    path("scan/host/start", host.start, name="开始主机发现任务"),
+    path("scan/host/stop", host.stop, name="停止主机发现任务"),
+    path("scan/host/query", host.query, name="主机发现数据库查询"),
+    # 服务识别
+    path("scan/service", service.index, name="服务识别"),
+    path("scan/service/start", service.start, name="开始服务识别任务"),
+    path("scan/service/stop", service.start, name="停止服务识别任务"),
+    path("scan/service/query", service.query, name="服务识别数据库查询"),
+    # 端口扫描
+    path("scan/port", port.index, name="端口扫描"),
+    path("scan/port/start", port.start, name="开始端口扫描任务"),
+    path("scan/port/stop", port.start, name="停止端口扫描任务"),
+    path("scan/port/query", port.query, name="端口扫描数据库拆线呢"),
+    # 漏洞扫描
+    path("scan/bug", bug.index, name="漏洞检测"),
+    path("scan/bug/start", bug.start, name="开始漏洞检测服务"),
+    path("scan/bug/stop", bug.start, name="停止漏洞检测服务"),
+    path("scan/bug/add", bug.add, name="漏洞检测数据库查询"),
 
     path("web/scan", web_scan.scan, name="漏洞扫描记录"),
     path("web/scan/add", web_scan.scan_add, name="网页漏洞扫描"),

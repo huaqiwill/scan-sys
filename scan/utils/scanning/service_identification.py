@@ -27,15 +27,7 @@ def identify_services(host):
     return services
 
 
-def start_service_discovery():
-    # hosts = [{"ip": "192.168.2.109"}]
-    # for host in hosts:
-    #     services = identify_services(host["ip"])
-    #     for service in services:
-    #         print(
-    #             f"Host: {host['ip']}, Port: {service['port']}, Service: {service['service']}, Version: {service['version']}"
-    #         )
-    # ip = "192.168.2.109"
+def start_service_discovery(ip):
     ip = "150.158.199.226"
     services = identify_services(ip)
     for service in services:
@@ -45,4 +37,4 @@ def start_service_discovery():
 
 
 if __name__ == "__main__":
-    start_service_discovery()
+    start_service_discovery("150.158.199.226")

@@ -27,17 +27,18 @@ class Vulnerability(models.Model):
         return self.name
 
 
-class Host(models.Model):
+class HostLog(models.Model):
     """主机发现记录"""
-    hostname = models.CharField("主机名称", max_length=255)
-    host_type = models.CharField("主机类型", max_length=255)
-    operating_system = models.CharField("操作系统", max_length=255)
-    network_location = models.CharField("网络位置", max_length=255)
-    network_ip = models.CharField("网络IP", max_length=255)
-    network_mac = models.CharField("MAC地址", max_length=255)
-    scan_time = models.DateTimeField("扫描开始时间")
-    scan_end_time = models.DateTimeField("扫描结束时间")
+    ip = models.CharField("主机名称", max_length=255)
+    mac = models.CharField("主机类型", max_length=255)
+    os = models.CharField("操作系统", max_length=255)
+    supplier = models.CharField("操作系统", max_length=255)
+    start_time = models.DateTimeField("扫描开始时间")
+    end_time = models.DateTimeField("扫描结束时间")
     notes = models.TextField("备注", blank=True)
+
+    class Meta:
+        db_table = 'host_log'
 
 
 class Service(models.Model):
