@@ -30,6 +30,7 @@ def query(request: HttpRequest):
     data_list = []
     for service in page_data:
         data_list.append({
+            "id": service.id,
             "host": service.ip,
             "port": service.port,
             "service": service.service,
@@ -56,3 +57,11 @@ def start(request: HttpRequest):
 def stop(request: HttpRequest):
     stop_service_scan()
     return res_josn_data.success_api()
+
+
+@require_http_methods(["POST"])
+def delete(request: HttpRequest):
+    print("查询参数", request.POST)
+    id = request.POST.get("id")
+    ServiceLog.objects.filter(id=id).delete()
+    return res_josn_data.success_api("删除成功")

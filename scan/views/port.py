@@ -56,3 +56,10 @@ def stop(request: HttpRequest):
     print("端口扫描：", request.POST)
     stop_port_scan()
     return res_josn_data.success_api()
+
+@require_http_methods(["POST"])
+def delete(request: HttpRequest):
+    print("查询参数", request.POST)
+    id = request.POST.get("id")
+    PortLog.objects.filter(id=id).delete()
+    return res_josn_data.success_api("删除成功")

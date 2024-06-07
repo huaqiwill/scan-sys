@@ -21,49 +21,9 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">名称</label>
+                            <label class="layui-form-label">报告名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="powerName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">Code</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="powerCode" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">类型</label>
-                            <div class="layui-input-inline">
-                                <select name="powerType">
-                                    <option value=""></option>
-                                    <option value="0">目录</option>
-                                    <option value="1">菜单</option>
-                                    <option value="2">按钮</option>
-                                    <option value="3">其他</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">父项ID</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="parentId" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">图标</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="icon" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">是否启用</label>
-                            <div class="layui-input-inline">
-                                <select name="powerEnable">
-                                    <option value=""></option>
-                                    <option value="1">启用</option>
-                                    <option value="0">禁用</option>
-                                </select>
+                                <input type="text" name="name" autocomplete="1" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -86,9 +46,8 @@
 
 <script type="text/html" id="currentTableBar">
     <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
-    {% if "power:delete" in request.session.permissions %}
-        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
-    {% endif %}
+    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">下载</a>
+    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
 </script>
 
 <script type="text/html" id="power-enable">
@@ -120,6 +79,7 @@
 
 
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js"></script>
 <script>
     layui.use(['form', 'table', 'ajax'], function () {
         const $ = layui.jquery
@@ -134,16 +94,11 @@
             let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
             let cols = [
                 {type: "checkbox", width: 50},
-                {field: 'id', width: 100, title: '序号', align: 'center', sort: true},
-                {field: 'powerId', width: 100, title: '权限ID', align: 'center', sort: true, hide: false},
-                {field: 'powerName', width: 180, title: '名称', align: 'center', edit: 'text', sort: true},
-                {field: 'powerCode', width: 240, title: 'Code', align: 'center', edit: 'text', sort: true},
-                {field: 'powerType', width: 180, title: '类型', align: 'center', sort: true},
-                {field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true},
-                {field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text'},
-                {field: 'sort', title: '排序', width: 100, minWidth: 150, align: 'center', edit: 'text', sort: true},
-                {field: 'enable', width: 180, title: '是否启用', align: 'center', templet: '#power-enable', sort: true},
-                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+                {field: 'id', width: 100, title: 'ID', align: 'center', sort: true},
+                {field: 'name', width: 240, title: '报告名称', align: 'center', sort: true},
+                {field: 'url', minWidth: 180, title: '报告url', align: 'center', sort: true},
+                {field: 'create_time', width: 200, title: '创建时间', align: 'center', sort: true},
+                {title: '操作', width: 180, toolbar: '#currentTableBar', align: "center"}
             ];
 
             if (!enable) {
@@ -153,7 +108,7 @@
 
             table.render({
                 elem: '#currentTableId',
-                url: '/web/resport/query',
+                url: '/scan/report/query',
                 method: 'post',
                 toolbar: '#toolbarUser',
                 defaultToolbar: ['filter', 'exports', 'print'],
@@ -184,13 +139,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             const add = () => {
                 const index = layer.open({
-                    title: '新增',
+                    title: '开始网页漏洞扫描',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
                     area: ['40%', '80%'],
-                    content: '/web/report',
+                    content: '/scan/webbug/start',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -296,15 +251,15 @@
             const del = () => {
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
                     //传给后台
-                    ajax.post("/power-delete", obj.data, function (result) {
+                    ajax.post("/scan/report/delete", obj.data, function (result) {
                         if (result.success) {
                             layer.msg(result.msg, {icon: 1});
+                            obj.del();
+                            layer.close(index);
                         } else {
                             layer.msg(result.msg, {icon: 2});
                         }
                     })
-                    obj.del();
-                    layer.close(index);
                 });
             }
 

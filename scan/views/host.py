@@ -7,7 +7,7 @@ from django.views.decorators.http import require_http_methods
 from common.API import res_josn_data
 from scan.utils.scanning import start_host_scan, stop_host_scan
 from scan.models import HostLog
-from scan.utils import get_filters
+from scan.utils import get_filters, get_datetime
 
 
 @require_http_methods(["GET"])
@@ -29,11 +29,12 @@ def query(request: HttpRequest):
     data_list = []
     for host_log in page_data:
         data = {
+            "id": host_log.id,
             "ip": host_log.ip,
             "mac": host_log.mac,
             "os": host_log.os,
             "supplier": host_log.supplier,
-            "start_time": host_log.start_time,
+            "start_time": get_datetime(host_log.start_time),
             "end_time": host_log.end_time
         }
         data_list.append(data)
@@ -55,3 +56,11 @@ def stop(request: HttpRequest):
     print("查询参数", request.POST)
     stop_host_scan()
     return res_josn_data.success_api()
+
+
+@require_http_methods(["POST"])
+def delete(request: HttpRequest):
+    print("查询参数", request.POST)
+    id = request.POST.get("id")
+    HostLog.objects.filter(id=id).delete()
+    return res_josn_data.success_api("删除成功")

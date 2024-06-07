@@ -10,13 +10,13 @@ from scan.utils import get_filters
 
 @require_http_methods(["GET"])
 def index(request: HttpRequest):
-    return render(request, "scan/scanning/bug-index.html")
+    return render(request, "scan/suggest/suggest-index.html")
 
 
 @require_http_methods(["GET", "POST"])
 def add(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/scanning/bug-start.html")
+        return render(request, "scan/suggest/suggest-add.html")
 
     print("请求参数", request.POST)
 
@@ -35,6 +35,21 @@ def query(request: HttpRequest):
     data_list = []
     for bug in page_data:
         data_list.append({
-            "id": bug.id
+            "id": bug.id,
+            "name_en": bug.name_en,
+            "name_cn": bug.name_cn,
+            "risk": bug.risk,
+            "describe": bug.describe,
+            "solution": bug.solution,
+            "cve": bug.cve,
+            "is_update": bug.is_update
         })
     return res_josn_data.table_api(count=count, data=data_list)
+
+
+@require_http_methods(["POST"])
+def delete(request: HttpRequest):
+    print("查询参数", request.POST)
+    id = request.POST.get("id")
+    SuggestLog.objects.filter(id=id).delete()
+    return res_josn_data.success_api("删除成功")

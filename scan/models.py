@@ -12,13 +12,14 @@ notes 用户可以编辑
 
 class BugLog(models.Model):
     name = models.CharField("漏洞名称", max_length=255)
-    type = models.CharField("漏洞类型", max_length=255)
-    affected_host = models.CharField("影响主机", max_length=255)
-    affected_port = models.IntegerField("影响端口")
-    level = models.CharField("漏洞等级", max_length=255)
-    discovery_time = models.DateTimeField("发现时间")
-    fix_status = models.CharField("修复状态", max_length=255)
-    fix_time = models.DateTimeField("修复时间", null=True, blank=True)
+    os = models.CharField("操作系统", max_length=255)
+    found_by = models.CharField("发现人", max_length=255)
+    found_time = models.DateTimeField("发现时间")
+    bug_type = models.CharField("漏洞类型", max_length=255)
+    bug_name = models.CharField("漏洞名称", max_length=255)
+    bug_level = models.CharField("漏洞等级", max_length=255)
+    bug_url = models.CharField("漏洞URL", max_length=255)
+    bug_status = models.CharField("漏洞状态", max_length=255)
     notes = models.TextField("备注", blank=True)
 
     class Meta:
@@ -65,15 +66,38 @@ class PortLog(models.Model):
 
 
 class WebBugLog(models.Model):
+    name = models.CharField("漏洞名称", max_length=255)
+    os = models.CharField("操作系统", max_length=255)
+    found_by = models.CharField("发现人", max_length=255)
+    found_time = models.DateTimeField("发现时间")
+    bug_type = models.CharField("漏洞类型", max_length=255)
+    bug_name = models.CharField("漏洞名称", max_length=255)
+    bug_level = models.CharField("漏洞等级", max_length=255)
+    bug_url = models.CharField("漏洞URL", max_length=255)
+    bug_status = models.CharField("漏洞状态", max_length=255)
+    notes = models.TextField("备注", blank=True)
+
     class Meta:
         db_table = "scan_web_bug_log"
 
 
 class ReportLog(models.Model):
+    name = models.CharField("报告名称", max_length=255)
+    url = models.CharField("报告地址", max_length=255)
+    create_time = models.DateTimeField("报告生成时间")
+
     class Meta:
         db_table = "scan_report_log"
 
 
 class SuggestLog(models.Model):
+    name_en = models.TextField("")
+    name_cn = models.TextField("")
+    risk = models.TextField("")
+    describe = models.TextField("")
+    solution = models.TextField("")
+    cve = models.TextField("")
+    is_update = models.IntegerField("")
+
     class Meta:
         db_table = "scan_suggest_log"
