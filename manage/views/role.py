@@ -9,7 +9,7 @@ import json
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import login_required, authorize
 from manage.models import Role, User, RolePower, Power
 
@@ -87,7 +87,7 @@ def role_query(request):
         }
         data_list.append(item_data)
 
-    return res_josn_data.table_api(count=len(user_obj), data=data_list)
+    return json_result.table_api(count=len(user_obj), data=data_list)
 
 
 @authorize(power="role:add", log=True)
@@ -116,7 +116,7 @@ def role_add(request):
             remark=role_remark,
         )
         new_obj.save()
-        return res_josn_data.success_api(msg=f"角色:{role_code} 添加成功")
+        return json_result.success_api(msg=f"角色:{role_code} 添加成功")
 
 
 @authorize(power="role:delete", log=True)
@@ -127,9 +127,9 @@ def role_delete(request):
         db_id = post_data["roleID"]
         role_code = post_data["roleCode"]
         Role.objects.filter(id=db_id).delete()
-        return res_josn_data.success_api(f"角色:{role_code} 删除成功")
+        return json_result.success_api(msg=f"角色:{role_code} 删除成功")
     else:
-        return res_josn_data.fail_api(msg="请求权限不够!")
+        return json_result.fail_api(msg="请求权限不够!")
 
 
 @login_required
@@ -148,7 +148,7 @@ def role_cell_edit(request):
         field_value = post_data["value"]
         field_id = post_data["fieldID"]
         Role.objects.filter(id=field_id).update(**{filed_dict[field_name]: field_value})
-        return res_josn_data.success_api(f"更新成功")
+        return json_result.success_api(mgs=f"更新成功")
 
 
 @authorize(power="role:enable", log=True)
@@ -162,7 +162,7 @@ def role_enable(request):
         enable_dict_cn = {"enable": "启用", "disable": "禁用"}
         role_obj = Role.objects.filter(id=field_id)
         role_obj.update(**{"enable": enable_dict[enable_value]})
-        return res_josn_data.success_api(
+        return json_result.success_api(
             msg=f"{role_obj[0].code} {enable_dict_cn[enable_value]}成功"
         )
 
@@ -234,7 +234,7 @@ def role_power(request):
                     "menuInfo": data_list1,
                 }
                 data_list.append(item_data)
-        return res_josn_data.table_api(data=data_list, count=len(data_list))
+        return json_result.table_api(data=data_list, count=len(data_list))
 
 
 @authorize(power="role:power", log=True)
@@ -263,7 +263,7 @@ def role_power_save(request):
         print("按钮权限ID:", button_power_list)
 
         if role_id is None:
-            return res_josn_data.fail_api(msg="role_id为空")
+            return json_result.fail_api(msg="role_id为空")
 
         # 删除原有权限
         RolePower.objects.filter(role_id=role_id).delete()
@@ -279,4 +279,4 @@ def role_power_save(request):
             role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="2")
             role_obj.save()
 
-        return res_josn_data.success_api("保存成功")
+        return json_result.success_api(mgs="保存成功")

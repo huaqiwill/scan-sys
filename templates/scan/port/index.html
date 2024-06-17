@@ -21,17 +21,20 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">报告名称</label>
+                            <label class="layui-form-label">IP地址</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="name" autocomplete="1" class="layui-input">
+                                <input type="text" name="host" autocomplete="1" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <button type="submit" class="layui-btn layui-btn-normal" lay-submit
-                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询
+                                    lay-filter="data-search-btn">
+                                <i class="layui-icon"></i>
+                                查 询
                             </button>
-                            <button type="reset" class="layui-btn layui-btn-primary"><i
-                                    class="layui-icon layui-icon-refresh"></i> 重 置
+                            <button type="reset" class="layui-btn layui-btn-primary">
+                                <i class="layui-icon layui-icon-refresh"></i>
+                                重 置
                             </button>
                         </div>
                     </div>
@@ -46,8 +49,13 @@
 
 <script type="text/html" id="currentTableBar">
     <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
-    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">下载</a>
-    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+    {% if "power:delete" in request.session.permissions %}
+        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete"
+           lay-event="delete">再次扫描</a>
+    {% endif %}
+    {% if "power:delete" in request.session.permissions %}
+        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+    {% endif %}
 </script>
 
 <script type="text/html" id="power-enable">
@@ -66,7 +74,7 @@
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
             <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
-                新增
+                端口扫描
             </button>
         {% endif %}
         {% if "power:delete" in request.session.permissions %}
@@ -77,14 +85,13 @@
     </div>
 </script>
 
-
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js"></script>
 <script>
     layui.use(['form', 'table', 'ajax'], function () {
         const $ = layui.jquery
         const form = layui.form
-        const table = layui.table
+        const table = layui.table;
         const ajax = layui.ajax;
 
         const token = "{{ csrf_token }}";
@@ -94,11 +101,10 @@
             let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
             let cols = [
                 {type: "checkbox", width: 50},
-                {field: 'id', width: 100, title: 'ID', align: 'center', sort: true},
-                {field: 'name', width: 240, title: '报告名称', align: 'center', sort: true},
-                {field: 'url', minWidth: 180, title: '报告url', align: 'center', sort: true},
-                {field: 'create_time', width: 200, title: '创建时间', align: 'center', sort: true},
-                {title: '操作', width: 180, toolbar: '#currentTableBar', align: "center"}
+                {field: 'id', width: 200, title: 'ID（编号）', align: 'center', sort: true},
+                {field: 'host', width: 200, title: '主机IP', align: 'center', sort: true},
+                {field: 'ports', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
+                {title: '操作', width: 150, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
             ];
 
             if (!enable) {
@@ -108,7 +114,7 @@
 
             table.render({
                 elem: '#currentTableId',
-                url: '/scan/report/query',
+                url: '/scan/port/query',
                 method: 'post',
                 toolbar: '#toolbarUser',
                 defaultToolbar: ['filter', 'exports', 'print'],
@@ -120,18 +126,13 @@
                 even: true
             });
         }
-        query()
+        query();
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             const result = JSON.stringify(data.field);
             table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    Params: result
-                }
+                page: {curr: 1}, where: {Params: result}
             }, 'data');
             return false;
         });
@@ -139,13 +140,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             const add = () => {
                 const index = layer.open({
-                    title: '开始网页漏洞扫描',
+                    title: '开始端口扫描',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
                     area: ['40%', '80%'],
-                    content: '/scan/webbug/start',
+                    content: '/scan/port/start',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -156,15 +157,10 @@
                 const checkStatus = table.checkStatus('currentTableId');
                 const data = checkStatus.data;
                 if (data.length === 0) {
-                    layer.msg('未选中数据', {
-                        icon: 3,
-                        time: 1000
-                    })
+                    layer.msg('未选中数据', {icon: 3, time: 1000})
                     return false
                 } else {
                     layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-                        layer.close(index);
-
                         if (data.length === 0) {
                             layer.msg('请选择需要删除的数据!', {
                                 icon: 3,
@@ -172,30 +168,18 @@
                             })
                             return false
                         }
-                        //传给后台
-                        $.ajax({
-                            url: "/power-multi-delete",
-                            type: "post",
-                            data: {Params: JSON.stringify(data)},
-                            success: function (result) {
-                                if (result.success) {
-                                    // layer.msg(result.msg);
-                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                        table.reload('currentTableId');  //表格重载
-                                    })
-                                } else {
-                                    layer.msg(result.msg);
-                                }
-
-                            },
-                            error: function (result) {
-                                alert("接口错误！！");
+                        ajax.post("/power-multi-delete", {Params: JSON.stringify(data)}, function (result) {
+                            if (result.success) {
+                                layer.msg(result.msg, {icon: 1, time: 2000}, function () {
+                                    parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                                    table.reload('currentTableId');  //表格重载
+                                })
+                            } else {
+                                layer.msg(result.msg);
                             }
-                        });
-                        return false;
+                        })
+                        layer.close(index);
                     });
-
                 }
             }
 
@@ -206,6 +190,7 @@
             } else if (obj.event === 'refresh') {
                 window.refresh()
             }
+
         });
 
         //监听表格复选框选择
@@ -214,10 +199,9 @@
         });
 
         table.on('tool(currentTableFilter)', function (obj) {
-            const data = obj.data;
-
-            const edit = () => {
-                const index = layer.open({
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                var index = layer.open({
                     title: '编辑',
                     type: 2,
                     shade: 0.2,
@@ -246,12 +230,10 @@
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            }
-
-            const del = () => {
+                return false;
+            } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
-                    //传给后台
-                    ajax.post("/scan/report/delete", obj.data, function (result) {
+                    ajax.post("/scan/port/delete", obj.data, function (result) {
                         if (result.success) {
                             layer.msg(result.msg, {icon: 1});
                             obj.del();
@@ -260,16 +242,13 @@
                             layer.msg(result.msg, {icon: 2});
                         }
                     })
+                    return false;
                 });
-            }
-
-            if (obj.event === 'edit') {
-                edit();
-            } else if (obj.event === 'delete') {
-                del();
             } else if (obj.event === 'refresh') {
+                console.log(obj);
                 window.refresh()
             }
+
         });
 
 
@@ -299,11 +278,19 @@
                 }
             });
             return false;
+
+
         });
 
 
         form.on('switch(powerEnable)', function (obj) {
-            let operate = obj.elem.checked ? 'enable' : 'disable'
+            // console.log(obj);
+            let operate
+            if (obj.elem.checked) {
+                operate = 'enable'
+            } else {
+                operate = 'disable'
+            }
             let loading = layer.load()
 
             $.ajax({
@@ -327,11 +314,13 @@
                 }
             });
             return false;
+
         })
 
         window.refresh = function (param) {
             table.reload('currentTableId', {where: param})
         }
+
     });
 </script>
 

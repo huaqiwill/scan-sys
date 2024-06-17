@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+</head>
+
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>查询条件</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">IP地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="powerName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">子网掩码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="powerCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">默认网关</label>
+                            <div class="layui-input-inline">
+                                <select name="powerType">
+                                    <option value=""></option>
+                                    <option value="0">目录</option>
+                                    <option value="1">菜单</option>
+                                    <option value="2">按钮</option>
+                                    <option value="3">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">DNS服务器地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="parentId" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">租约时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="icon" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary"><i
+                                    class="layui-icon layui-icon-refresh"></i> 重 置
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+    </div>
+</div>
+
+<script type="text/html" id="currentTableBar">
+    <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
+    {% if "power:delete" in request.session.permissions %}
+        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+    {% endif %}
+</script>
+
+<script type="text/html" id="power-enable">
+    {% verbatim %}
+    {{#  if(d.enable==1){ }}
+    <input type="checkbox" name="power-enable" lay-skin="switch" checked lay-text="启用|禁用" value={{ d.powerId}}
+           lay-filter="powerEnable">
+    {{#  } else { }}
+    <input type="checkbox" name="power-enable" lay-skin="switch" lay-text="启用|禁用" value={{ d.powerId}}
+           lay-filter="powerEnable">
+    {{#  } }}
+    {% endverbatim %}
+</script>
+
+<script type="text/html" id="toolbarUser">
+    <div class="layui-btn-container">
+        {% if "power:add" in request.session.permissions %}
+            <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
+                网页漏洞扫描
+            </button>
+        {% endif %}
+        {% if "power:delete" in request.session.permissions %}
+            <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn"
+                    lay-event="multi-del"> 批量删除
+            </button>
+        {% endif %}
+    </div>
+</script>
+
+
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js"></script>
+<script>
+    layui.use(['form', 'table', 'ajax'], function () {
+        const $ = layui.jquery
+        const form = layui.form
+        const table = layui.table
+        const ajax = layui.ajax
+
+        const token = "{{ csrf_token }}"
+        ajax.setup(token)
+
+        const query = () => {
+            let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
+            let cols = [
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 100, title: 'ID', align: 'center', sort: true},
+                {field: 'name', width: 100, title: '名称', align: 'center', sort: true, hide: false},
+                {field: 'os', width: 180, title: '操作系统', align: 'center', edit: 'text', sort: true},
+                {field: 'found_by', width: 240, title: '发现人', align: 'center', edit: 'text', sort: true},
+                {field: 'found_time', width: 180, title: '发现时间', align: 'center', sort: true},
+                {field: 'bug_type', width: 100, title: '漏洞类型', align: 'center', edit: 'text', sort: true},
+                {field: 'bug_name', width: 200, title: '漏洞名称', align: 'center', edit: 'text'},
+                {field: 'bug_level', title: '漏洞等级', width: 100, align: 'center', edit: 'text', sort: true},
+                {field: 'bug_url', width: 180, title: '漏洞URL', align: 'center', sort: true},
+                {field: 'bug_status', width: 180, title: '漏洞状态', align: 'center', sort: true},
+                {field: 'notes', width: 180, title: '备注', align: 'center', sort: true},
+                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+            ];
+
+            if (!enable) {
+                // 移除enale列
+                cols = cols.filter(col => col.field !== 'enable');
+            }
+
+            table.render({
+                elem: '#currentTableId',
+                url: '/scan/webbug/query',
+                method: 'post',
+                toolbar: '#toolbarUser',
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [cols],
+                limits: [10, 20, 50, 100, 200, 500],
+                limit: 10,
+                page: true,
+                skin: 'row',
+                even: true
+            });
+        }
+        query()
+
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            const result = JSON.stringify(data.field);
+            table.reload('currentTableId', {
+                page: {curr: 1}, where: {Params: result}
+            }, 'data');
+            return false;
+        });
+
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                const index = layer.open({
+                    title: '开始网页漏洞扫描任务',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['40%', '80%'],
+                    content: '/scan/webbug/start',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
+                var checkStatus = table.checkStatus('currentTableId');
+                var data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg('未选中数据', {
+                        icon: 3,
+                        time: 1000
+                    })
+                    return false
+                } else {
+                    layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
+                        layer.close(index);
+
+                        if (data.length === 0) {
+                            layer.msg('请选择需要删除的数据!', {
+                                icon: 3,
+                                time: 1000
+                            })
+                            return false
+                        }
+                        //传给后台
+                        $.ajax({
+                            url: "/power-multi-delete",
+                            type: "post",
+                            data: {Params: JSON.stringify(data)},
+                            success: function (result) {
+                                if (result.success) {
+                                    // layer.msg(result.msg);
+                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
+                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                                        table.reload('currentTableId');  //表格重载
+                                    })
+                                } else {
+                                    layer.msg(result.msg);
+                                }
+
+                            },
+                            error: function (result) {
+                                alert("接口错误！！");
+                            }
+                        });
+                        return false;
+                    });
+
+                }
+            } else if (obj.event === 'refresh') {
+                window.refresh()
+            }
+
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                var index = layer.open({
+                    title: '编辑',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['40%', '80%'],
+                    content: '/power-edit-page',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        // var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                        // console.log(data); //得到iframe页的body内容
+                        body.find("input[name='powerId']").val(data.powerId);
+                        body.find("input[name='powerName']").val(data.powerName);
+                        body.find("input[name='powerCode']").val(data.powerCode);
+                        body.find("input[name='icon']").val(data.icon);
+                        body.find("input[name='sort']").val(data.sort);
+                        // 通过ID更新
+                        body.find("#openType").val(data.powerType);
+                        body.find("#enable").val(data.enable);
+                        // 重新渲染
+                        var iframeWindow = layero.find('iframe')[0].contentWindow;
+                        iframeWindow.layui.form.render();
+                    }
+                });
+
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
+                    ajax.post("/scan/webbug/delete", obj.data, function (result) {
+                        if (result.success) {
+                            layer.msg(result.msg, {icon: 1});
+                            obj.del();
+                            layer.close(index);
+                        } else {
+                            layer.msg(result.msg, {icon: 2});
+                        }
+                    })
+                    return false;
+                });
+            } else if (obj.event === 'refresh') {
+                console.log(obj);
+                window.refresh()
+            }
+
+        });
+
+
+        table.on('edit(currentTableFilter)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+            // console.log(obj.value); //得到修改后的值
+            // console.log(obj.field); //当前编辑的字段名
+            console.log(obj.data); //所在行的所有相关数据
+            //传给后台
+            $.ajax({
+                url: "/power-cell-edit",
+                type: "post",
+                data: {
+                    field: obj.field,
+                    value: obj.value,
+                    powerId: obj.data.powerId
+                },
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1});
+                    } else {
+                        layer.msg(result.msg, {icon: 2});
+                    }
+
+                },
+                error: function (result) {
+                    alert("接口错误！！");
+                }
+            });
+            return false;
+
+
+        });
+
+
+        form.on('switch(powerEnable)', function (obj) {
+            // console.log(obj);
+            let operate
+            if (obj.elem.checked) {
+                operate = 'enable'
+            } else {
+                operate = 'disable'
+            }
+            let loading = layer.load()
+
+            $.ajax({
+                url: "/power-enable",
+                type: "post",
+                data: {
+                    powerID: obj.value,
+                    enableValue: operate
+                },
+                success: function (result) {
+                    layer.close(loading)
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1});
+                    } else {
+                        layer.msg(result.msg, {icon: 2});
+
+                    }
+                },
+                error: function (result) {
+                    alert("接口错误！！");
+                }
+            });
+            return false;
+
+        })
+
+        window.refresh = function (param) {
+            table.reload('currentTableId', {where: param})
+        }
+
+    });
+</script>
+
+</body>
+
+</html>

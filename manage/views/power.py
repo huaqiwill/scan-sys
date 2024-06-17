@@ -10,7 +10,7 @@ import json
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import login_required, authorize
 from manage.models import Power, RolePower
 
@@ -98,7 +98,7 @@ def power_query(request):
         }
         data_list.append(item_data)
 
-    return res_josn_data.table_api(count=len(power_obj), data=data_list)
+    return json_result.table_api(count=len(power_obj), data=data_list)
 
 
 @authorize(power="power:add", log=True)
@@ -141,7 +141,7 @@ def power_add(request):
             role_id=2, power_id=max_id_obj.id, power_type=power_type
         )
         role_power_obj.save()
-        return res_josn_data.success_api(f"{power_name} 添加成功")
+        return json_result.success_api(msg=f"{power_name} 添加成功")
 
 
 @login_required
@@ -153,7 +153,7 @@ def power_sub_query(request):
         print("power-name请求数据:", post_data)
         type_value = post_data["type_value"]
         if type_value == "0":
-            return res_josn_data.table_api(data=data_list, count=0)
+            return json_result.table_api(data=data_list, count=0)
         elif type_value == "1":
             p_name = Power.objects.filter(type=0).values("name")
         elif type_value == "2":
@@ -164,7 +164,7 @@ def power_sub_query(request):
         for item in p_name:
             item_data = {"power_name": item["name"]}
             data_list.append(item_data)
-        return res_josn_data.table_api(data=data_list, count=len(p_name))
+        return json_result.table_api(data=data_list, count=len(p_name))
 
 
 @authorize(power="power:delete", log=True)
@@ -176,9 +176,9 @@ def power_delete(request):
         user_name = post_data["powerName"]
         Power.objects.filter(id=db_id).delete()
         RolePower.objects.filter(power_id=db_id).delete()  # 对应role_power中的权限删除
-        return res_josn_data.success_api(f"{user_name} 删除成功")
+        return json_result.success_api(msg=f"{user_name} 删除成功")
     else:
-        return res_josn_data.fail_api(msg="请求权限不够!")
+        return json_result.fail_api(msg="请求权限不够!")
 
 
 @authorize(power="power:delete", log=True)
@@ -195,7 +195,7 @@ def power_multi_delete(request):
                 power_id=db_id
             ).delete()  # 对应role_power中的权限删除
             user_list.append(user_name)
-        return res_josn_data.success_api(f"{user_list} 删除成功")
+        return json_result.success_api(mgs=f"{user_list} 删除成功")
 
 
 @login_required
@@ -217,7 +217,7 @@ def power_cell_edit(request):
         Power.objects.filter(id=field_id).update(
             **{filed_dict[field_name]: field_value}
         )
-        return res_josn_data.success_api(f"更新成功")
+        return json_result.success_api(mgs=f"更新成功")
 
 
 @authorize(power="power:enable", log=True)
@@ -231,6 +231,6 @@ def power_enable(request):
         enable_dict_cn = {"enable": "启用", "disable": "禁用"}
         item_obj = Power.objects.filter(id=field_id)
         item_obj.update(**{"enable": enable_dict[enable_value]})
-        return res_josn_data.success_api(
+        return json_result.success_api(
             msg=f"{item_obj[0].name} {enable_dict_cn[enable_value]}成功"
         )

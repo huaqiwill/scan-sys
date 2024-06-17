@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import login_required, authorize
 from manage.models import User, Role
 
@@ -93,7 +93,7 @@ def user_query(request):
         }
         data_list.append(item_data)
 
-    return res_josn_data.table_api(count=len(user_obj), data=data_list)
+    return json_result.table_api(count=len(user_obj), data=data_list)
 
 
 @authorize(power="user:add", log=True)
@@ -127,7 +127,7 @@ def user_add(request):
             email=user_email,
         )
         new_obj.save()
-        return res_josn_data.success_api(msg=f"用户:{user_name} 添加成功")
+        return json_result.success_api(msg=f"用户:{user_name} 添加成功")
 
 
 @login_required
@@ -139,7 +139,7 @@ def user_role_query(request):
             item_data = {"roleID": item.role_value, "roleName": item.name}
             data_list.append(item_data)
         print(data_list)
-        return res_josn_data.table_api(data=data_list, count=len(role_data))
+        return json_result.table_api(data=data_list, count=len(role_data))
 
 
 @authorize(power="user:delete", log=True)
@@ -150,9 +150,9 @@ def user_delete(request):
         db_id = post_data["fieldID"]
         user_name = post_data["name"]
         User.objects.filter(id=db_id).delete()
-        return res_josn_data.success_api(f"用户:{user_name} 删除成功")
+        return json_result.success_api(f"用户:{user_name} 删除成功")
     else:
-        return res_josn_data.fail_api(msg="请求权限不够!")
+        return json_result.fail_api(msg="请求权限不够!")
 
 
 @authorize(power="user:delete", log=True)
@@ -166,7 +166,7 @@ def user_multi_delete(request):
             user_name = item["name"]
             User.objects.filter(id=db_id).delete()
             user_list.append(user_name)
-        return res_josn_data.success_api(f"用户:{user_list} 删除成功")
+        return json_result.success_api(f"用户:{user_list} 删除成功")
 
 
 @login_required
@@ -186,7 +186,7 @@ def user_cell_edit(request):
         field_value = post_data["value"]
         field_id = post_data["dbID"]
         User.objects.filter(id=field_id).update(**{filed_dict[field_name]: field_value})
-        return res_josn_data.success_api(f"更新成功")
+        return json_result.success_api(f"更新成功")
 
 
 @login_required
@@ -201,7 +201,7 @@ def user_role_edit(request):
         role_obj = Role.objects.filter(role_value=role_id).first()
         update_dict = {"role_id": role_id, "role_des": role_obj.name}
         User.objects.filter(id_number=user_id).update(**update_dict)
-        return res_josn_data.success_api(msg=f"{user_id} 角色更新成功")
+        return json_result.success_api(msg=f"{user_id} 角色更新成功")
 
 
 @authorize(power="user:enable", log=True)
@@ -215,6 +215,6 @@ def user_enable(request):
         enable_dict_cn = {"enable": "启用", "disable": "禁用"}
         role_obj = User.objects.filter(id=field_id)
         role_obj.update(**{"user_status": enable_dict[enable_value]})
-        return res_josn_data.success_api(
+        return json_result.success_api(
             msg=f"{role_obj[0].user_name} {enable_dict_cn[enable_value]}成功"
         )

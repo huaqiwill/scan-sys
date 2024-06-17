@@ -1,25 +1,16 @@
 from django.http import JsonResponse
 
 
-def success_api(msg: str = "成功"):
-    """成功响应 默认值”成功“"""
-    res = {
-        "msg": msg,
-        "success": True,
-    }
+def success_api(data=None, msg: str = "success"):
+    """成功响应"""
+    res = {"msg": msg, "success": True, "data": data}
     return JsonResponse(res, safe=False)
 
 
-def fail_api(msg: str = "失败"):
-    """失败响应 默认值“失败”"""
-    res = {
-        "msg": msg,
-        "success": False,
-    }
+def fail_api(msg: str = "fail"):
+    """失败响应"""
+    res = {"msg": msg, "success": False}
     return JsonResponse(res, safe=False)
-
-
-from django.core import serializers
 
 
 def table_api(msg: str = "success", count=0, data=None, limit=10):
@@ -29,7 +20,7 @@ def table_api(msg: str = "success", count=0, data=None, limit=10):
 
 
 def user_setting_api(user_id, username, department, position, role, email, data):
-    """用户信息 返回数据"""
+    """用户信息响应"""
     res = {
         "id": user_id,
         "code": 0,

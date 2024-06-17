@@ -9,7 +9,7 @@ import json
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import authorize, login_required
 from login.models import Log
 from django.views.decorators.http import require_http_methods
@@ -94,7 +94,7 @@ def log_query(request):
         }
         data_list.append(item_data)
 
-    return res_josn_data.table_api(count=len(user_obj), data=data_list)
+    return json_result.table_api(count=len(user_obj), data=data_list)
 
 
 @authorize(power="log:delete", log=True)
@@ -108,4 +108,4 @@ def log_delete(request):
             db_id = item["fieldID"]
             Log.objects.filter(id=db_id).delete()
             user_list.append(db_id)
-        return res_josn_data.success_api(f"日志-ID:{user_list} 删除成功")
+        return json_result.success_api(msg=f"日志-ID:{user_list} 删除成功")

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import login_required
 from .models import Monitor, Notify, SubEmail, Handle
 from django.http import JsonResponse, HttpResponse
@@ -122,13 +122,13 @@ def monitor_query(request):
             }
         )
 
-    return res_josn_data.table_api(count=count, data=data_list)
+    return json_result.table_api(count=count, data=data_list)
 
 
 @login_required
 @require_http_methods(["GET", "POST"])
 def monitor_delete(request):
-    return res_josn_data.success_api("success")
+    return json_result.success_api("success")
 
 
 @login_required
@@ -200,7 +200,7 @@ def notify_query(request):
             }
         )
     print("数量", count)
-    return res_josn_data.table_api(count=count, data=data_list)
+    return json_result.table_api(count=count, data=data_list)
 
 
 @login_required
@@ -208,7 +208,7 @@ def notify_query(request):
 def notify_delete(request):
     notify_id = request.POST.get("id")
     Notify.objects.filter(id=notify_id).delete()
-    return res_josn_data.success_api("刪除成功")
+    return json_result.success_api("刪除成功")
 
 
 @login_required
@@ -254,7 +254,7 @@ def sub_email_query(request):
         }
         data_list.append(email_dict)
 
-    return res_josn_data.table_api(count=10, data=data_list)
+    return json_result.table_api(count=10, data=data_list)
 
 
 @login_required
@@ -280,11 +280,11 @@ def sub_email_add(request):
                 user_id=user_id,
             )
             if email.id is not None:
-                return res_josn_data.success_api("添加成功")
+                return json_result.success_api("添加成功")
         except:
             pass
 
-        return res_josn_data.fail_api("添加失败")
+        return json_result.fail_api("添加失败")
 
 
 @login_required
@@ -296,7 +296,7 @@ def sub_email_delete(request):
     sub_id = request.POST.get("id")
     print(sub_id)
     SubEmail.objects.filter(id=sub_id).delete()
-    return res_josn_data.success_api(f"删除成功")
+    return json_result.success_api(f"删除成功")
 
 
 def to_dict(**kwargs):
@@ -321,7 +321,7 @@ def sub_email_edit(request):
     print(datas)
 
     SubEmail.objects.filter(id=sub_id).update(**datas)
-    return res_josn_data.success_api(f"更新成功")
+    return json_result.success_api(f"更新成功")
 
 
 """
@@ -368,7 +368,7 @@ def handle_query(request):
                 "handle_detail": item.handle_detail,
             }
         )
-    return res_josn_data.table_api(count=10, data=data_list)
+    return json_result.table_api(count=10, data=data_list)
 
 
 @login_required
@@ -379,7 +379,7 @@ def handle_delete(request):
     """
     handle_id = request.POST.get("id")
     Handle.objects.filter(id=handle_id).delete()
-    return res_josn_data.success_api("刪除成功")
+    return json_result.success_api("刪除成功")
 
 
 """
@@ -426,7 +426,7 @@ def restore_query(request):
                 "handle_detail": item.handle_detail,
             }
         )
-    return res_josn_data.table_api(count=10, data=data_list)
+    return json_result.table_api(count=10, data=data_list)
 
 
 @login_required
@@ -435,4 +435,4 @@ def restore_delete(request):
     """
     删除业务数据恢复记录
     """
-    return res_josn_data.success_api("success")
+    return json_result.success_api("success")

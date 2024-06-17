@@ -135,19 +135,19 @@
 				}
 			});
 
-			let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1" ? true : false;
+			let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
 			let cols = [
 				{ type: "checkbox", width: 50 },
-				{ field: 'id', width: 100, title: '序号', align: 'center', sort: true },
-				{ field: 'powerId', width: 100, title: '权限ID', align: 'center', sort: true, hide: false },
+				{ field: 'id', width: 80, title: '序号', align: 'center', sort: true },
+				{ field: 'powerId', width: 120, title: '权限ID', align: 'center', sort: true, hide: false },
 				{ field: 'powerName', width: 180, title: '名称', align: 'center', edit: 'text', sort: true },
 				{ field: 'powerCode', width: 240, title: 'Code', align: 'center', edit: 'text', sort: true },
-				{ field: 'powerType', width: 180, title: '类型', align: 'center', sort: true },
+				{ field: 'powerType', width: 120, title: '类型', align: 'center', sort: true },
 				{ field: 'parentId', width: 100, title: '父项ID', align: 'center', edit: 'text', sort: true },
-				{ field: 'icon', width: 200, title: '图标', align: 'center', edit: 'text' },
-				{ field: 'sort', title: '排序', width: 100, minWidth: 150, align: 'center', edit: 'text', sort: true },
-				{ field: 'enable', width: 180, title: '是否启用', align: 'center', templet: '#power-enable', sort: true },
-				{ title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center" }
+				{ field: 'icon', width: 150, title: '图标', align: 'center', edit: 'text' },
+				{ field: 'sort', title: '排序', width: 80, minWidth: 150, align: 'center', edit: 'text', sort: true },
+				{ field: 'enable', width: 110, title: '是否启用', align: 'center', templet: '#power-enable', sort: true },
+				{ title: '操作', minWidth: 80, toolbar: '#currentTableBar', align: "center" , fixed: 'right'}
 			];
 
 			if (!enable) {

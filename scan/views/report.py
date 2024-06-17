@@ -3,49 +3,59 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from common.API import res_josn_data
+from common.API.json_result import success_api, fail_api
 from scan.models import ReportLog
-from scan.utils import get_filters, get_datetime
+from scan.utils import get_filters, get_datetime, table_data, print_params
 
 
 @require_http_methods(["GET"])
 def index(request: HttpRequest):
-    return render(request, "scan/report/report-index.html")
+    return render(request, "scan/report/index.html")
 
 
 @require_http_methods(["GET", "POST"])
 def add(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/report/report-add.html")
-
-    print("请求参数", request.POST)
+        return render(request, "scan/report/add.html")
 
 
 @require_http_methods(["POST"])
 def query(request: HttpRequest):
-    print("请求参数", request.POST)
-    page = request.POST.get("page")
-    limit = request.POST.get("limit")
     filters = get_filters(request.POST.get("Params"), ["name"])
-
-    bugs = ReportLog.objects.filter(**filters).all()
-    page_data = Paginator(bugs, limit).page(page)
-
-    count = len(bugs)
-    data_list = []
-    for bug in page_data:
-        data_list.append({
-            "id": bug.id,
-            "name": bug.name,
-            "url": bug.url,
-            "create_time": get_datetime(bug.create_time),
-        })
-    return res_josn_data.table_api(count=count, data=data_list)
+    result = ReportLog.objects.filter(**filters).order_by("-id")
+    fields = ["id", "name", "url", "create_time"]
+    return table_data(request, result, fields)
 
 
 @require_http_methods(["POST"])
 def delete(request: HttpRequest):
-    print("查询参数", request.POST)
     id = request.POST.get("id")
     ReportLog.objects.filter(id=id).delete()
-    return res_josn_data.success_api("删除成功")
+    return success_api()
+
+
+@require_http_methods(["POST"])
+def deleteBatch(request: HttpRequest):
+    ids = request.POST.get("ids")
+    ids_list = ids.split(",")
+    objects_to_delete = ReportLog.objects.in_bulk(ids_list)
+    for obj in objects_to_delete.values():
+        obj.delete()
+    return success_api()
+
+
+@require_http_methods(["POST"])
+def info(request: HttpRequest):
+    id = request.POST.get("id")
+    try:
+        data = ReportLog.objects.get(id=id)
+        return success_api(data)
+    except ReportLog.DoesNotExist:
+        return fail_api("未找到该记录")
+
+
+@require_http_methods(["POST"])
+def download(request: HttpRequest):
+    id = request.POST.get("id")
+    ReportLog.objects.filter(id=id).delete()
+    return success_api()

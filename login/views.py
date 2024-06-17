@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.auth import add_auth_session
 from common.API.captcha import make_captcha
 from common.API.code import check_code
@@ -49,7 +49,7 @@ def login(request):
         code = request.POST.get("captcha")
 
         if not username or not password or not code:
-            return res_josn_data.fail_api(msg="用户名或密码没有输入")
+            return json_result.fail_api(msg="用户名或密码没有输入")
 
         s_code = request.session.get("code", None)
         print("验证码:", code, s_code)
@@ -62,21 +62,21 @@ def login(request):
             login_log(
                 request, uid=username, is_access=False, desc="验证码错误,请刷新验证码"
             )
-            return res_josn_data.fail_api(msg="验证码错误,请刷新验证码!")
+            return json_result.fail_api(msg="验证码错误,请刷新验证码!")
 
         if code != s_code:
             login_log(request, uid=username, is_access=False, desc="验证码错误")
-            return res_josn_data.fail_api(msg="验证码错误")
+            return json_result.fail_api(msg="验证码错误")
 
         user = User.objects.filter(id_number=username).first()
 
         if user is None:
             login_log(request, uid=username, is_access=False, desc="用户不存在")
-            return res_josn_data.fail_api(msg="用户不存在!")
+            return json_result.fail_api(msg="用户不存在!")
 
         if user.user_status == 0:
             login_log(request, uid=user.id_number, is_access=False, desc="用户被禁用")
-            return res_josn_data.fail_api(msg="用户被禁用!")
+            return json_result.fail_api(msg="用户被禁用!")
 
         if username == user.id_number and check_password(password, user.id_password):
             # 设置session过期时间
@@ -97,10 +97,10 @@ def login(request):
             login_log(request, uid=user.id_number, is_access=True, desc="登录成功")
             # 存入权限
             add_auth_session(request)
-            return res_josn_data.success_api(msg="登录成功")
+            return json_result.success_api(msg="登录成功")
         else:
             login_log(request, uid=user.id_number, is_access=False, desc="密码错误")
-            return res_josn_data.fail_api(msg="密码错误")
+            return json_result.fail_api(msg="密码错误")
 
 
 def image_code(request):
@@ -231,7 +231,7 @@ def user_setting(request):
             "email": field_email,
         }
         User.objects.filter(id_number=field_user_id).update(**update_dict)
-        return res_josn_data.success_api(msg=f"用户:{field_user_id} 更新成功")
+        return json_result.success_api(msg=f"用户:{field_user_id} 更新成功")
 
 
 @login_required
@@ -243,7 +243,7 @@ def user_info_query(request):
     user_info = User.objects.filter(id_number=login_id).first()
     role_info = Role.objects.filter(role_value=user_info.role_id).first()
 
-    return res_josn_data.user_setting_api(
+    return json_result.user_setting_api(
         login_id,
         user_info.user_name,
         user_info.department,
@@ -267,15 +267,15 @@ def user_password(request):
         again_password = post_data["Param[again_password]"]
         user_obj = User.objects.filter(id_number=login_id).first()
         if not user_obj:
-            return res_josn_data.fail_api(msg="用户不存在!")
+            return json_result.fail_api(msg="用户不存在!")
         if not check_password(old_password, user_obj.id_password):
-            return res_josn_data.fail_api(msg="旧密码错误!")
+            return json_result.fail_api(msg="旧密码错误!")
         if new_password != again_password:
-            return res_josn_data.fail_api(msg="两次密码不一致!")
+            return json_result.fail_api(msg="两次密码不一致!")
         User.objects.filter(id_number=login_id).update(
             **{"id_password": make_password(new_password)}
         )
-        return res_josn_data.success_api(msg="修改成功!")
+        return json_result.success_api(msg="修改成功!")
 
 
 # def page_not_found(request, exception):

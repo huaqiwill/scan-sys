@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import redirect
 
-from common.API import res_josn_data
+from common.API import json_result
 from common.API.log import exec_log
 from manage.models import RolePower, Power
 
@@ -48,7 +48,7 @@ def authorize(power: str, log: bool = False):
                 if log:
                     exec_log(request=request, is_access=False, desc="没有权限")
                 if request.method == "GET":
-                    return res_josn_data.fail_api(msg="权限不足!")
+                    return json_result.fail_api(msg="权限不足!")
             if log and request.method == "POST":
                 exec_log(request=request, is_access=True, desc=str(dict(request.POST)))
             return func(request, *args, **kwargs)
