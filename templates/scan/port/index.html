@@ -12,53 +12,52 @@
 </head>
 
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
+    <div class="layuimini-container">
+        <div class="layuimini-main">
 
-        <fieldset class="table-search-fieldset">
-            <legend>查询条件</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" action="">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">IP地址</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="host" autocomplete="1" class="layui-input">
+            <fieldset class="table-search-fieldset">
+                <legend>查询条件</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">IP地址</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="host" autocomplete="1" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-search-btn">
+                                    <i class="layui-icon"></i>
+                                    查 询
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">
+                                    <i class="layui-icon layui-icon-refresh"></i>
+                                    重 置
+                                </button>
                             </div>
                         </div>
-                        <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
-                                    lay-filter="data-search-btn">
-                                <i class="layui-icon"></i>
-                                查 询
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                重 置
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </fieldset>
+                    </form>
+                </div>
+            </fieldset>
 
-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
+        </div>
     </div>
-</div>
 
-<script type="text/html" id="currentTableBar">
+    <script type="text/html" id="currentTableBar">
     <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
     {% if "power:delete" in request.session.permissions %}
-        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete"
-           lay-event="delete">再次扫描</a>
+    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">再次扫描</a>
     {% endif %}
     {% if "power:delete" in request.session.permissions %}
-        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
     {% endif %}
-</script>
+    </script>
 
-<script type="text/html" id="power-enable">
+    <script type="text/html" id="power-enable">
     {% verbatim %}
     {{#  if(d.enable==1){ }}
     <input type="checkbox" name="power-enable" lay-skin="switch" checked lay-text="启用|禁用" value={{ d.powerId}}
@@ -70,7 +69,7 @@
     {% endverbatim %}
 </script>
 
-<script type="text/html" id="toolbarUser">
+    <script type="text/html" id="toolbarUser">
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
             <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
@@ -85,244 +84,127 @@
     </div>
 </script>
 
-<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="/static/js/lay-config.js"></script>
-<script>
-    layui.use(['form', 'table', 'ajax'], function () {
-        const $ = layui.jquery
-        const form = layui.form
-        const table = layui.table;
-        const ajax = layui.ajax;
+    <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/static/js/lay-config.js"></script>
+    <script>
+        layui.use(['form', 'table', 'ajax'], function () {
+            const $ = layui.jquery
+            const form = layui.form
+            const table = layui.table;
+            const ajax = layui.ajax;
 
-        const token = "{{ csrf_token }}";
-        ajax.setup(token)
+            const token = "{{ csrf_token }}";
+            ajax.setup(token)
 
-        const query = () => {
-            let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
-            let cols = [
-                {type: "checkbox", width: 50},
-                {field: 'id', width: 200, title: 'ID（编号）', align: 'center', sort: true},
-                {field: 'host', width: 200, title: '主机IP', align: 'center', sort: true},
-                {field: 'ports', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false},
-                {title: '操作', width: 150, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
-            ];
+            const query = () => {
+                let enable = `{% if "power:enable" in request.session.permissions %}1{% endif %}` === "1";
+                let cols = [
+                    { type: "checkbox", width: 50 },
+                    { field: 'id', width: 200, title: 'ID（编号）', align: 'center', sort: true },
+                    { field: 'host', width: 200, title: '主机IP', align: 'center', sort: true },
+                    { field: 'ports', minWidth: 300, title: '存活端口', align: 'center', sort: true, hide: false },
+                    { title: '操作', width: 150, toolbar: '#currentTableBar', align: "center", fixed: 'right' }
+                ];
 
-            if (!enable) {
-                // 移除enale列
-                cols = cols.filter(col => col.field !== 'enable');
+                if (!enable) {
+                    // 移除enale列
+                    cols = cols.filter(col => col.field !== 'enable');
+                }
+
+                table.render({
+                    elem: '#currentTableId',
+                    url: '/scan/port/query',
+                    method: 'post',
+                    toolbar: '#toolbarUser',
+                    defaultToolbar: ['filter', 'exports', 'print'],
+                    cols: [cols],
+                    limits: [10, 20, 50, 100, 200, 500],
+                    limit: 10,
+                    page: true,
+                    skin: 'row',
+                    even: true
+                });
             }
+            query();
 
-            table.render({
-                elem: '#currentTableId',
-                url: '/scan/port/query',
-                method: 'post',
-                toolbar: '#toolbarUser',
-                defaultToolbar: ['filter', 'exports', 'print'],
-                cols: [cols],
-                limits: [10, 20, 50, 100, 200, 500],
-                limit: 10,
-                page: true,
-                skin: 'row',
-                even: true
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                const result = JSON.stringify(data.field);
+                table.reload('currentTableId', {
+                    page: { curr: 1 }, where: { Params: result }
+                }, 'data');
+                return false;
             });
-        }
-        query();
 
-        // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
-            const result = JSON.stringify(data.field);
-            table.reload('currentTableId', {
-                page: {curr: 1}, where: {Params: result}
-            }, 'data');
-            return false;
-        });
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+                    const index = layer.open({
+                        title: '开始端口扫描',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['40%', '80%'],
+                        content: '/scan/port/start',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                } else if (obj.event === 'multi-del') {  // 监听multi-del操作
+                    const checkStatus = table.checkStatus('currentTableId');
+                    const data = checkStatus.data;
 
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            const add = () => {
-                const index = layer.open({
-                    title: '开始端口扫描',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin: true,
-                    shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/scan/port/start',
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-            }
+                    if (data.length === 0) {
+                        layer.msg('未选中数据', { icon: 3 })
+                        return false
+                    }
 
-            const del = () => {
-                const checkStatus = table.checkStatus('currentTableId');
-                const data = checkStatus.data;
-                if (data.length === 0) {
-                    layer.msg('未选中数据', {icon: 3, time: 1000})
-                    return false
-                } else {
-                    layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
+                    layer.confirm('真的删除选中行吗?', { icon: 3, title: '确认删除' }, function (index) {
+
                         if (data.length === 0) {
-                            layer.msg('请选择需要删除的数据!', {
-                                icon: 3,
-                                time: 1000
-                            })
+                            layer.msg('请选择需要删除的数据!', { icon: 3 })
                             return false
                         }
-                        ajax.post("/power-multi-delete", {Params: JSON.stringify(data)}, function (result) {
-                            if (result.success) {
-                                layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                    parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                    table.reload('currentTableId');  //表格重载
-                                })
-                            } else {
-                                layer.msg(result.msg);
-                            }
-                        })
-                        layer.close(index);
-                    });
-                }
-            }
 
-            if (obj.event === 'add') {  // 监听添加操作
-                add()
-            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
-                del()
-            } else if (obj.event === 'refresh') {
-                window.refresh()
-            }
-
-        });
-
-        //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
-        });
-
-        table.on('tool(currentTableFilter)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'edit') {
-                var index = layer.open({
-                    title: '编辑',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin: true,
-                    shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/power-edit-page',
-                    success: function (layero, index) {
-                        var body = layer.getChildFrame('body', index);
-                        // var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                        // console.log(data); //得到iframe页的body内容
-                        body.find("input[name='powerId']").val(data.powerId);
-                        body.find("input[name='powerName']").val(data.powerName);
-                        body.find("input[name='powerCode']").val(data.powerCode);
-                        body.find("input[name='icon']").val(data.icon);
-                        body.find("input[name='sort']").val(data.sort);
-                        // 通过ID更新
-                        body.find("#openType").val(data.powerType);
-                        body.find("#enable").val(data.enable);
-                        // 重新渲染
-                        var iframeWindow = layero.find('iframe')[0].contentWindow;
-                        iframeWindow.layui.form.render();
-                    }
-                });
-
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-                return false;
-            } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
-                    ajax.post("/scan/port/delete", obj.data, function (result) {
-                        if (result.success) {
-                            layer.msg(result.msg, {icon: 1});
-                            obj.del();
+                        let ids = data.map(item => item.id);
+                        ajax.post("/scan/port/deleteBatch", { ids: ids.join(",") }).then(res => {
+                            parent.layer.msg("批量删除成功", { icon: 1, time: 1000 })
+                            parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                            table.reload('currentTableId');  //表格重载
                             layer.close(index);
-                        } else {
-                            layer.msg(result.msg, {icon: 2});
-                        }
-                    })
-                    return false;
-                });
-            } else if (obj.event === 'refresh') {
-                console.log(obj);
-                window.refresh()
-            }
-
-        });
-
-
-        table.on('edit(currentTableFilter)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
-            // console.log(obj.value); //得到修改后的值
-            // console.log(obj.field); //当前编辑的字段名
-            console.log(obj.data); //所在行的所有相关数据
-            //传给后台
-            $.ajax({
-                url: "/power-cell-edit",
-                type: "post",
-                data: {
-                    field: obj.field,
-                    value: obj.value,
-                    powerId: obj.data.powerId
-                },
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1});
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-                    }
-
-                },
-                error: function (result) {
-                    alert("接口错误！！");
+                        })
+                    });
+                } else if (obj.event === 'refresh') {
+                    window.refresh()
                 }
             });
-            return false;
 
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
 
-        });
-
-
-        form.on('switch(powerEnable)', function (obj) {
-            // console.log(obj);
-            let operate
-            if (obj.elem.checked) {
-                operate = 'enable'
-            } else {
-                operate = 'disable'
-            }
-            let loading = layer.load()
-
-            $.ajax({
-                url: "/power-enable",
-                type: "post",
-                data: {
-                    powerID: obj.value,
-                    enableValue: operate
-                },
-                success: function (result) {
-                    layer.close(loading)
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1});
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-
-                    }
-                },
-                error: function (result) {
-                    alert("接口错误！！");
+            table.on('tool(currentTableFilter)', function (obj) {
+                if (obj.event === 'delete') {
+                    let id = obj.data.id;
+                    layer.confirm(`真的删除数据 ‘${id}’ 么?`, { icon: 3, title: '确认删除' }, function (index) {
+                        ajax.post("/scan/port/delete", { id }).then(res => {
+                            obj.del();
+                            layer.msg("删除成功", { icon: 1 });
+                            layer.close(index);
+                        });
+                    });
+                } else if (obj.event === 'refresh') {
+                    console.log(obj);
+                    window.refresh()
                 }
             });
-            return false;
 
-        })
-
-        window.refresh = function (param) {
-            table.reload('currentTableId', {where: param})
-        }
-
-    });
-</script>
+            window.refresh = function (param) {
+                table.reload('currentTableId', { where: param })
+            }
+        });
+    </script>
 
 </body>
 

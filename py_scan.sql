@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 07/06/2024 22:42:09
+ Date: 14/06/2024 19:33:14
 */
 
 SET NAMES utf8mb4;
@@ -333,6 +333,10 @@ INSERT INTO `django_session` VALUES ('0mcj6wyyfz9j48ndui4rzeq54qyuf5sy', 'eyJjb2
 INSERT INTO `django_session` VALUES ('ikvidim6f0n8bfg430gqgtx5o1dxb4x5', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sFW50:rWzFKHuMLtEQfGqoh6Av71LjGQs8sVd58y2nmQ-Z8R4', '2024-06-07 19:40:14.200772');
 INSERT INTO `django_session` VALUES ('q2sza7efeotl637kvr569p70mnpck9tl', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sFYC8:bBKc0uv4S2lQewx4O0Lkpuy3UcBuXTk4o3elA8x4bvE', '2024-06-07 21:55:44.775932');
 INSERT INTO `django_session` VALUES ('uv1olvsq4x3zli8jbc78axcsr1w78qnv', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sFa8Q:XMvtXwRQPyFaB4chwnxXLMq9WHuR5ACGphDs3epu79U', '2024-06-08 00:00:02.803549');
+INSERT INTO `django_session` VALUES ('olkq3aix4wscs63cysjut8t0rt4wd5y1', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sFjxg:sik8yHWA02IrEP730tft1xk4Bf-rarDxxmsktTOt5sI', '2024-06-08 10:29:36.630692');
+INSERT INTO `django_session` VALUES ('dq29oaforuwql42lwqwmn5n2cfuasvq5', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sGhP1:uoFuKK0ksV1PORND-9Qnh8761fGfROWvCm3NKtMAgCs', '2024-06-11 01:57:47.627753');
+INSERT INTO `django_session` VALUES ('4vby8d9an0u71zv9b0tl5zox91fyycyp', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sGsdz:JFANLlCNN3IlYfY6Ym5K-XVPk9ku9Zhmv5skp6T6yQ4', '2024-06-11 13:57:59.214633');
+INSERT INTO `django_session` VALUES ('66dzqw002d3kzxk9m9w735d3rqtm50yw', '.eJx1TklOwzAUvYvXoQ0dUVbcg6LoJ_4yljzVAwUh7l7H9ZBNN9Yb_d8fmTVFMqggREdGh85xrUb8Mdz-kuG86_uOBId25JQMBKjkimRFgcSVZrXAlNplTNFF-xLOE7zG99CfLuF4OL7F7BLbd4SiAeslKv8saLTjPi6KfmQogYty8v163cxaLiG0kqfh8eBHGvciQQHDPKsxo29rU2jWyNIbgNICKQr01Uj_BEOhSahgEuVGbiZYm4mlm4XUTlJz6YFr60FrMo5snptBbafACrzhtGJGW1_wl3YVx7XffK59FxjD5lpMvc__Ox37r5k:1sHx0o:x4hsL0n62XWyk7iWRnqtO_BRbt-E5IHyKTYrL460JYo', '2024-06-14 12:49:58.021516');
 
 -- ----------------------------
 -- Table structure for monitor_handle
@@ -1859,7 +1863,7 @@ CREATE TABLE `scan_bug_log`  (
   `bug_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
   `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scan_bug_log
@@ -1881,11 +1885,12 @@ CREATE TABLE `scan_host_log`  (
   `end_time` datetime(0) NOT NULL,
   `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scan_host_log
 -- ----------------------------
+INSERT INTO `scan_host_log` VALUES (27, '172.20.10.1', 'ea:78:65:c1:8e:64', 'Apple iOS 15.0 - 16.1 (Darwin 21.1.0 - 22.1.0)', 'phone', '2024-06-08 09:15:57', '2024-06-08 09:16:10', '');
 INSERT INTO `scan_host_log` VALUES (3, '192.168.46.1', 'd4:da:21:0e:ef:c5', 'unknown os', 'unknown vendor', '2024-06-06 21:00:46', '2024-06-06 21:01:01', '');
 INSERT INTO `scan_host_log` VALUES (4, '192.168.46.2', 'f4:6b:8c:98:61:d6', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:03', '');
 INSERT INTO `scan_host_log` VALUES (5, '192.168.46.3', '52:54:00:02:d2:e7', 'Linux 3.2 - 4.14', 'general purpose', '2024-06-06 21:00:46', '2024-06-06 21:01:06', '');
@@ -1910,6 +1915,7 @@ INSERT INTO `scan_host_log` VALUES (23, '192.168.46.61', '1a:2f:0c:30:6b:9f', 'A
 INSERT INTO `scan_host_log` VALUES (24, '192.168.46.57', 'b0:dc:ef:24:8f:f1', 'unknown os', 'unknown vendor', '2024-06-06 21:12:06', '2024-06-06 21:13:54', '');
 INSERT INTO `scan_host_log` VALUES (25, '192.168.46.82', 'e8:9a:4e:fc:7c:51', 'unknown os', 'general purpose', '2024-06-06 21:12:06', '2024-06-06 21:14:05', '');
 INSERT INTO `scan_host_log` VALUES (26, '172.20.10.1', 'ea:78:65:c1:8e:64', 'Apple iOS 15.0 - 16.1 (Darwin 21.1.0 - 22.1.0)', 'phone', '2024-06-06 22:35:06', '2024-06-06 22:35:18', '');
+INSERT INTO `scan_host_log` VALUES (28, '172.20.10.7', '4c:79:6e:e7:5b:8f', 'Microsoft Windows 10 1809 - 21H2', 'general purpose', '2024-06-08 09:15:57', '2024-06-08 09:16:13', '');
 
 -- ----------------------------
 -- Table structure for scan_port_log
@@ -1943,7 +1949,7 @@ CREATE TABLE `scan_report_log`  (
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scan_report_log
@@ -2012,7 +2018,7 @@ CREATE TABLE `scan_suggest_log`  (
   `cve` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `is_update` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 1000000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scan_suggest_log
@@ -3919,7 +3925,7 @@ CREATE TABLE `scan_web_bug_log`  (
   `bug_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scan_web_bug_log
@@ -3941,7 +3947,7 @@ CREATE TABLE `sys_log`  (
   `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `create_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 310 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 323 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
@@ -4263,6 +4269,11 @@ INSERT INTO `sys_log` VALUES (314, 'POST', 'admin', '/power-delete', '{\'ip\': [
 INSERT INTO `sys_log` VALUES (315, 'POST', 'admin', '/power-delete', '{\'id\': [\'1\'], \'host\': [\'12\'], \'ports\': [\'12,12,12\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-07 22:35:11.268369');
 INSERT INTO `sys_log` VALUES (316, 'POST', 'admin', '/power-delete', '{\'id\': [\'1\'], \'name\': [\'1\'], \'os\': [\'12\'], \'found_by\': [\'12\'], \'found_time\': [\'2024-05-06 00:00:00\'], \'bug_type\': [\'12\'], \'bug_name\': [\'0\'], \'bug_level\': [\'0\'], \'bug_url\': [\'0\'], \'bug_status\': [\'0\'], \'notes\': [\'\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-07 22:36:35.682541');
 INSERT INTO `sys_log` VALUES (317, 'POST', 'admin', '/power-delete', '{\'id\': [\'10043\'], \'name_en\': [\'Chargen UDP Service Remote DoS\'], \'name_cn\': [\'Chargen UDP服务远程拒绝服务攻击漏洞\'], \'risk\': [\'中危\'], \'describe\': [\'远程主机运行“Chargen”服务，当连接时，chargen响应会伴随一些随机的字符，当UDP连接时，会返回UDP数据包，当TCP连接时，会持续发送字符，直到客户端关闭连接。 这项服务的目的是主要测试本身的TCP / IP协议,以确保所有的数据包到达目的地没有改变。未使用此项服务时,建议你禁用它,因为攻击者可能用它来建立一个攻击，或者利用这台主机作为中继，攻击第三方主机。 一个简单的攻击就像是“乒乓球”,攻击者恶搞运行chargen服务的两台机器之间的数据包。这将导致它们互相持续发送字符,导致两台主机拒绝服务，堵塞网络通道。\'], \'solution\': [\'在Unix系统中,进入/etc/inetd.conf并注释掉chargen那行，重启inetd进程。 在Windows系统下,将下面的注册表键值设置为0: HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\SimpTCP\\\\Parameters\\\\EnableTcpChargen HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\SimpTCP\\\\Parameters\\\\EnableUdpChargen 然后启动cmd.exe和类型: net stop simptcp net start simptcp 重启服务。 相关链接： http://www.nessus.org/u?f0dbdf05\'], \'cve\': [\'\'], \'is_update\': [\'\']}', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-07 22:40:04.116605');
+INSERT INTO `sys_log` VALUES (318, 'POST', 'admin', '/login', '验证码错误', '127.0.0.1', 0, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-08 08:29:31.173453');
+INSERT INTO `sys_log` VALUES (319, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-08 08:29:36.625693');
+INSERT INTO `sys_log` VALUES (320, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-10 23:57:47.618751');
+INSERT INTO `sys_log` VALUES (321, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-11 11:57:59.206630');
+INSERT INTO `sys_log` VALUES (322, 'POST', 'admin', '/login', '登录成功', '127.0.0.1', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0', '2024-06-14 10:49:58.012511');
 
 -- ----------------------------
 -- Table structure for sys_power

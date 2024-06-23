@@ -8,8 +8,6 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse
 
 
-
-
 def get_delete_param(request: HttpRequest):
     ids = request.POST.get("ids", "")
     if ids is "":

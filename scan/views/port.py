@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 
 from common.API.json_result import success_api, fail_api
 from scan.models import PortLog
-from scan.utils.scanning import start_port_scan, stop_port_scan
+from scan.utils.scanning.port import start_port_scan, stop_port_scan, get_local_ip
 from scan.utils import get_filters, print_params, table_data
 
 
@@ -23,7 +23,10 @@ def query(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def start(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/port/start.html")
+        context = {
+            "local_ip": get_local_ip()
+        }
+        return render(request, "scan/port/start.html", context=context)
 
     host = request.POST.get("host")
     start_port = request.POST.get("start_port")

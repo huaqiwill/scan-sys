@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.views.decorators.http import require_http_methods
 from common.API.json_result import success_api, fail_api
-from scan.utils.scanning import start_host_scan, stop_host_scan
+from scan.utils.report.aev4 import get_local_ip
+from scan.utils.scanning.host import start_host_scan, stop_host_scan
 from scan.models import HostLog
 from scan.utils import get_filters, table_data, print_params
 
@@ -23,7 +24,10 @@ def query(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def start(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/host/start.html")
+        context = {
+            "local_ip": get_local_ip()
+        }
+        return render(request, "scan/host/start.html",context=context)
 
     print_params(request)
     start_host_scan()
