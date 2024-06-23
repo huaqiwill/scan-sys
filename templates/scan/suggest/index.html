@@ -85,9 +85,9 @@
 </div>
 
 <script type="text/html" id="currentTableBar">
-    <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
+    <a class="layui-btn  layui-bg-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
     {% if "power:delete" in request.session.permissions %}
-        <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+        <a class="layui-btn layui-btn-xs layui-bg-red data-count-delete" lay-event="delete">删除</a>
     {% endif %}
 </script>
 
@@ -106,12 +106,12 @@
 <script type="text/html" id="toolbarUser">
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
-            <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
-                新增
+            <button class="layui-btn layui-btn-sm  layui-bg-green data-add-btn" lay-event="add">
+                新增漏洞
             </button>
         {% endif %}
         {% if "power:delete" in request.session.permissions %}
-            <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn"
+            <button class="layui-btn layui-btn-sm layui-bg-red data-delete-btn"
                     lay-event="multi-del"> 批量删除
             </button>
         {% endif %}
@@ -136,14 +136,27 @@
             let cols = [
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 100, title: 'ID', align: 'center', sort: true},
-                {field: 'name_en', width: 200, title: '英文名称', align: 'center', sort: true, hide: false},
                 {field: 'name_cn', width: 250, title: '中文名称', align: 'center', sort: true},
+                {field: 'name_en', width: 200, title: '英文名称', align: 'center', sort: true, hide: false},
                 {field: 'risk', width: 100, title: '风险', align: 'center', sort: true},
                 {field: 'describe', width: 180, title: '漏洞描述', align: 'center', sort: true},
                 {field: 'solution', width: 180, title: '解决方案', align: 'center', sort: true},
                 {field: 'cve', width: 80, title: 'CVE', align: 'center', sort: true},
-                {field: 'is_update', width: 120, title: '是否更新', align: 'center', sort: true},
-                {title: '操作', minWidth: 100, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
+                {
+                    field: 'is_update',
+                    width: 120,
+                    title: '是否更新',
+                    align: 'center',
+                    sort: true,
+                    templet: function (res) {
+                        if (res.is_update === 0) {
+                            return '是'
+                        } else {
+                            return '否'
+                        }
+                    }
+                },
+                {title: '操作', minWidth: 120, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
             ];
 
             if (!enable) {
@@ -182,66 +195,47 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
+                const index = layer.open({
                     title: '新增',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/power-add',
+                    area: ['600px', '95%'],
+                    content: '/scan/suggest/add',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
-                var checkStatus = table.checkStatus('currentTableId');
-                var data = checkStatus.data;
-                if (data.length === 0) {
-                    layer.msg('未选中数据', {
-                        icon: 3,
-                        time: 1000
-                    })
-                    return false
-                } else {
-                    layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-                        layer.close(index);
-
-                        if (data.length === 0) {
-                            layer.msg('请选择需要删除的数据!', {
-                                icon: 3,
-                                time: 1000
-                            })
-                            return false
-                        }
-                        //传给后台
-                        $.ajax({
-                            url: "/power-multi-delete",
-                            type: "post",
-                            data: {Params: JSON.stringify(data)},
-                            success: function (result) {
-                                if (result.success) {
-                                    // layer.msg(result.msg);
-                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                        table.reload('currentTableId');  //表格重载
-                                    })
-                                } else {
-                                    layer.msg(result.msg);
-                                }
-
-                            },
-                            error: function (result) {
-                                alert("接口错误！！");
-                            }
-                        });
-                        return false;
-                    });
-
-                }
-            } else if (obj.event === 'refresh') {
-                window.refresh()
+                return false;
             }
+
+            if (obj.event === 'multi-del') {  // 监听multi-del操作
+                const checkStatus = table.checkStatus('currentTableId');
+                const data = checkStatus.data;
+
+                if (data.length === 0) {
+                    return layer.msg('请选择需要删除的数据!', {icon: 3, time: 1000})
+                }
+
+                layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
+                    let ids = data.map(item => item.id);
+                    ajax.post("/scan/suggest/delete_batch", {ids: ids.join(",")}).then(res => {
+                        parent.layer.msg("批量删除成功", {icon: 1, time: 1000})
+                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                        table.reload('currentTableId');  //表格重载
+                        layer.close(index);
+                    })
+                });
+                return false;
+            }
+
+            if (obj.event === 'refresh') {
+                window.refresh()
+                return false;
+            }
+
+            return false;
 
         });
 
@@ -253,53 +247,40 @@
         table.on('tool(currentTableFilter)', function (obj) {
             const data = obj.data;
             if (obj.event === 'edit') {
+                let id = obj.data.id;
                 const index = layer.open({
-                    title: '编辑',
+                    title: '新增',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/power-edit-page',
-                    success: function (layero, index) {
-                        var body = layer.getChildFrame('body', index);
-                        // var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                        // console.log(data); //得到iframe页的body内容
-                        body.find("input[name='powerId']").val(data.powerId);
-                        body.find("input[name='powerName']").val(data.powerName);
-                        body.find("input[name='powerCode']").val(data.powerCode);
-                        body.find("input[name='icon']").val(data.icon);
-                        body.find("input[name='sort']").val(data.sort);
-                        // 通过ID更新
-                        body.find("#openType").val(data.powerType);
-                        body.find("#enable").val(data.enable);
-                        // 重新渲染
-                        const iframeWindow = layero.find('iframe')[0].contentWindow;
-                        iframeWindow.layui.form.render();
-                    }
+                    area: ['600px', '95%'],
+                    content: '/scan/suggest/edit?id=' + id,
                 });
-
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
-            } else if (obj.event === 'delete') {
+            }
+
+            if (obj.event === 'delete') {
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
-                    ajax.post("/scan/suggest/delete", obj.data, function (result) {
-                        if (result.success) {
-                            obj.del();
-                            layer.close(index);
-                            layer.msg(result.msg, {icon: 1});
-                        } else {
-                            layer.msg(result.msg, {icon: 2});
-                        }
+                    ajax.post("/scan/suggest/delete", obj.data).then(res => {
+                        obj.del();
+                        layer.close(index);
+                        layer.msg(result.msg, {icon: 1});
                     })
                     return false;
                 });
-            } else if (obj.event === 'refresh') {
+            }
+
+            if (obj.event === 'refresh') {
                 console.log(obj);
                 window.refresh()
+                return false;
             }
+
+            return false;
         });
 
 

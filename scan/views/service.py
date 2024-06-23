@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from common.API.json_result import success_api, fail_api
 from scan.models import ServiceLog
-from scan.utils.scanning import start_service_scan, stop_service_scan
+from scan.utils.scanning.service import start_service_scan, stop_service_scan, get_local_ip
 from scan.utils import get_filters, print_params, table_data
 
 
@@ -35,7 +35,10 @@ def query(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def start(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/service/start.html")
+        context = {
+            "local_ip": get_local_ip()
+        }
+        return render(request, "scan/service/start.html", context=context)
 
     ip = request.POST.get("ip")
     start_service_scan(ip)
@@ -56,7 +59,7 @@ def delete(request: HttpRequest):
 
 
 @require_http_methods(["POST"])
-def deleteBatch(request: HttpRequest):
+def delete_batch(request: HttpRequest):
     ids = request.POST.get("ids")
     ids_list = ids.split(",")
     objects_to_delete = ServiceLog.objects.in_bulk(ids_list)
@@ -67,6 +70,19 @@ def deleteBatch(request: HttpRequest):
 
 @require_http_methods(["POST"])
 def info(request: HttpRequest):
+    id = request.POST.get("id")
+    try:
+        data = ServiceLog.objects.get(id=id)
+        return success_api(data)
+    except ServiceLog.DoesNotExist:
+        return fail_api("未找到该记录")
+
+
+@require_http_methods(["GET", "POST"])
+def edit(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, "scan/service/add.html")
+
     id = request.POST.get("id")
     try:
         data = ServiceLog.objects.get(id=id)

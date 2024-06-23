@@ -77,7 +77,7 @@
         <script type="text/html" id="toolbarUser">
             <div class="layui-btn-container">
                 {% if "role:add" in request.session.permissions %}
-                    <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm data-add-btn"
+                    <button class="layui-btn  layui-bg-green layui-btn-sm data-add-btn"
                             lay-event="add"> 新增
                     </button>
                 {% endif %}
@@ -90,12 +90,12 @@
         <script type="text/html" id="currentTableBar">
 
             {% if "role:power" in request.session.permissions %}
-                <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit"
+                <a class="layui-btn layui-bg-green layui-btn-xs data-count-edit"
                    lay-event="power">权限</a>
             {% endif %}
 
             {% if "role:delete" in request.session.permissions %}
-                <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete"
+                <a class="layui-btn layui-btn-xs layui-bg-red data-count-delete"
                    lay-event="delete">删除</a>
             {% endif %}
 
@@ -200,7 +200,7 @@
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '50%'],
+                    area: ['600px', '95%'],
                     content: '/role-add',
                 });
                 $(window).on("resize", function () {
@@ -280,7 +280,7 @@
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['80%', '100%'],
+                    area: ['800px', '95%'],
                     content: '/role-power',
                     success: function (layero, index) {
                         console.log(userID);

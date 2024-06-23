@@ -85,6 +85,7 @@ class ReportLog(models.Model):
     name = models.CharField("报告名称", max_length=255)
     url = models.CharField("报告地址", max_length=255)
     create_time = models.DateTimeField("报告生成时间")
+    format = models.CharField("报告格式", max_length=255)
 
     class Meta:
         db_table = "scan_report_log"

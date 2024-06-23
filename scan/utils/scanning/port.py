@@ -8,6 +8,7 @@ import socket
 import threading
 
 from scan.models import PortLog
+from .utils import is_host_online
 
 
 def get_local_ip():

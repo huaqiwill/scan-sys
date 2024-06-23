@@ -9,7 +9,7 @@ from scan.utils import (
     table_data,
     success_api,
     fail_api,
-    get_delete_param,
+    get_delete_param, get_form,
 )
 
 
@@ -22,6 +22,10 @@ def index(request: HttpRequest):
 def start(request: HttpRequest):
     if request.method == "GET":
         return render(request, "scan/web_bug/start.html")
+
+    form = get_form(request.POST, ["url", "range", "type", "token", "strategy"])
+
+    return success_api()
 
 
 @require_http_methods(["POST"])
@@ -57,7 +61,7 @@ def delete(request: HttpRequest):
 
 
 @require_http_methods(["POST"])
-def deleteBatch(request: HttpRequest):
+def delete_batch(request: HttpRequest):
     # 获取参数
     ids_list = get_delete_param(request)
     # 执行批量删除操作
@@ -70,6 +74,19 @@ def deleteBatch(request: HttpRequest):
 
 @require_http_methods(["POST"])
 def info(request: HttpRequest):
+    id_ = request.POST.get("id")
+    try:
+        web_bug_log = WebBugLog.objects.get(id=id_)
+        return success_api(web_bug_log)
+    except WebBugLog.DoesNotExist:
+        return fail_api("未找到该记录")
+
+
+@require_http_methods(["GET", "POST"])
+def edit(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, "scan/web_bug/add.html")
+
     id_ = request.POST.get("id")
     try:
         web_bug_log = WebBugLog.objects.get(id=id_)

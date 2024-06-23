@@ -45,9 +45,9 @@
 </div>
 
 <script type="text/html" id="currentTableBar">
-    <!-- <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a> -->
-    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">下载</a>
-    <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete" lay-event="delete">删除</a>
+    <a class="layui-btn  layui-bg-green layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-bg-red data-count-delete" lay-event="download">下载</a>
+    <a class="layui-btn layui-btn-xs layui-bg-red data-count-delete" lay-event="delete">删除</a>
 </script>
 
 <script type="text/html" id="power-enable">
@@ -65,12 +65,12 @@
 <script type="text/html" id="toolbarUser">
     <div class="layui-btn-container">
         {% if "power:add" in request.session.permissions %}
-            <button class="layui-btn layui-btn-primary layui-btn-sm  layui-border-green data-add-btn" lay-event="add">
-                新增
+            <button class="layui-btn layui-btn-sm  layui-bg-green data-add-btn" lay-event="add">
+                漏洞报告生成
             </button>
         {% endif %}
         {% if "power:delete" in request.session.permissions %}
-            <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn"
+            <button class="layui-btn layui-btn-sm layui-bg-red data-delete-btn"
                     lay-event="multi-del"> 批量删除
             </button>
         {% endif %}
@@ -81,11 +81,12 @@
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js"></script>
 <script>
-    layui.use(['form', 'table', 'ajax'], function () {
+    layui.use(['form', 'table', 'ajax', 'utils'], function () {
         const $ = layui.jquery
         const form = layui.form
         const table = layui.table
         const ajax = layui.ajax;
+        const utils = layui.utils;
 
         const token = "{{ csrf_token }}";
         ajax.setup(token)
@@ -98,6 +99,7 @@
                 {field: 'name', width: 240, title: '报告名称', align: 'center', sort: true},
                 {field: 'url', minWidth: 180, title: '报告url', align: 'center', sort: true},
                 {field: 'create_time', width: 200, title: '创建时间', align: 'center', sort: true},
+                {field: 'format', width: 120, title: '生成格式', align: 'center', sort: true},
                 {title: '操作', width: 180, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
             ];
 
@@ -137,78 +139,48 @@
         });
 
         table.on('toolbar(currentTableFilter)', function (obj) {
-            const add = () => {
+
+
+            if (obj.event === 'add') {
+                // 监听添加操作
                 const index = layer.open({
-                    title: '开始网页漏洞扫描',
+                    title: '报告生成',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/scan/webbug/start',
+                    area: ['600px', '95%'],
+                    content: '/scan/report/add',
                 });
+                // 当window的尺寸发生变化，layer全屏显示
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            }
-
-            const del = () => {
+            } else if (obj.event === 'multi-del') {
+                // 监听multi-del操作
                 const checkStatus = table.checkStatus('currentTableId');
                 const data = checkStatus.data;
+
                 if (data.length === 0) {
-                    layer.msg('未选中数据', {
-                        icon: 3,
-                        time: 1000
-                    })
+                    layer.msg('未选中数据', {icon: 3, time: 1000})
                     return false
-                } else {
-                    layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-                        layer.close(index);
-
-                        if (data.length === 0) {
-                            layer.msg('请选择需要删除的数据!', {
-                                icon: 3,
-                                time: 1000
-                            })
-                            return false
-                        }
-                        //传给后台
-                        $.ajax({
-                            url: "/power-multi-delete",
-                            type: "post",
-                            data: {Params: JSON.stringify(data)},
-                            success: function (result) {
-                                if (result.success) {
-                                    // layer.msg(result.msg);
-                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                        table.reload('currentTableId');  //表格重载
-                                    })
-                                } else {
-                                    layer.msg(result.msg);
-                                }
-
-                            },
-                            error: function (result) {
-                                alert("接口错误！！");
-                            }
-                        });
-                        return false;
-                    });
-
                 }
-            }
 
-            if (obj.event === 'add') {  // 监听添加操作
-                add()
-            } else if (obj.event === 'multi-del') {  // 监听multi-del操作
-                del()
+                let ids = data.map(item => item.id)
+                layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
+                    layer.close(index);
+                    ajax.post("/scan/report/delete_batch", {"ids": ids.join(",")}).then(res => {
+                        parent.layer.msg("删除成功", {icon: 1})
+                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                        table.reload('currentTableId');  //表格重载
+                    })
+                });
             } else if (obj.event === 'refresh') {
                 window.refresh()
             }
         });
 
-        //监听表格复选框选择
+        // 监听表格复选框选择
         table.on('checkbox(currentTableFilter)', function (obj) {
             console.log(obj)
         });
@@ -216,60 +188,55 @@
         table.on('tool(currentTableFilter)', function (obj) {
             const data = obj.data;
 
-            const edit = () => {
+            if (obj.event === "download") {
+                let url = obj.data.url
+                location.href = url
+                return false;
+            }
+
+            if (obj.event === 'edit') {
+                // 监听添加操作
+                let id = obj.data.id;
                 const index = layer.open({
-                    title: '编辑',
+                    title: '编辑报告',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '80%'],
-                    content: '/power-edit-page',
+                    area: ['600px', '95%'],
+                    content: '/scan/report/edit?id=' + id,
                     success: function (layero, index) {
-                        var body = layer.getChildFrame('body', index);
-                        // var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                        // console.log(data); //得到iframe页的body内容
-                        body.find("input[name='powerId']").val(data.powerId);
-                        body.find("input[name='powerName']").val(data.powerName);
-                        body.find("input[name='powerCode']").val(data.powerCode);
-                        body.find("input[name='icon']").val(data.icon);
-                        body.find("input[name='sort']").val(data.sort);
-                        // 通过ID更新
-                        body.find("#openType").val(data.powerType);
-                        body.find("#enable").val(data.enable);
-                        // 重新渲染
-                        var iframeWindow = layero.find('iframe')[0].contentWindow;
-                        iframeWindow.layui.form.render();
+                        /* ajax.post("/scan/report/info", {id}).then(res => {
+                             let data = res.data;
+                             const body = layer.getChildFrame('body', index);
+                             body.find("input[name='name']").val(data.name);
+                         })*/
                     }
                 });
-
+                // 当window的尺寸发生变化，layer全屏显示
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
+                return false;
             }
 
-            const del = () => {
+            if (obj.event === 'delete') {
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
-                    //传给后台
-                    ajax.post("/scan/report/delete", obj.data, function (result) {
-                        if (result.success) {
-                            layer.msg(result.msg, {icon: 1});
-                            obj.del();
-                            layer.close(index);
-                        } else {
-                            layer.msg(result.msg, {icon: 2});
-                        }
+                    ajax.post("/scan/report/delete", obj.data).then(res => {
+                        obj.del();
+                        layer.msg("删除成功", {icon: 1});
+                        layer.close(index);
                     })
                 });
+                return false;
             }
 
-            if (obj.event === 'edit') {
-                edit();
-            } else if (obj.event === 'delete') {
-                del();
-            } else if (obj.event === 'refresh') {
+            if (obj.event === 'refresh') {
                 window.refresh()
+                return false;
             }
+
+            return false;
         });
 
 

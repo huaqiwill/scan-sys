@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+</head>
+
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <h2 align="center">漏洞报告生成</h2>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">请选择扫描ID</label>
+        <div class="layui-input-block">
+            <select name="sub_email" lay-verify="required" lay-reqtext="请选择漏洞类型" placeholder="请选择漏洞类型">
+                <option value="">请选择</option>
+                <option value="AAA">SQL注入</option>
+                <option value="BBB">跨站脚本(XSS)</option>
+                <option value="BBB">远程命令执行(RCE)</option>
+                <option value="BBB">远程命令执行(RCE)</option>
+                <option value="BBB">弱口令检测</option>
+                <option value="BBB">CRSF检测</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">生成格式</label>
+        <div class="layui-input-block">
+            <select name="sub_email" lay-verify="required" lay-reqtext="请选择生成格式" placeholder="请选择生成格式">
+                <option value="">请选择</option>
+                <option value="AAA">HTML</option>
+                <option value="BBB">PDF</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">报告名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" lay-reqtext="请输入报告名称" placeholder="请输入报告名称"
+                   value="" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">开始生成</button>
+        </div>
+    </div>
+</div>
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="/static/js/lay-config.js"></script>
+<script>
+    layui.use(['form', 'table', 'ajax'], function () {
+        const form = layui.form;
+        const layer = layui.layer;
+        const ajax = layui.ajax;
+        const $ = layui.$;
+
+        const token = "{{ csrf_token }}"
+        ajax.setup(token)
+
+        let updateId = "{{ update_id }}" !== "";
+        let url = updateId ? "/host/found/add" : "/host/found/edit";
+        if (updateId) {
+            data.field.id = updateId;
+        }
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            ajax.post(url, data.field).then(res => {
+                parent.layer.msg("报告生成成功", {icon: 1, time: 1000})
+                parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                parent.layui.table.reload('currentTableId')
+            })
+        });
+    });
+</script>
+</body>
+
+</html>

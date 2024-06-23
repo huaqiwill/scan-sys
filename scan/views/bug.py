@@ -5,7 +5,21 @@ from django.views.decorators.http import require_http_methods
 
 from common.API.json_result import success_api, fail_api
 from scan.models import BugLog
-from scan.utils import get_filters, get_datetime, print_params, table_data
+from scan.utils import get_filters, get_datetime, print_params, table_data, get_form, get_item
+
+result_fields = [
+    "id",
+    "name",
+    "os",
+    "found_by",
+    "found_time",
+    "bug_type",
+    "bug_name",
+    "bug_level",
+    "bug_url",
+    "bug_status",
+    "notes",
+]
 
 
 @require_http_methods(["GET"])
@@ -18,6 +32,9 @@ def start(request: HttpRequest):
     if request.method == "GET":
         return render(request, "scan/bug/start.html")
 
+    form = get_form(request.POST, ["url", "range", "type", "token", "strategy"])
+
+    return success_api()
 
 
 @require_http_methods(["POST"])
@@ -25,20 +42,7 @@ def query(request: HttpRequest):
     print_params(request)
     filters = get_filters(request.POST.get("Param"), [])
     result = BugLog.objects.filter(**filters).order_by("-id")
-    fields = [
-        "id",
-        "name",
-        "os",
-        "found_by",
-        "found_time",
-        "bug_type",
-        "bug_name",
-        "bug_level",
-        "bug_url",
-        "bug_status",
-        "notes",
-    ]
-    return table_data(request, result, fields)
+    return table_data(request, result, result_fields)
 
 
 def stop(request: HttpRequest):
@@ -56,7 +60,7 @@ def delete(request: HttpRequest):
 
 
 @require_http_methods(["POST"])
-def deleteBatch(request: HttpRequest):
+def delete_batch(request: HttpRequest):
     id = request.POST.get("id")
     BugLog.objects.filter(id=id).delete()
     return success_api()
@@ -65,8 +69,17 @@ def deleteBatch(request: HttpRequest):
 @require_http_methods(["POST"])
 def info(request: HttpRequest):
     id = request.POST.get("id")
-    try:
-        data = BugLog.objects.get(id=id)
-        return success_api(data)
-    except BugLog.DoesNotExist:
-        return fail_api("未找到该记录")
+    data = BugLog.objects.get(id=id)
+    return success_api(get_item(data, result_fields))
+
+
+@require_http_methods(["GET", "POST"])
+def edit(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, "scan/port/add.html")
+
+    form = get_form(request.POST, ["id"])
+    obj = BugLog.objects.get(id=form["id"])
+    obj.name = form["name"]
+    obj.save()
+    return success_api()

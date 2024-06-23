@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/static/css/public.css" media="all">
 </head>
+
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
@@ -14,8 +16,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">IP地址</label>
         <div class="layui-input-block">
-            <input type="text" name="ip" placeholder="请输入IP地址，如果为空，则默认本机IP"
-                   value="" class="layui-input" autocomplete="1">
+            <input type="text" name="ip" placeholder="请输入IP地址，如果为空，则默认本机IP" value="{{ local_ip }}" class="layui-input"
+                   autocomplete="1">
         </div>
     </div>
     <div class="layui-form-item">
@@ -27,8 +29,6 @@
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js"></script>
 <script>
-
-
     layui.use(['form', 'table', 'ajax'], function () {
         const form = layui.form;
         const layer = layui.layer;
@@ -40,22 +40,13 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            console.log(data.field);
-            const add = () => {
-                ajax.post("/scan/host/start", data.field, function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-                            parent.layui.table.reload('currentTableId')
-                        })
-                    } else {
-                        layer.alert(result.msg);
-                    }
-                })
-            }
-            add()
+            ajax.post("/scan/host/start", data.field).then(res => {
+                parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                parent.layer.msg("开始主机发现任务", {icon: 1, time: 1000})
+            })
         });
     });
 </script>
 </body>
+
 </html>

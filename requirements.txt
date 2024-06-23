@@ -1,3 +1,6 @@
+# require C++ environment
+netifaces
+
 django
 djangorestframework
 ratelimit
@@ -9,7 +12,9 @@ pymysql
 mysql-connector-python
 psutil
 scapy
-# require C++ environment
-netifaces
 python-nmap
 beautifulsoup4
+pandas
+requests
+aiohttp
+

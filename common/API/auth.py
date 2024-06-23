@@ -14,9 +14,7 @@ def add_auth_session(request):
     """
     role_id = request.session.get("role_id")
     # 通过用户ID查询用户操作权限
-    auth_list = RolePower.objects.values_list("power_id").filter(
-        Q(role_id=role_id) & ~Q(power_type=0)
-    )
+    auth_list = RolePower.objects.values_list("power_id").filter(Q(role_id=role_id))
     auth_list = [i[0] for i in auth_list]
 
     power_obj = Power.objects.filter(id__in=auth_list)

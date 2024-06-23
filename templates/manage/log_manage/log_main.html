@@ -84,13 +84,15 @@
         <script type="text/html" id="toolbarUser">
             <div class="layui-btn-container">
                 {% if "log:delete" in request.session.permissions %}
-                    <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn"
+                    <button class="layui-btn layui-btn-sm  layui-bg-red data-delete-btn"
                             lay-event="multi-del"> 批量删除
                     </button>
                 {% endif %}
             </div>
         </script>
+
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
@@ -105,7 +107,6 @@
             {{#  } }}
             {% endverbatim %}
         </script>
-
     </div>
 </div>
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>

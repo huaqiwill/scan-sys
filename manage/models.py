@@ -39,12 +39,10 @@ class Role(models.Model):
 
 
 class Power(models.Model):
-    objects = None
     name = models.CharField("权限名称", max_length=50)
     type = models.IntegerField("权限类型")
     code = models.CharField("权限标识", max_length=30, null=True)
     url = models.CharField("权限路径", max_length=30, null=True)
-    open_type = models.CharField("权限类型-中文", max_length=20, null=True)
     parent_id = models.IntegerField("父类编号", null=True)
     icon = models.CharField("图标", max_length=50, null=True)
     sort = models.IntegerField("排序", null=True)
@@ -57,10 +55,8 @@ class Power(models.Model):
 
 
 class RolePower(models.Model):
-    objects = None
     role_id = models.IntegerField("角色id")
     power_id = models.IntegerField("权限id")
-    power_type = models.IntegerField("类型")  # 0-目录 1-菜单 2-按钮 3-其他
 
     class Meta:
-        db_table = "role_power"  # 角色权限
+        db_table = "sys_role_power"  # 角色权限

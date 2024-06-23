@@ -106,7 +106,7 @@ def user_add(request):
         user_id = post_data["userID"]
         user_password = post_data["password"]
         user_name = post_data["userName"]
-        user_dep = post_data["department"]
+        department = post_data["department"]
         user_position = post_data["position"]
         user_email = post_data["email"]
         user_enable = post_data["enable"]
@@ -119,7 +119,7 @@ def user_add(request):
             id_number=user_id,
             id_password=user_password_sha256,
             user_name=user_name,
-            department=user_dep,
+            department=department,
             position=user_position,
             role_id=role_value,
             role_des=role_obj.name,

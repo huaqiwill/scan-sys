@@ -1,60 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="/static/css/public.css" media="all">
 </head>
+
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <h2 align="center">服务识别</h2>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label required">IP地址</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_name" lay-verify="required" lay-reqtext="IP地址不能为空" placeholder="请输入IP地址"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label required">子网掩码</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="起始端口不能为空" placeholder="请输入起始端口"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label required">默认网关</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="结束端口不能为空" placeholder="请输入结束端口"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label required">DNS服务</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="结束端口不能为空" placeholder="请输入结束端口"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label required">租约时间</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="结束端口不能为空" placeholder="请输入结束端口"
-                   value="" class="layui-input">
-        </div>
+        <h2 align="center">漏洞库新增</h2>
     </div>
 
 
     <div class="layui-form-item">
+        <label class="layui-form-label required">中文名称</label>
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">开始扫描</button>
+            <input type="text" name="name_cn" lay-verify="required" lay-reqtext="中文名称不能为空" placeholder="请输入中文名称"
+                   value="{{ suggest.name_cn }}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">英文名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name_en" lay-verify="required" lay-reqtext="英文名称不能为空" placeholder="请输入英文名称"
+                   value="{{ suggest.name_en }}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">风险</label>
+        <div class="layui-input-block">
+            <select name="risk" lay-verify="required" lay-reqtext="是否更新不能为空" placeholder="请输入是否更新">
+                <option value="">请选择</option>
+                <option value="低危">低危</option>
+                <option value="中危">中危</option>
+                <option value="高危">高危</option>
+                <option value="紧急">紧急</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label required">漏洞描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="describe" lay-verify="required" lay-reqtext="漏洞描述不能为空" placeholder="请输入漏洞描述"
+                   value="{{ suggest.describe }}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label required">解决方案</label>
+        <div class="layui-input-block">
+            <input type="text" name="solution" lay-verify="required" lay-reqtext="解决方案不能为空" placeholder="请输入解决方案"
+                   value="{{ suggest.solution }}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label required">CVE</label>
+        <div class="layui-input-block">
+            <input type="text" name="cve" lay-verify="required" lay-reqtext="CVE不能为空" placeholder="请输入CVE"
+                   value="{{ suggest.cve }}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label required">是否更新</label>
+        <div class="layui-input-block">
+            <select name="is_update" lay-verify="required" lay-reqtext="是否更新不能为空" placeholder="请输入是否更新">
+                <option value="">请选择</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存漏洞</button>
         </div>
     </div>
 </div>
@@ -70,24 +97,26 @@
         const token = "{{ csrf_token }}"
         ajax.setup(token)
 
+        $("select[name='risk']").find("option[value='{{ suggest.risk }}']").attr('selected', true);
+        $("select[name='is_update']").find("option[value='{{ suggest.is_update }}']").attr('selected', true);
+        form.render('select');
+
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            console.log(data.field);
-            const add = () => {
-                ajax.post("/host/service/add", data.field, function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-                            parent.layui.table.reload('currentTableId')
-                        })
-                    } else {
-                        layer.alert(result.msg);
-                    }
-                })
+            let id = {{ suggest.id }};
+            let url = "/scan/suggest/add"
+            if (id !== '') {    // 更新
+                url = "/scan/suggest/edit"
+                data.field.id = id
             }
-            add()
+            ajax.post(url, data.field).then(res => {
+                parent.layer.msg("漏洞保存成功", {icon: 1, time: 1000})
+                parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                parent.layui.table.reload('currentTableId')
+            })
         });
     });
 </script>
 </body>
+
 </html>

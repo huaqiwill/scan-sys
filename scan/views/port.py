@@ -5,7 +5,8 @@ from django.views.decorators.http import require_http_methods
 
 from common.API.json_result import success_api, fail_api
 from scan.models import PortLog
-from scan.utils.scanning import start_port_scan, stop_port_scan
+from scan.utils.scanning import is_host_online
+from scan.utils.scanning.port import start_port_scan, stop_port_scan, get_local_ip
 from scan.utils import get_filters, print_params, table_data
 
 
@@ -23,11 +24,18 @@ def query(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def start(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/port/start.html")
+        context = {
+            "local_ip": get_local_ip()
+        }
+        return render(request, "scan/port/start.html", context=context)
 
     host = request.POST.get("host")
     start_port = request.POST.get("start_port")
     end_port = request.POST.get("end_port")
+
+    # 判断host是否在线
+    if not is_host_online(host):
+        return fail_api("主机不在线，结束扫描")
 
     start_port_scan(host, start_port, end_port)
 
@@ -48,7 +56,7 @@ def delete(request: HttpRequest):
 
 
 @require_http_methods(["POST"])
-def deleteBatch(request: HttpRequest):
+def delete_batch(request: HttpRequest):
     ids = request.POST.get("ids")
     ids_list = ids.split(",")
     objects_to_delete = PortLog.objects.in_bulk(ids_list)
@@ -59,6 +67,19 @@ def deleteBatch(request: HttpRequest):
 
 @require_http_methods(["POST"])
 def info(request: HttpRequest):
+    id = request.POST.get("id")
+    try:
+        data = PortLog.objects.get(id=id)
+        return success_api(data)
+    except PortLog.DoesNotExist:
+        return fail_api("未找到该记录")
+
+
+@require_http_methods(["GET", "POST"])
+def edit(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, "scan/port/add.html")
+
     id = request.POST.get("id")
     try:
         data = PortLog.objects.get(id=id)

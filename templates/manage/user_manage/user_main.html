@@ -84,13 +84,13 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 {% if "user:add" in request.session.permissions %}
-                    <button class="layui-btn layui-btn-primary  layui-btn-sm layui-border-green data-add-btn"
+                    <button class="layui-btn layui-btn-sm layui-bg-green data-add-btn"
                             lay-event="add"> 新增
                     </button>
                 {% endif %}
 
                 {% if "user:delete" in request.session.permissions %}
-                    <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-red data-delete-btn"
+                    <button class="layui-btn layui-btn-sm layui-bg-red data-delete-btn"
                             lay-event="multi-del"> 批量删除
                     </button>
                 {% endif %}
@@ -102,12 +102,12 @@
 
         <script type="text/html" id="currentTableBar">
             {% if "user:role-update" in request.session.permissions %}
-                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green data-count-editRole"
+                <a class="layui-btn layui-btn-xs layui-bg-green data-count-editRole"
                    lay-event="editRole">角色</a>
             {% endif %}
 
             {% if "user:delete" in request.session.permissions %}
-                <a class="layui-btn layui-btn-xs layui-btn-primary layui-border-red data-count-delete"
+                <a class="layui-btn layui-btn-xs layui-bg-red data-count-delete"
                    lay-event="delete">删除</a>
             {% endif %}
         </script>
@@ -164,7 +164,7 @@
             {field: 'userID', width: 100, title: '账号', align: 'center', sort: true},
             {field: 'name', width: 180, title: '姓名', align: 'center', sort: true, edit: 'text'},
             {field: 'department', width: 180, title: '部门', align: 'center', sort: true, edit: 'text'},
-            // { field: 'position', width: 180, title: '录入年级', align: 'center', sort: true, edit: 'text' },
+            {field: 'position', width: 180, title: '职位', align: 'center', sort: true, edit: 'text'},
             {field: 'email', title: '邮箱', minWidth: 240, minWidth: 150, align: 'center', sort: true, edit: 'text'},
             {field: 'status', width: 120, title: '状态', align: 'center', sort: true, templet: '#user-enable',},
             {field: 'role', width: 120, title: '角色', align: 'center', align: 'center', sort: true, templet: '#roleCN'},
@@ -222,7 +222,7 @@
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
-                    area: ['40%', '80%'],
+                    area: ['600px', '95%'],
                     content: '/user-add',
                 });
                 $(window).on("resize", function () {
