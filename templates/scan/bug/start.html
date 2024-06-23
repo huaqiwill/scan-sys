@@ -15,10 +15,10 @@
         <h2 align="center">服务漏洞扫描</h2>
     </div>
 
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="scanType">
         <label class="layui-form-label required">服务类型</label>
         <div class="layui-input-block">
-            <select name="sub_email" lay-filter="scanType" lay-verify="required" lay-reqtext="请选择扫描范围"
+            <select name="type" lay-filter="scanType" lay-verify="required" lay-reqtext="请选择扫描范围"
                     placeholder="请选择扫描范围">
                 <option value="">请选择</option>
                 <option value="sql">数据库服务</option>
@@ -29,77 +29,6 @@
         </div>
     </div>
 
-    <div class="layui-form-item sql" style="display: none">
-        <label class="layui-form-label required ">主机</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入主机" placeholder="请输入主机"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item sql" style="display: none">
-        <label class="layui-form-label required ">端口</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入端口" placeholder="请输入端口"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item sql" style="display: none">
-        <label class="layui-form-label required ">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入用户名" placeholder="请输入用户名"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text sql" style="display: none">
-        <label class="layui-form-label required">密码</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入密码" placeholder="请输入密码"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text sql" style="display: none">
-        <label class="layui-form-label required">数据库</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入数据库" placeholder="请输入数据库"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text stmp" style="display: none">
-        <label class="layui-form-label required">服务器</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入服务器" placeholder="请输入服务器"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text stmp" style="display: none">
-        <label class="layui-form-label required">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入用户名" placeholder="请输入用户名"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text stmp" style="display: none">
-        <label class="layui-form-label required">密码</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入密码" placeholder="请输入密码"
-                   value="" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text web" style="display: none">
-        <label class="layui-form-label required">网页地址</label>
-        <div class="layui-input-block">
-            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入网页地址" placeholder="请输入网页地址"
-                   value="" class="layui-input">
-        </div>
-    </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -107,6 +36,92 @@
         </div>
     </div>
 </div>
+
+<script type="text/template" id="sqlTemplate">
+    <div class="layui-form-item dynamic">
+        <label class="layui-form-label required ">主机</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入主机" placeholder="请输入主机"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item dynamic">
+        <label class="layui-form-label required ">端口</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入端口" placeholder="请输入端口"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item dynamic">
+        <label class="layui-form-label required ">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入用户名" placeholder="请输入用户名"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入密码" placeholder="请输入密码"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">数据库</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入数据库" placeholder="请输入数据库"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+</script>
+
+<script type="text/template" id="stmpTemplate">
+
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">服务器</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入服务器" placeholder="请输入服务器"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入用户名" placeholder="请输入用户名"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入密码" placeholder="请输入密码"
+                   value="" class="layui-input">
+        </div>
+    </div>
+</script>
+
+
+<script type="text/template" id="webTemplate">
+    <div class="layui-form-item layui-form-text dynamic">
+        <label class="layui-form-label required">网页地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="sub_email" lay-verify="required" lay-reqtext="请输入网页地址" placeholder="请输入网页地址"
+                   value="" class="layui-input">
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="fileTemplate">
+
+</script>
+
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js"></script>
 <script>
@@ -120,29 +135,35 @@
         ajax.setup(token)
 
         form.on('select(scanType)', function (data) {
+            $(".dynamic").remove()
             if (data.value === 'sql') {
-                $(".sql").show()
-            } else {
-                $(".sql").hide()
+                $("#scanType").after($($("#sqlTemplate").html()))
+                return false;
             }
+
             if (data.value === 'stmp') {
-                $(".stmp").show()
-            } else {
-                $(".stmp").hide()
+                $("#scanType").after($($("#stmpTemplate").html()))
+                return false;
             }
+
             if (data.value === 'web') {
-                $(".web").show()
-            } else {
-                $(".web").hide()
+                $("#scanType").after($($("#webTemplate").html()))
+                return false;
             }
+
+            if (data.value === 'file') {
+                $("#scanType").after($($("#fileTemplate").html()))
+                return false;
+            }
+
         })
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            ajax.post("/host/found/add", data.field).then(res => {
-                parent.layer.msg("主机发现任务开始", {icon: 1, time: 1000})
+            ajax.post("/scan/bug/start", data.field).then(res => {
+                parent.layer.msg("网页漏洞扫描任务开始", {icon: 1, time: 1000})
                 parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-                //parent.layui.table.reload('currentTableId')
+                parent.layui.table.reload('currentTableId')
             })
         });
     });

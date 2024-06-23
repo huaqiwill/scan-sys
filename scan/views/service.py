@@ -5,7 +5,19 @@ from django.views.decorators.http import require_http_methods
 from common.API.json_result import success_api, fail_api
 from scan.models import ServiceLog
 from scan.utils.scanning.service import start_service_scan, stop_service_scan, get_local_ip
-from scan.utils import get_filters, print_params, table_data
+from scan.utils import get_filters, print_params, table_data, get_item, get_form
+
+result_fields = [
+    "id",
+    "ip",
+    "port",
+    "service",
+    "version",
+    "protocol",
+    "state",
+    "product",
+    "notes"
+]
 
 
 @require_http_methods(["GET"])
@@ -19,17 +31,7 @@ def query(request: HttpRequest):
     fields = ["ip", "port", "protocol", "state", "product"]
     filters = get_filters(request.POST.get("Params"), fields)
     result = ServiceLog.objects.filter(**filters).order_by("-id")
-    fields = [
-        "id",
-        "ip",
-        "port",
-        "service",
-        "version",
-        "protocol",
-        "state",
-        "product",
-    ]
-    return table_data(request, result, fields)
+    return table_data(request, result, result_fields)
 
 
 @require_http_methods(["GET", "POST"])
@@ -81,11 +83,13 @@ def info(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def edit(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/service/add.html")
+        id = request.GET.get("id")
+        obj = ServiceLog.objects.get(id=id)
+        context = {
+            "service": get_item(obj, result_fields)
+        }
+        return render(request, "scan/service/add.html", context)
 
-    id = request.POST.get("id")
-    try:
-        data = ServiceLog.objects.get(id=id)
-        return success_api(data)
-    except ServiceLog.DoesNotExist:
-        return fail_api("未找到该记录")
+    form = get_form(request.POST, ["id", "ip", "port", "protocol", "service", "version", "state", "product", "notes"])
+    ServiceLog.objects.filter(id=form["id"]).update(**form)
+    return success_api()

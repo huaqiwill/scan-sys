@@ -7,7 +7,9 @@ from common.API.json_result import success_api, fail_api
 from scan.models import PortLog
 from scan.utils.scanning import is_host_online
 from scan.utils.scanning.port import start_port_scan, stop_port_scan, get_local_ip
-from scan.utils import get_filters, print_params, table_data
+from scan.utils import get_filters, print_params, table_data, get_item, get_form
+
+result_fields = ["id", "host", "ports"]
 
 
 def index(request: HttpRequest):
@@ -17,8 +19,7 @@ def index(request: HttpRequest):
 def query(request: HttpRequest):
     filters = get_filters(request.POST.get("Params"), ["host"])
     result = PortLog.objects.filter(**filters).order_by("-id")
-    fields = ["id", "host", "ports"]
-    return table_data(request, result, fields)
+    return table_data(request, result, result_fields)
 
 
 @require_http_methods(["GET", "POST"])
@@ -78,11 +79,14 @@ def info(request: HttpRequest):
 @require_http_methods(["GET", "POST"])
 def edit(request: HttpRequest):
     if request.method == "GET":
-        return render(request, "scan/port/add.html")
+        id = request.GET.get("id")
+        print(id)
+        obj = PortLog.objects.get(id=id)
+        context = {
+            "port": get_item(obj, result_fields)
+        }
+        return render(request, "scan/port/add.html", context)
 
-    id = request.POST.get("id")
-    try:
-        data = PortLog.objects.get(id=id)
-        return success_api(data)
-    except PortLog.DoesNotExist:
-        return fail_api("未找到该记录")
+    form = get_form(request.POST, ["id", "host", "ports"])
+    PortLog.objects.filter(id=form["id"]).update(**form)
+    return success_api()

@@ -17,7 +17,6 @@ class Logo(models.Model):
 
 
 class Log(models.Model):
-    objects = None
     method = models.CharField("请求方法", max_length=10)
     uid = models.CharField("用户ID", max_length=10)
     url = models.CharField("请求URL", max_length=50, null=True)

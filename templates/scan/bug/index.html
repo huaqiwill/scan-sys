@@ -200,18 +200,16 @@
                     }
 
                     layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-
+                        layer.close(index);
                         if (data.length === 0) {
                             message.warn("请选择需要删除的数据!")
                             return false
                         }
-
                         let ids = data.map(item => item.id);
                         ajax.post("/scan/bug/delete_batch", {ids: ids.join(",")}).then(res => {
                             parent.layer.msg("批量删除成功", {icon: 1, time: 1000})
                             parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
                             table.reload('currentTableId');  //表格重载
-                            layer.close(index);
                         })
                     });
 
@@ -233,6 +231,7 @@
 
             table.on('tool(currentTableFilter)', function (obj) {
                 if (obj.event === 'edit') {
+                    let id = obj.data.id
                     const index = layer.open({
                         title: '编辑漏洞',
                         type: 2,
@@ -240,7 +239,7 @@
                         maxmin: true,
                         shadeClose: true,
                         area: ['500px', '95%'],
-                        content: '/scan/bug/edit',
+                        content: '/scan/bug/edit?id=' + id,
                     });
                     $(window).on("resize", function () {
                         layer.full(index);
@@ -249,7 +248,15 @@
                 }
 
                 if (obj.event === 'delete') {
+                    let id = obj.data.id
 
+                    layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
+                        layer.close(index);
+                        ajax.post("/scan/bug/delete", {id}).then(res => {
+                            layer.msg("删除成功", {icon: 1});
+                            obj.del();
+                        })
+                    });
                     return false;
                 }
 

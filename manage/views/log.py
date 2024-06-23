@@ -7,12 +7,15 @@
 import json
 
 from django.core.paginator import Paginator
+from django.http import HttpRequest
 from django.shortcuts import render
 
 from common.API import json_result
 from common.API.auth import authorize, login_required
 from login.models import Log
 from django.views.decorators.http import require_http_methods
+
+from scan.utils import get_form, success_api
 
 
 @login_required
@@ -99,13 +102,15 @@ def log_query(request):
 
 @authorize(power="log:delete", log=True)
 def log_delete(request):
-    if request.method == "POST":
-        user_list = []
-        post_data_str = request.POST.get("Params", None)
-        post_data = json.loads(post_data_str)
-        print("AJAX:", post_data)
-        for item in post_data:
-            db_id = item["fieldID"]
-            Log.objects.filter(id=db_id).delete()
-            user_list.append(db_id)
-        return json_result.success_api(msg=f"日志-ID:{user_list} 删除成功")
+    id = request.POST.get("id")
+    Log.objects.filter(id=id).delete()
+    return success_api()
+
+
+def edit(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, "manage/log_manage/add.html")
+
+    form = get_form(request, ["id", ""])
+    Log.objects.filter(id=form["id"]).update(**form)
+    return success_api()

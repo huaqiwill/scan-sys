@@ -188,14 +188,15 @@
         table.on('tool(currentTableFilter)', function (obj) {
 
             if (obj.event === 'edit') {
+                let id = obj.data.id;
                 const index = layer.open({
-                    title: '开始端口扫描',
+                    title: '端口扫描修改',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
                     shadeClose: true,
                     area: ['500px', '95%'],
-                    content: '/scan/port/edit',
+                    content: '/scan/port/edit?id=' + id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

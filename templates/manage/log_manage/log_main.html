@@ -94,7 +94,7 @@
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            {#            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>#}
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -160,7 +160,7 @@
                 {field: 'desc', minWidth: 320, title: '操作信息', align: 'center', edit: 'text', sort: true},
                 {field: 'success', width: 100, title: '是否成功', align: 'center', sort: true, templet: '#logStatus'},
                 {field: 'userAgent', title: '用户代理', minWidth: 180, minWidth: 150, align: 'center', sort: true},
-                {title: '操作', width: 120, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
+                {title: '操作', width: 80, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
             ]],
             limits: [10, 20, 50, 100, 200, 500],
             limit: 10,
@@ -295,20 +295,21 @@
                 });
                 return false;
             } else if (obj.event === 'delete') {
+                let id = obj.data.id;
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
                     // console.log(obj);
                     obj.del();
                     layer.close(index);
                     //传给后台
                     $.ajax({
-                        url: "/power/power-delete",
+                        url: "/log-delete",
                         type: "post",
-                        data: obj.data,
+                        data: {id},
                         success: function (result) {
                             if (result.success) {
-                                layer.msg(result.msg);
+                                layer.msg(result.msg, {icon: 1});
                             } else {
-                                layer.msg(result.msg);
+                                layer.msg(result.msg, {icon: 2});
                             }
 
                         },

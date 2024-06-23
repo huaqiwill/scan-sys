@@ -11,45 +11,77 @@
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <h2 align="center">漏洞报告生成</h2>
+        <h2 align="center">主机发现编辑</h2>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">请选择扫描ID</label>
+        <label class="layui-form-label required">IP地址</label>
         <div class="layui-input-block">
-            <select name="sub_email" lay-verify="required" lay-reqtext="请选择漏洞类型" placeholder="请选择漏洞类型">
-                <option value="">请选择</option>
-                <option value="AAA">SQL注入</option>
-                <option value="BBB">跨站脚本(XSS)</option>
-                <option value="BBB">远程命令执行(RCE)</option>
-                <option value="BBB">远程命令执行(RCE)</option>
-                <option value="BBB">弱口令检测</option>
-                <option value="BBB">CRSF检测</option>
-            </select>
+            <input type="text" name="ip" lay-verify="required" lay-reqtext="请输入IP地址" placeholder="请输入IP地址"
+                   value="{{ service.ip }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">生成格式</label>
+        <label class="layui-form-label required">端口号</label>
         <div class="layui-input-block">
-            <select name="sub_email" lay-verify="required" lay-reqtext="请选择生成格式" placeholder="请选择生成格式">
-                <option value="">请选择</option>
-                <option value="AAA">HTML</option>
-                <option value="BBB">PDF</option>
-            </select>
+            <input type="text" name="port" lay-verify="required" lay-reqtext="请输入端口号" placeholder="请输入端口号"
+                   value="{{ service.port }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">报告名称</label>
+        <label class="layui-form-label required">协议</label>
         <div class="layui-input-block">
-            <input type="text" name="name" lay-verify="required" lay-reqtext="请输入报告名称" placeholder="请输入报告名称"
-                   value="" class="layui-input" autocomplete="0">
+            <input type="text" name="protocol" lay-verify="required" lay-reqtext="请输入协议" placeholder="请输入协议"
+                   value="{{ service.protocol }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label required">服务名称</label>
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">开始生成</button>
+            <input type="text" name="service" lay-verify="required" lay-reqtext="请输入服务名称" placeholder="请输入服务名称"
+                   value="{{ service.service }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">版本</label>
+        <div class="layui-input-block">
+            <input type="text" name="version" lay-verify="required" lay-reqtext="请输入版本" placeholder="请输入版本"
+                   value="{{ service.version }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">状态</label>
+        <div class="layui-input-block">
+            <input type="text" name="state" lay-verify="required" lay-reqtext="请输入状态" placeholder="请输入状态"
+                   value="{{ service.state }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">产品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="product" lay-verify="required" lay-reqtext="请输入产品名称" placeholder="请输入产品名称"
+                   value="{{ service.product }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="notes" lay-verify="required" lay-reqtext="请输入备注" placeholder="请输入备注"
+                   value="{{ service.notes }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存数据</button>
         </div>
     </div>
 </div>
@@ -67,8 +99,14 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            ajax.post("/host/found/add", data.field).then(res => {
-                parent.layer.msg("报告生成成功", {icon: 1, time: 1000})
+            let id = "{{ service.id }}"
+            let url = "/scan/service/add"
+            if (id !== '') {
+                url = "/scan/service/edit"
+                data.field.id = id
+            }
+            ajax.post(url, data.field).then(res => {
+                parent.layer.msg("数据保存成功", {icon: 1, time: 1000})
                 parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
                 parent.layui.table.reload('currentTableId')
             })

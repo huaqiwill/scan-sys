@@ -230,7 +230,7 @@
                  */
                 let id = obj.data.id;
                 const index = layer.open({
-                    title: '开始主机发现任务',
+                    title: '修改主机发现参数',
                     type: 2,
                     shade: 0.2,
                     maxmin: true,
@@ -265,20 +265,6 @@
             return false;
         });
 
-        // 编辑
-        table.on('edit(currentTableFilter)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
-            // console.log(obj.value); //得到修改后的值
-            // console.log(obj.field); //当前编辑的字段名
-            console.log(obj.data); //所在行的所有相关数据
-            ajax.post("/power-edit", {
-                field: obj.field,
-                value: obj.value,
-                powerId: obj.data.powerId
-            }).then(res => {
-                layer.msg(res.msg, {icon: 1});
-            })
-            return false;
-        });
 
         // 启用和禁用
         form.on('switch(powerEnable)', function (obj) {

@@ -28,6 +28,7 @@ class BugLog(models.Model):
 
 class HostLog(models.Model):
     ip = models.CharField("主机名称", max_length=255)
+    name = models.CharField("名称", max_length=255)
     mac = models.CharField("主机类型", max_length=255)
     os = models.CharField("操作系统", max_length=255)
     supplier = models.CharField("操作系统", max_length=255)
@@ -66,15 +67,15 @@ class PortLog(models.Model):
 
 
 class WebBugLog(models.Model):
-    name = models.CharField("漏洞名称", max_length=255)
-    os = models.CharField("操作系统", max_length=255)
-    found_by = models.CharField("发现人", max_length=255)
+    name = models.CharField("漏洞名称", max_length=1200)
+    os = models.CharField("操作系统", max_length=1200)
+    found_by = models.CharField("发现人", max_length=1200)
     found_time = models.DateTimeField("发现时间")
-    bug_type = models.CharField("漏洞类型", max_length=255)
-    bug_name = models.CharField("漏洞名称", max_length=255)
-    bug_level = models.CharField("漏洞等级", max_length=255)
-    bug_url = models.CharField("漏洞URL", max_length=255)
-    bug_status = models.CharField("漏洞状态", max_length=255)
+    bug_type = models.CharField("漏洞类型", max_length=1200)
+    bug_name = models.CharField("漏洞名称", max_length=1200)
+    bug_level = models.CharField("漏洞等级", max_length=1200)
+    bug_url = models.CharField("漏洞URL", max_length=1200)
+    bug_status = models.CharField("漏洞状态", max_length=1200)
     notes = models.TextField("备注", blank=True)
 
     class Meta:

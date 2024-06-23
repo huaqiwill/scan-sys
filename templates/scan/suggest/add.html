@@ -103,7 +103,7 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            let id = {{ suggest.id }};
+            let id = "{{ suggest.id }}";
             let url = "/scan/suggest/add"
             if (id !== '') {    // 更新
                 url = "/scan/suggest/edit"

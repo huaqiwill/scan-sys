@@ -11,10 +11,10 @@
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <h2 align="center">服务漏洞修改</h2>
+        <h2 align="center">日志修改</h2>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞名称</label>
+        <label class="layui-form-label required">用户ID</label>
         <div class="layui-input-block">
             <input type="text" name="name" lay-verify="required" lay-reqtext="请输入漏洞名称" placeholder="请输入漏洞名称"
                    value="{{ webbug.name }}" class="layui-input" autocomplete="0">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">操作系统</label>
+        <label class="layui-form-label required">请求方法</label>
         <div class="layui-input-block">
             <input type="text" name="os" lay-verify="required" lay-reqtext="请输入操作系统" placeholder="请输入操作系统"
                    value="{{ webbug.os }}" class="layui-input" autocomplete="0">
@@ -30,7 +30,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">发现人</label>
+        <label class="layui-form-label required">请求URL</label>
         <div class="layui-input-block">
             <input type="text" name="found_by" lay-verify="required" lay-reqtext="请输入发现人" placeholder="请输入发现人"
                    value="{{ webbug.found_by }}" class="layui-input" autocomplete="0">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞类型</label>
+        <label class="layui-form-label required">IP</label>
         <div class="layui-input-block">
             <input type="text" name="bug_type" lay-verify="required" lay-reqtext="请输入漏洞类型" placeholder="请输入漏洞类型"
                    value="{{ webbug.bug_type }}" class="layui-input" autocomplete="0">
@@ -46,49 +46,16 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞名称</label>
+        <label class="layui-form-label required">操作信息</label>
         <div class="layui-input-block">
             <input type="text" name="bug_name" lay-verify="required" lay-reqtext="请输入漏洞名称" placeholder="请输入漏洞名称"
-                   value={{ webbug.bug_name }}" class=" layui-input" autocomplete="0">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞等级</label>
-        <div class="layui-input-block">
-            <input type="text" name="bug_level" lay-verify="required" lay-reqtext="请输入漏洞等级" placeholder="请输入漏洞等级"
-                   value="{{ webbug.bug_level }}" class="layui-input" autocomplete="0">
-        </div>
-    </div>
-
-
-    <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞网址</label>
-        <div class="layui-input-block">
-            <input type="text" name="bug_url" lay-verify="required" lay-reqtext="请输入漏洞网址" placeholder="请输入漏洞网址"
-                   value="{{ webbug.bug_url }}" class="layui-input" autocomplete="0">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞状态</label>
-        <div class="layui-input-block">
-            <input type="text" name="bug_status" lay-verify="required" lay-reqtext="请输入漏洞状态" placeholder="请输入漏洞状态"
-                   value="{{ webbug.bug_status }}" class="layui-input" autocomplete="0">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label required">漏洞备注</label>
-        <div class="layui-input-block">
-            <input type="text" name="notes" lay-verify="required" lay-reqtext="请输入漏洞备注" placeholder="请输入漏洞备注"
-                   value="{{ webbug.notes }}" class="layui-input" autocomplete="0">
+                   value="{{ webbug.bug_type }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存数据</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">开始生成</button>
         </div>
     </div>
 </div>
@@ -107,9 +74,9 @@
         //监听提交
         form.on('submit(saveBtn)', function (data) {
             let id = "{{ webbug.id }}";
-            let url = "/scan/bug/add";
+            let url = "/log-add";
             if (id !== '') {
-                url = "/scan/bug/edit";
+                url = "/log-edit";
                 data.field.id = id
             }
             ajax.post(url, data.field).then(res => {

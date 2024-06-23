@@ -148,7 +148,7 @@ def role_cell_edit(request):
         field_value = post_data["value"]
         field_id = post_data["fieldID"]
         Role.objects.filter(id=field_id).update(**{filed_dict[field_name]: field_value})
-        return json_result.success_api(mgs=f"更新成功")
+        return json_result.success_api(msg=f"更新成功")
 
 
 @authorize(power="role:enable", log=True)
@@ -273,10 +273,10 @@ def role_power_save(request):
             role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="0")
             role_obj.save()
         for item_id in menu_power_list:
-            role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="1")
+            role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="0")
             role_obj.save()
         for item_id in button_power_list:
-            role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="2")
+            role_obj = RolePower(role_id=role_id, power_id=item_id, power_type="0")
             role_obj.save()
 
-        return json_result.success_api(mgs="保存成功")
+        return json_result.success_api(msg="保存成功")

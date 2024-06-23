@@ -39,7 +39,7 @@ def power_add(request):
     # type_dict = {"0": "目录", "1": "菜单", "2": "按钮", "3": "其他"}
     Power.objects.create(**form)
     max_id_obj = Power.objects.all().order_by("-id").first()
-    RolePower.objects.create(role_id=2, power_id=max_id_obj.id)
+    RolePower.objects.create(role_id=2, power_id=max_id_obj.id, power_type=form["type"])
     return success_api()
 
 

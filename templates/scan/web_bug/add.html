@@ -11,39 +11,78 @@
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <h2 align="center">漏洞报告生成</h2>
+        <h2 align="center">网页漏洞修改</h2>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">请选择扫描ID</label>
+        <label class="layui-form-label required">漏洞名称</label>
         <div class="layui-input-block">
-            <select name="type" lay-verify="required" lay-reqtext="请选择漏洞类型" placeholder="请选择漏洞类型">
-                <option value="">请选择</option>
-                <option value="AAA">SQL注入</option>
-                <option value="BBB">跨站脚本(XSS)</option>
-                <option value="BBB">远程命令执行(RCE)</option>
-                <option value="BBB">远程命令执行(RCE)</option>
-                <option value="BBB">弱口令检测</option>
-                <option value="BBB">CRSF检测</option>
-            </select>
+            <input type="text" name="name" lay-verify="required" lay-reqtext="请输入漏洞名称" placeholder="请输入漏洞名称"
+                   value="{{ webbug.name }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">生成格式</label>
+        <label class="layui-form-label required">操作系统</label>
         <div class="layui-input-block">
-            <select name="sub_email" lay-verify="required" lay-reqtext="请选择生成格式" placeholder="请选择生成格式">
-                <option value="">请选择</option>
-                <option value="AAA">HTML</option>
-                <option value="BBB">PDF</option>
-            </select>
+            <input type="text" name="os" lay-verify="required" lay-reqtext="请输入操作系统" placeholder="请输入操作系统"
+                   value="{{ webbug.os }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label required">报告名称</label>
+        <label class="layui-form-label required">发现人</label>
         <div class="layui-input-block">
-            <input type="text" name="name" lay-verify="required" lay-reqtext="请输入报告名称" placeholder="请输入报告名称"
-                   value="" class="layui-input" autocomplete="0">
+            <input type="text" name="found_by" lay-verify="required" lay-reqtext="请输入发现人" placeholder="请输入发现人"
+                   value="{{ webbug.found_by }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞类型</label>
+        <div class="layui-input-block">
+            <input type="text" name="bug_type" lay-verify="required" lay-reqtext="请输入漏洞类型" placeholder="请输入漏洞类型"
+                   value="{{ webbug.bug_type }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="bug_name" lay-verify="required" lay-reqtext="请输入漏洞名称" placeholder="请输入漏洞名称"
+                   value={{ webbug.bug_name }}" class=" layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞等级</label>
+        <div class="layui-input-block">
+            <input type="text" name="bug_level" lay-verify="required" lay-reqtext="请输入漏洞等级" placeholder="请输入漏洞等级"
+                   value="{{ webbug.bug_level }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞网址</label>
+        <div class="layui-input-block">
+            <input type="text" name="bug_url" lay-verify="required" lay-reqtext="请输入漏洞网址" placeholder="请输入漏洞网址"
+                   value="{{ webbug.bug_url }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞状态</label>
+        <div class="layui-input-block">
+            <input type="text" name="bug_status" lay-verify="required" lay-reqtext="请输入漏洞状态" placeholder="请输入漏洞状态"
+                   value="{{ webbug.bug_status }}" class="layui-input" autocomplete="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">漏洞备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="notes" lay-verify="required" lay-reqtext="请输入漏洞备注" placeholder="请输入漏洞备注"
+                   value="{{ webbug.notes }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
@@ -67,8 +106,14 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            ajax.post("/host/found/add", data.field).then(res => {
-                parent.layer.msg("报告生成成功", {icon: 1, time: 1000})
+            let id = "{{ webbug.id }}";
+            let url = "/scan/webbug/add";
+            if (id !== '') {
+                url = "/scan/webbug/edit";
+                data.field.id = id
+            }
+            ajax.post(url, data.field).then(res => {
+                parent.layer.msg("网页漏洞保存成功", {icon: 1, time: 1000})
                 parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
                 parent.layui.table.reload('currentTableId')
             })

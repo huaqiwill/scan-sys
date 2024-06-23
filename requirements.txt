@@ -17,4 +17,9 @@ beautifulsoup4
 pandas
 requests
 aiohttp
-
+ipy
+cx_Oracle
+pymongo
+psycopg2
+binascii
+winpcapy

@@ -265,10 +265,10 @@
 
             if (obj.event === 'delete') {
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
+                    layer.close(index);
                     ajax.post("/scan/suggest/delete", obj.data).then(res => {
                         obj.del();
-                        layer.close(index);
-                        layer.msg(result.msg, {icon: 1});
+                        layer.msg("删除成功", {icon: 1});
                     })
                     return false;
                 });

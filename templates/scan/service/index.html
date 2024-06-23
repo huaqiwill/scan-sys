@@ -125,6 +125,7 @@
                 {field: 'version', width: 100, title: '版本', align: 'center'},
                 {field: 'state', width: 100, title: '状态', align: 'center', sort: true},
                 {field: 'product', minWidth: 200, title: '产品名称', align: 'center', sort: true},
+                {field: 'notes', width: 200, title: '备注', align: 'center', sort: true},
                 {title: '操作', width: 120, toolbar: '#currentTableBar', align: "center", fixed: 'right'}
             ]
             if (!enable) {
@@ -213,6 +214,7 @@
             var data = obj.data;
 
             if (obj.event === 'edit') {
+                let id = obj.data.id;
                 const index = layer.open({
                     title: '启动服务识别任务',
                     type: 2,
@@ -220,7 +222,7 @@
                     maxmin: true,
                     shadeClose: true,
                     area: ['500px', '95%'],
-                    content: '/scan/service/edit',
+                    content: '/scan/service/edit?id=' + id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -242,72 +244,6 @@
             }
 
         });
-
-
-        table.on('edit(currentTableFilter)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
-            // console.log(obj.value); //得到修改后的值
-            // console.log(obj.field); //当前编辑的字段名
-            console.log(obj.data); //所在行的所有相关数据
-            //传给后台
-            $.ajax({
-                url: "/power-cell-edit",
-                type: "post",
-                data: {
-                    field: obj.field,
-                    value: obj.value,
-                    powerId: obj.data.powerId
-                },
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1});
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-                    }
-
-                },
-                error: function (result) {
-                    alert("接口错误！！");
-                }
-            });
-            return false;
-
-
-        });
-
-
-        form.on('switch(powerEnable)', function (obj) {
-            // console.log(obj);
-            let operate
-            if (obj.elem.checked) {
-                operate = 'enable'
-            } else {
-                operate = 'disable'
-            }
-            let loading = layer.load()
-
-            $.ajax({
-                url: "/power-enable",
-                type: "post",
-                data: {
-                    powerID: obj.value,
-                    enableValue: operate
-                },
-                success: function (result) {
-                    layer.close(loading)
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1});
-                    } else {
-                        layer.msg(result.msg, {icon: 2});
-
-                    }
-                },
-                error: function (result) {
-                    alert("接口错误！！");
-                }
-            });
-            return false;
-
-        })
 
         window.refresh = function (param) {
             table.reload('currentTableId', {where: param})

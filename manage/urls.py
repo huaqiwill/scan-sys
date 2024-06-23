@@ -35,4 +35,5 @@ urlpatterns = [
     path("log-manage", log.log_manage),  # 日志管理
     path("log-query", log.log_query),  # 日志查询
     path("log-delete", log.log_delete),  # 日志删除
+    path("log-edit", log.edit),  # 日志删除
 ]

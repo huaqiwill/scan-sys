@@ -184,50 +184,26 @@
                     layer.full(index);
                 });
             } else if (obj.event === 'multi-del') {  // 监听multi-del操作
-                var checkStatus = table.checkStatus('currentTableId');
-                var data = checkStatus.data;
+                const checkStatus = table.checkStatus('currentTableId');
+                const data = checkStatus.data;
                 if (data.length === 0) {
                     layer.msg('未选中数据', {
                         icon: 3,
                         time: 1000
                     })
                     return false
-                } else {
-                    layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
-                        layer.close(index);
-
-                        if (data.length === 0) {
-                            layer.msg('请选择需要删除的数据!', {
-                                icon: 3,
-                                time: 1000
-                            })
-                            return false
-                        }
-                        //传给后台
-                        $.ajax({
-                            url: "/power-multi-delete",
-                            type: "post",
-                            data: {Params: JSON.stringify(data)},
-                            success: function (result) {
-                                if (result.success) {
-                                    // layer.msg(result.msg);
-                                    layer.msg(result.msg, {icon: 1, time: 2000}, function () {
-                                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                        table.reload('currentTableId');  //表格重载
-                                    })
-                                } else {
-                                    layer.msg(result.msg);
-                                }
-
-                            },
-                            error: function (result) {
-                                alert("接口错误！！");
-                            }
-                        });
-                        return false;
-                    });
-
                 }
+
+                let ids = data.map(item => item.id)
+                layer.confirm('真的删除选中行吗?', {icon: 3, title: '确认删除'}, function (index) {
+                    layer.close(index);
+                    ajax.post("/scan/webbug/delete_batch", {ids: ids.join(",")}).then(res => {
+                        parent.layer.msg("批量删除成功", {icon: 1, time: 1000})
+                        parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                        table.reload('currentTableId');  //表格重载
+                    })
+                    return false;
+                });
             } else if (obj.event === 'refresh') {
                 window.refresh()
             }
@@ -249,24 +225,23 @@
                     maxmin: true,
                     shadeClose: true,
                     area: ['600px', '95%'],
-                    content: '/scan/webbug/start?id=' + id,
+                    content: '/scan/webbug/edit?id=' + id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
+                let id = obj.data.id;
                 layer.confirm('真的删除行么?', {icon: 3, title: '确认删除'}, function (index) {
-                    let ids = obj.data.map(item => item.id)
-                    ajax.post("/scan/webbug/delete_batch", {ids: ids.join(",")}).then(res => {
-                        layer.msg("批量删除成功", {icon: 1});
+                    layer.close(index);
+                    ajax.post("/scan/webbug/delete", {id}).then(res => {
+                        layer.msg("删除成功", {icon: 1});
                         obj.del();
-                        layer.close(index);
                     })
                     return false;
                 });
             } else if (obj.event === 'refresh') {
-                console.log(obj);
                 window.refresh()
             }
         });

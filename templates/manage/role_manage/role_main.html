@@ -340,12 +340,12 @@
                     fieldID: obj.data.roleID
                 },
                 success: function (result) {
+                    console.log(result)
                     if (result.success) {
                         layer.msg(result.msg, {icon: 1});
                     } else {
                         layer.msg(result.msg, {icon: 2});
                     }
-
                 },
                 error: function (result) {
                     alert("接口错误！！");

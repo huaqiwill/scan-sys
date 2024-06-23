@@ -16,8 +16,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">IP</label>
         <div class="layui-input-block">
-            <input type="text" name="host" lay-verify="required" lay-reqtext="请输入IP" placeholder="请输入IP"
-                   value="" class="layui-input" autocomplete="0">
+            <input type="text" name="ip" lay-verify="required" lay-reqtext="请输入IP" placeholder="请输入IP"
+                   value="{{ host.ip }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
@@ -25,7 +25,7 @@
         <label class="layui-form-label required">名称</label>
         <div class="layui-input-block">
             <input type="text" name="name" lay-verify="required" lay-reqtext="请输入名称" placeholder="请输入名称"
-                   value="" class="layui-input" autocomplete="0">
+                   value="{{ host.name }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         <label class="layui-form-label required">MAC</label>
         <div class="layui-input-block">
             <input type="text" name="mac" lay-verify="required" lay-reqtext="请输入MAC" placeholder="请输入MAC"
-                   value="" class="layui-input" autocomplete="0">
+                   value="{{ host.mac }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
@@ -41,7 +41,7 @@
         <label class="layui-form-label required">操作系统</label>
         <div class="layui-input-block">
             <input type="text" name="os" lay-verify="required" lay-reqtext="请输入操作系统" placeholder="请输入操作系统"
-                   value="" class="layui-input" autocomplete="0">
+                   value="{{ host.os }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
@@ -49,13 +49,13 @@
         <label class="layui-form-label required">供应商</label>
         <div class="layui-input-block">
             <input type="text" name="supplier" lay-verify="required" lay-reqtext="请输入供应商" placeholder="请输入供应商"
-                   value="" class="layui-input" autocomplete="0">
+                   value="{{ host.supplier }}" class="layui-input" autocomplete="0">
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">开始生成</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存数据</button>
         </div>
     </div>
 </div>
@@ -73,8 +73,14 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            ajax.post("/host/found/add", data.field).then(res => {
-                parent.layer.msg("报告生成成功", {icon: 1, time: 1000})
+            let id = "{{ host.id }}"
+            let url = "/scan/host/add";
+            if (id !== '') {
+                data.field.id = id
+                url = "/scan/host/edit";
+            }
+            ajax.post(url, data.field).then(res => {
+                parent.layer.msg("保存数据成功", {icon: 1, time: 1000})
                 parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
                 parent.layui.table.reload('currentTableId')
             })

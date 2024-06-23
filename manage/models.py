@@ -6,7 +6,6 @@ from django.utils import timezone
 
 
 class User(models.Model):
-    objects = None
     id_number = models.CharField("用户账号", max_length=30)
     id_password = models.CharField("用户密码", max_length=255)
     user_name = models.CharField("用户名称", max_length=30)
@@ -23,7 +22,6 @@ class User(models.Model):
 
 
 class Role(models.Model):
-    objects = None
     role_value = models.IntegerField("角色值")
     name = models.CharField("角色名称", max_length=50, null=True)
     code = models.CharField("角色标识", max_length=50)
@@ -57,6 +55,7 @@ class Power(models.Model):
 class RolePower(models.Model):
     role_id = models.IntegerField("角色id")
     power_id = models.IntegerField("权限id")
+    power_type = models.IntegerField("类型")  # 0-目录 1-菜单 2-按钮 3-其他
 
     class Meta:
         db_table = "sys_role_power"  # 角色权限
